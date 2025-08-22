@@ -73,7 +73,10 @@
   button {
     @apply cursor-pointer disabled:cursor-not-allowed;
   }
-}
+
+  label {
+    @apply mb-2 block text-base font-medium;
+  }
 
 @layer components {
   .nav-list {
