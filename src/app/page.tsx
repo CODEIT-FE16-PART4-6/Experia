@@ -15,8 +15,16 @@ export default function Home() {
       <Field>
         <InputField label='인풋 테스트' placeholder='이름을 입력해주세요' />
         <InputField label='이름' placeholder='이름을 입력해주세요' />
-        <InputField label='이메일' placeholder='이름을 입력해주세요' />
-        <InputField label='비밀번호' placeholder='이름을 입력해주세요' />
+        <InputField
+          label='이메일'
+          placeholder='이름을 입력해주세요'
+          error='이메일 방식이 잘못됐습니다.'
+        />
+        <InputField
+          label='비밀번호'
+          placeholder='이름을 입력해주세요'
+          error='비밀번호를 입력해주세요.'
+        />
         <InputField placeholder='이름을 입력해주세요' />
       </Field>
     </main>
