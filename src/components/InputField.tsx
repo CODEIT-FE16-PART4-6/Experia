@@ -6,13 +6,10 @@ interface InputProps {
   placeholder: string;
   label?: string;
   inputLabelGap?: number;
-  autoComplete?: string;
-  error?: string;
-  className?: string;
 }
 
 const InputField = forwardRef<HTMLInputElement, InputProps>(
-  ({ type, placeholder, error, className, inputLabelGap, ...props }, ref) => {
+  ({ type, placeholder, inputLabelGap, ...props }, ref) => {
     return (
       <>
         {props.label && (
@@ -27,13 +24,12 @@ const InputField = forwardRef<HTMLInputElement, InputProps>(
           <Input
             type={type}
             placeholder={placeholder}
-            autoComplete={props.autoComplete}
-            className={`input hover:border-primary ${error ? 'border-red-500' : 'border-gray-300'} ${className || ''}`}
+            className='input hover:primary border-gary-300'
             ref={ref}
             {...props}
           />
         </div>
-        <p className={`md:text-md mt-1 h-6 text-sm text-red-500`}>{error ? error : ''}</p>
+        <p className='md:text-md mt-1 h-6 text-sm'></p>
       </>
     );
   },
