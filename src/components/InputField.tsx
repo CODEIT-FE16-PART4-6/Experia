@@ -1,4 +1,5 @@
-import { Input, Label } from '@headlessui/react';
+'use client'
+import { Field, Input, Label } from '@headlessui/react';
 import { forwardRef } from 'react';
 
 interface InputProps {
@@ -6,24 +7,27 @@ interface InputProps {
   placeholder: string;
   label?: string;
   error?: string;
+  labelClassName?: string;
+  inputClassName?: string;
 }
 
 const InputField = forwardRef<HTMLInputElement, InputProps>(
-  ({ type, placeholder, error, ...props }, ref) => {
+  ({ type, placeholder,label,labelClassName,inputClassName, error, ...rest }, ref) => {
     return (
-      <>
-        {props.label && <Label>{props.label}</Label>}
+      <Field>
+        {label && <Label className={`${labelClassName}`}>{label}</Label>}
         <div className='relative w-full'>
           <Input
             type={type}
             placeholder={placeholder}
             ref={ref}
-            {...props}
-            className={`focus:border-primary ${error ? 'border-red-600' : 'border-gray-600'}`}
+            {...rest}
+            className={`focus:border-primary ${error ? 'border-red-600' : 'border-gray-600'} ${inputClassName}`}
           />
         </div>
-        <p className='md:text-md mt-1 h-6 text-sm text-red-600'>{error ? error : ''}</p>
-      </>
+          
+            <p className='md:text-md mt-1 min-h-6 text-sm text-red-600'>{error? error:''}</p>
+      </Field>
     );
   },
 );

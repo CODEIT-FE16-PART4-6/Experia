@@ -1,7 +1,16 @@
+'use client';
+
 import InputField from '@/components/InputField';
-import { Field } from '@headlessui/react';
+import { useForm } from 'react-hook-form';
 
 export default function Home() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ email: string; password: string; nickname: string}>();
+
+  const onSubmit = (data: any) => console.log(data);
   return (
     <main>
       반응형, 컬러 시스템 테스트
@@ -12,21 +21,45 @@ export default function Home() {
       <h5 className='text-orange text-xl font-medium'>폰트 테스트</h5>
       <h6 className='text-green text-lg'>폰트 테스트</h6>
       <p className='text-base text-black'>폰트 테스트</p>
-      <Field>
-        <InputField label='인풋 테스트' placeholder='이름을 입력해주세요' />
-        <InputField label='이름' placeholder='이름을 입력해주세요' />
+      <form onSubmit={handleSubmit(onSubmit)}>
         <InputField
           label='이메일'
-          placeholder='이름을 입력해주세요'
-          error='이메일 방식이 잘못됐습니다.'
+          placeholder='이메일 입력'
+          type='email'
+          {...register('email', { required: '이메일을 입력해주세요' })}
+          error={errors.email?.message}
+          labelClassName='text-green'
+        />
+         <InputField
+          label='닉네임'
+          placeholder='닉네임을 입력해 주세요'
+          type='text'
+          {...register('nickname', { required: '닉네임을 입력해주세요' })}
+          error={errors.nickname?.message}
         />
         <InputField
           label='비밀번호'
-          placeholder='이름을 입력해주세요'
-          error='비밀번호를 입력해주세요.'
+          placeholder='비밀번호 입력'
+          type='password'
+          {...register('password', { required: '비밀번호를 입력해주세요' })}
+          error={errors.password?.message}
         />
-        <InputField placeholder='이름을 입력해주세요' />
-      </Field>
+          <label className='text-2xl font-bold pb-2'>가격</label>
+           <InputField
+          placeholder='정만철'
+          type='text'
+          {...register('nickname', { required: '비밀번호를 입력해주세요' })}
+          error={errors.nickname?.message}
+        />
+           <label className='text-2xl font-bold pb-3'>주소</label>
+           <InputField
+          placeholder='정만철'
+          type='text'
+          {...register('nickname', { required: '비밀번호를 입력해주세요' })}
+          error={errors.nickname?.message}
+        />
+        <button type='submit' className='w-1/12 bg-blue-400 py-3 px-6 rounded-md text-white font-bold'>로그인</button>
+      </form>
     </main>
   );
 }
