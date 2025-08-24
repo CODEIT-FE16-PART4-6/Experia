@@ -1,16 +1,19 @@
 'use client'
 import { Button } from '@headlessui/react';
+import clsx from 'clsx';
+
+
 
 interface ButtonProps {
   children: React.ReactNode;
 }
 
 const ButtonField = ({ children }: ButtonProps) => {
-
+  const baseStyle = 'w-full rounded-md border font-bold transition-all'
 
 
   return (
-    <Button className="rounded-md bg-sky-600 px-4 py-3 text-md text-white">
+    <Button className={clsx(baseStyle)}>
       {children}
     </Button>
   );
