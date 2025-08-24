@@ -1,12 +1,14 @@
+import { MyActivitiesDto } from '@/utils/api-public/api';
 import { JSX } from 'react';
 import CalenderOnePartComponent from '../calenderOnePart/CalenderOnePart';
 
 type Props = {
   year: number;
   month: number;
+  activities: MyActivitiesDto[];
 };
 
-const CalenderBoardFunction = ({ year, month }: Props) => {
+const CalenderBoardFunction = ({ year, month, activities }: Props) => {
   // 해당 월의 총 일수를 구한다.
   const date: Date = new Date(year, month);
   console.log(date);
@@ -37,19 +39,38 @@ const CalenderBoardFunction = ({ year, month }: Props) => {
   }
 
   for (let i = 1; i <= countDays; i++) {
-    console.log('countDays : ', i);
-    arr.push(
-      <CalenderOnePartComponent
-        key={`${i}`}
-        day={String(i)}
-        completed={0}
-        confirmed={0}
-        pending={0}
-      />,
-    );
+    let exist: boolean = false;
+    for (let j = 0; j < activities.length; j++) {
+      const oneDay: number = Number(activities[j].date.split('-')[2]);
+      console.log('oneDay : ', activities[j]);
+      if (i == oneDay) {
+        arr.push(
+          <CalenderOnePartComponent
+            key={`${i}`}
+            day={String(i)}
+            completed={activities[j].reservations.completed}
+            confirmed={activities[j].reservations.confirmed}
+            pending={activities[j].reservations.pending}
+          />,
+        );
+        exist = true;
+        break;
+      }
+    }
+
+    if (!exist) {
+      arr.push(
+        <CalenderOnePartComponent
+          key={`${i}`}
+          day={String(i)}
+          completed={0}
+          confirmed={0}
+          pending={0}
+        />,
+      );
+    }
   }
 
-  console.log('arr : ', arr);
   return arr;
 };
 
