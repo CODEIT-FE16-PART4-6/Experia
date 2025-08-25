@@ -19,7 +19,7 @@ const CalenderBoard = ({ year, month, activities }: Props) => {
   const arr: JSX.Element[] = CalenderBoardFunction({ year, month, activities });
 
   return (
-    <div className='grid w-full grid-cols-7 grid-rows-[43px_repeat(5,154px)] gap-[1px] border border-[#e8e8e8] bg-[#e8e8e8] text-[#969696]'>
+    <div className='grid w-full grid-cols-7 grid-rows-[43px_repeat(5,154px)] gap-[1px] overflow-hidden rounded-[10px] border border-[#e8e8e8] bg-[#e8e8e8] text-[#969696]'>
       <p className={dayOftheWeek.style}>SUN</p>
       <p className={dayOftheWeek.style}>MON</p>
       <p className={dayOftheWeek.style}>TUE</p>

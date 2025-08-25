@@ -60,7 +60,7 @@ const CalenderPage = () => {
   console.log('나의 체험에 예약한 리스트 : ', activities);
 
   return (
-    <div className='mx-[17px] sm:mx-[23px] lg:mx-[352px]'>
+    <div className='mx-[17px] mb-4 sm:mx-[23px] lg:mx-[352px]'>
       <h1>Calender Page</h1>
       <CalenderArrow year={date.year} month={date.month} onClick={handelSetMonth} />
       <CalenderBoard year={date.year} month={date.month} activities={activities} />
