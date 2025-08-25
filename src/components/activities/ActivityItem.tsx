@@ -17,7 +17,7 @@ const ActivityItem = ({ item }: { item: Activity }) => {
             placeholder={item.blurDataUrl ? 'blur' : 'empty'}
           />
 
-          {/* hover 시 카드 전체 오버레이 */}
+          {/* hover 시 썸네일 dimmed 처리 */}
           <div className='absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100'></div>
         </figure>
 
