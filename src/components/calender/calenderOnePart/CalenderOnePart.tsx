@@ -22,8 +22,8 @@ export default function CalenderOnePartComponent({ day, completed, confirmed, pe
     );
   }
   return (
-    <div className='flex h-[154px] w-[49px] border border-solid border-[#e8e8e8]'>
-      <div>{`${day}`}</div>
+    <div className='flex h-[154px] justify-between bg-white'>
+      <div className='px-3 py-3 text-[21px]'>{`${day}`}</div>
       <div>
         <CalenderOnePartStatus status='completed' num={completed} />
         <CalenderOnePartStatus status='confirmed' num={confirmed} />

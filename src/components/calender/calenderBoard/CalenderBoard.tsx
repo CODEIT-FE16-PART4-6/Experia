@@ -1,7 +1,6 @@
 import { MyActivitiesDto } from '@/utils/api-public/api';
 import { JSX } from 'react';
 import CalenderBoardFunction from './CalenderBoard.function';
-import './CalenderBoard.model.css';
 
 type Props = {
   year: number;
@@ -10,7 +9,7 @@ type Props = {
 };
 
 const dayOftheWeek = {
-  style: 'w-full h-full border border-[#e8e8e8] px-[12px] py-[12px]',
+  style: 'h-full px-[12px] py-[12px] flex items-center bg-white',
 };
 
 const CalenderBoard = ({ year, month, activities }: Props) => {
@@ -20,7 +19,7 @@ const CalenderBoard = ({ year, month, activities }: Props) => {
   const arr: JSX.Element[] = CalenderBoardFunction({ year, month, activities });
 
   return (
-    <div className='grid grid-cols-[repeat(7,49px)] grid-rows-[43px_repeat(5,154px)]'>
+    <div className='grid w-full grid-cols-7 grid-rows-[43px_repeat(5,154px)] gap-[1px] border border-[#e8e8e8] bg-[#e8e8e8] text-[#969696]'>
       <p className={dayOftheWeek.style}>SUN</p>
       <p className={dayOftheWeek.style}>MON</p>
       <p className={dayOftheWeek.style}>TUE</p>

@@ -9,7 +9,7 @@ type Props = {
 
 const CalenderArrow = ({ year, month, onClick }: Props) => {
   return (
-    <div className='flex flex-row justify-between gap-4 text-xl font-bold'>
+    <div className='mb-[17px] flex flex-row justify-between gap-4 text-xl font-bold sm:mx-[44px] lg:justify-center lg:gap-[96px]'>
       <div
         className='flex flex-col justify-center hover:cursor-pointer'
         onClick={() => onClick(false)}
