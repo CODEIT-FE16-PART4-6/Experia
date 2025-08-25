@@ -1,0 +1,26 @@
+/* CalenderBoardComponnts.model.css */
+.CalenderBoard {
+  display: grid;
+  grid-template-columns: repeat(7, 114.29px); /* 가로 7칸(고정 너비) */
+  grid-template-rows: 43px repeat(5, 154px); /* 1행 43px, 2~6행 154px */
+  gap: 1px; /* 선처럼 보이게 */
+  background: #e5e7eb; /* 그리드 라인 색 */
+}
+
+.CalenderBoard > * {
+  background: #fff; /* 셀 배경 */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 첫 줄(요일 헤더) 스타일 보강 선택 */
+.CalenderBoard > p {
+  font-weight: 600;
+}
+
+/* 비어있는 칸을 자리 유지하며 숨기고 싶다면(컴포넌트에 empty 클래스 부여) */
+.empty {
+  visibility: hidden;
+}
