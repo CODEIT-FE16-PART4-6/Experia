@@ -9,6 +9,10 @@ type Props = {
   activities: MyActivitiesDto[];
 };
 
+const dayOftheWeek = {
+  style: 'w-full h-full border border-[#e8e8e8] px-[12px] py-[12px]',
+};
+
 const CalenderBoard = ({ year, month, activities }: Props) => {
   console.log('CalenderBoard year : ', year);
   console.log('CalenderBoard month : ', month);
@@ -16,14 +20,14 @@ const CalenderBoard = ({ year, month, activities }: Props) => {
   const arr: JSX.Element[] = CalenderBoardFunction({ year, month, activities });
 
   return (
-    <div className='CalenderBoard'>
-      <p>SUM</p>
-      <p>MON</p>
-      <p>TUE</p>
-      <p>WED</p>
-      <p>THUR</p>
-      <p>FRI</p>
-      <p>SAT</p>
+    <div className='grid grid-cols-[repeat(7,49px)] grid-rows-[43px_repeat(5,154px)]'>
+      <p className={dayOftheWeek.style}>SUN</p>
+      <p className={dayOftheWeek.style}>MON</p>
+      <p className={dayOftheWeek.style}>TUE</p>
+      <p className={dayOftheWeek.style}>WED</p>
+      <p className={dayOftheWeek.style}>THUR</p>
+      <p className={dayOftheWeek.style}>FRI</p>
+      <p className={dayOftheWeek.style}>SAT</p>
       {arr}
     </div>
   );
