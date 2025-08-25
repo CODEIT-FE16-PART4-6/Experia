@@ -1,11 +1,12 @@
 import './CalenderOnePartStatus.model.css';
 
 type Props = {
+  className: string;
   status: string;
   num: number;
 };
 
-const CalenderOnePartStatus = ({ status, num }: Props) => {
+const CalenderOnePartStatus = ({ className = '', status, num }: Props) => {
   let label: string = '';
 
   if (num > 0) {
