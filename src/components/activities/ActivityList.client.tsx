@@ -1,25 +1,58 @@
 'use client';
-import { Activities } from '@/types/schema/activitiesSchema';
+
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_MAX_PAGESIZE } from '@/constants';
+import { Activities } from '@/types/schema/activitiesSchema';
+import useWindowWidth from '@/hooks/useWindowWidth';
+import { useQuery } from '@tanstack/react-query';
+import { fetchServerData } from '@/utils/api-server';
 
 interface ActivityListProps {
   initialData: Activities;
+  initialPage: number;
 }
 
-const ActivityList = ({ initialData }: ActivityListProps) => {
-  const { activities, totalCount } = initialData;
+const getPageSize = (width: number) => {
+  if (width >= BREAKPOINTS.lg) return ITEM_PAGESIZE.lg;
+  if (width >= BREAKPOINTS.md) return ITEM_PAGESIZE.md;
+  return ITEM_PAGESIZE.sm;
+};
+
+const ActivityList = ({ initialData, initialPage }: ActivityListProps) => {
+  const innerWidth = useWindowWidth();
+  const [pageSize, setPageSize] = useState<number>(ITEM_MAX_PAGESIZE);
+
+  useEffect(() => {
+    if (innerWidth !== undefined) {
+      setPageSize(getPageSize(innerWidth));
+    }
+  }, [innerWidth]);
+
+  const { data, isPending } = useQuery({
+    queryKey: ['activities', initialPage, pageSize],
+    queryFn: () => {
+      return fetchServerData<Activities>({
+        path: '/activities',
+        query: { method: 'offset', page: initialPage, size: pageSize },
+      });
+    },
+    initialData,
+  });
+
+  if (isPending) return <div>Loading...</div>;
 
   return (
-    <ul className='mb-12 grid w-full grid-cols-4 grid-rows-2 gap-x-6 gap-y-12'>
-      {activities.map(a => (
-        <li key={a.id} className='w-[282px] text-black'>
-          <figure className='mb-4 h-[282px] w-full overflow-hidden rounded-[20px]'>
+    <ul className='mb-12 grid grid-cols-2 grid-rows-2 gap-x-6 gap-y-12 md:grid-cols-3 md:grid-rows-3 lg:grid-cols-4 lg:grid-rows-2'>
+      {data.activities.map(a => (
+        <li key={a.id} className='max-w-none text-black lg:max-w-[282px]'>
+          <figure className='mb-4 aspect-square w-full overflow-hidden rounded-[20px]'>
             <Image
               src={a.bannerImageUrl}
               alt={a.description}
               width={282}
               height={282}
-              className='h-full object-cover'
+              className='h-full w-full object-cover'
             />
           </figure>
 
