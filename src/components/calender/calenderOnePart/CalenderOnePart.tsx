@@ -22,7 +22,7 @@ export default function CalenderOnePartComponent({ day, completed, confirmed, pe
     );
   }
   return (
-    <div className='calenderOnePart'>
+    <div className='flex h-[154px] w-[49px] border border-solid border-[#e8e8e8]'>
       <div>{`${day}`}</div>
       <div>
         <CalenderOnePartStatus status='completed' num={completed} />
