@@ -25,6 +25,18 @@ export type MyActivities = z.infer<typeof MyActivities>;
 
 export type Activities = Omit<MyActivities, 'cursorId'>;
 
+export const Activity = z.object({
+  id: z.number().optional(),
+  title: z.string(),
+  description: z.string(),
+  price: z.number(),
+  bannerImageUrl: z.string(),
+  rating: z.number(),
+  reviewCount: z.number(),
+});
+
+export type Activity = z.infer<typeof Activity>;
+
 export const ActivityDetail = z.object({
   id: z.number(),
   userId: z.number(),
