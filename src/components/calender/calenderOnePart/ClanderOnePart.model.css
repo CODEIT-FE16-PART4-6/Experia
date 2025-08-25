@@ -1,0 +1,9 @@
+.calenderOnePart {
+  border: 1px solid black;
+  height: 144px;
+  width: 104.29px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
