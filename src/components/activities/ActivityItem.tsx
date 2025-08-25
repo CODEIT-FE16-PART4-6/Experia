@@ -11,6 +11,8 @@ const ActivityItem = ({ item }: { item: Activity }) => {
           width={282}
           height={282}
           className='h-full w-full object-cover'
+          blurDataURL={item.blurDataUrl!}
+          placeholder={item.blurDataUrl ? 'blur' : 'empty'}
         />
       </figure>
 

@@ -33,6 +33,7 @@ export const Activity = z.object({
   bannerImageUrl: z.string(),
   rating: z.number(),
   reviewCount: z.number(),
+  blurDataUrl: z.string().nullish(),
 });
 
 export type Activity = z.infer<typeof Activity>;
