@@ -18,7 +18,7 @@ export async function FindAllMyActivities(
       method: 'get',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ3MCwidGVhbUlkIjoiMTYtNCIsImlhdCI6MTc1NjEyNDM0NywiZXhwIjoxNzU3MzMzOTQ3LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.Yi-_nIWQwIyS4GVOBfGRBOupd6I86iuWvx4PV5KLkLY`,
       }),
     },
   )
