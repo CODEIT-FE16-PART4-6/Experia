@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import useScrollY from '@/utils/useScrollY';
+import useScrollY from '@/hooks/useScrollY';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
