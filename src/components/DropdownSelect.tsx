@@ -1,6 +1,7 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import clsx from 'clsx';
 export interface Activity {
   id: number;
   name: string;
@@ -8,7 +9,7 @@ export interface Activity {
 
 export interface DropdownProps {
   activities: Activity[];
-  value: Activity | null | string;
+  value: Activity | null;
   onChange: (value: number) => void;
   label?: string;
   placeholder?: string;
@@ -42,10 +43,15 @@ export const DropdownSelect = ({
     };
   }, []);
 
-  const handleSelect = (activity: Activity) => {
-    onChange(activity.id);
-    setIsOpen(false);
-  };
+  const handleSelect = useCallback(
+    (activity: Activity) => {
+      onChange(activity.id);
+      setIsOpen(false);
+    },
+    [onChange],
+  );
+
+  const displayValue = value ? value.name : placeholder || '카테고리';
 
   return (
     <div className='border' ref={containerRef}>
@@ -54,7 +60,7 @@ export const DropdownSelect = ({
         className='flex cursor-pointer items-center justify-between rounded border border-gray-800 px-4 py-2'
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span> {typeof value === 'string' ? value : (value?.name ?? placeholder)}</span>
+        <span>{displayValue}</span>
         <Image
           src='icons/ic_chevron_down.svg'
           alt='Dropdown Icon'
@@ -71,11 +77,9 @@ export const DropdownSelect = ({
           {activities.map(activity => (
             <div
               key={activity.id}
-              className={`cursor-pointer px-4 py-2 hover:bg-blue-500 hover:text-white ${
-                value && typeof value !== 'string' && value.id === activity.id
-                  ? 'bg-blue-500 text-white'
-                  : ''
-              }`}
+              className={clsx('cursor-pointer px-4 py-2 hover:bg-blue-500 hover:text-white', {
+                'bg-blue-500 text-white': value?.id === activity.id,
+              })}
               onClick={() => handleSelect(activity)}
             >
               {activity.name}
