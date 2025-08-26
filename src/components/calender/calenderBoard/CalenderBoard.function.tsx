@@ -9,23 +9,36 @@ type Props = {
 };
 
 const CalenderBoardFunction = ({ year, month, activities }: Props) => {
-  // 해당 월의 총 일수를 구한다.
-  const date: Date = new Date(year, month);
-  console.log(date);
+  // // 해당 월의 총 일수를 구한다.
+  // const date: Date = new Date(year, month);
+  // console.log(date);
 
-  // 해당 월의 1일이 몇요일인지 구한다.
-  const day: number = date.getDay();
-  console.log('day : ', day);
+  // // 해당 월의 1일이 몇요일인지 구한다.
+  // const day: number = date.getDay();
+  // console.log('day : ', day);
 
-  // 해당 월이 총 몇일 있는지 확인하기
+  // // 해당 월이 총 몇일 있는지 확인하기
   const countDays: number = new Date(year, month + 1, 0).getDate();
   console.log('countDays : ', countDays);
 
   const arr: JSX.Element[] = [];
   // CalenderOnePartComponent를 배열로 입력
   // 빈 컴포넌트 먼저 추가
-  if (day > 0) {
-    for (let i = 0; i < day; i++) {
+  const firstDay = new Date(year, month, 1).getDay();
+  const totalCells = firstDay + countDays;
+  const totalRows = Math.ceil(totalCells / 7);
+  let cellIndex = 0;
+  if (firstDay > 0) {
+    for (let i = 0; i < firstDay; i++) {
+      //*****
+      const col = cellIndex % 7;
+      const row = Math.floor(cellIndex / 7);
+      const isLastCol = col === 6;
+      const isLastRow = row === totalRows - 1;
+      const isFirstRow = row === 0;
+      const isVisualLastBorder = isLastRow || cellIndex + 7 > firstDay + countDays - 1;
+
+      //******
       arr.push(
         <CalenderOnePartComponent
           key={`empty-${i}`}
@@ -33,12 +46,25 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
           completed={0}
           confirmed={0}
           pending={0}
+          isLastCol={isLastCol}
+          isLastRow={isLastRow}
+          isFirstRow={isFirstRow}
         />,
       );
+      cellIndex++;
     }
   }
 
   for (let i = 1; i <= countDays; i++) {
+    const col = cellIndex % 7;
+    const row = Math.floor(cellIndex / 7);
+    const isLastCol = col === 6;
+    const isLastRow = row === totalRows - 1;
+    const isLastRowAb = row === totalRows / 7;
+    const isFirstRow = row === 0;
+
+    const isVisualLastBorder = isLastRow || cellIndex + 7 > firstDay + countDays - 1;
+
     let exist: boolean = false;
     for (let j = 0; j < activities.length; j++) {
       const oneDay: number = Number(activities[j].date.split('-')[2]);
@@ -51,6 +77,10 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
             completed={activities[j].reservations.completed}
             confirmed={activities[j].reservations.confirmed}
             pending={activities[j].reservations.pending}
+            isLastCol={isLastCol}
+            isLastRow={isLastRow}
+            isFirstRow={isFirstRow}
+            isLastRowAb={isLastRowAb}
           />,
         );
         exist = true;
@@ -66,12 +96,16 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
           completed={0}
           confirmed={0}
           pending={0}
+          isLastCol={isLastCol}
+          isLastRow={isLastRow}
+          isFirstRow={isFirstRow}
         />,
       );
     }
+    cellIndex++;
   }
 
-  return arr;
+  return <>{arr}</>;
 };
 
 export default CalenderBoardFunction;
