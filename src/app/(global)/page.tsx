@@ -1,14 +1,14 @@
 'use client';
-
 import Button from '@/components/Button';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { StarRating } from '@/components/StarRating';
 import { useState } from 'react';
 
-export default function Home() {
+  export default function Home() {
   const [rating, setRating] = useState(0);
   // 상태에 따른 버튼 활성화/비활성화
   const isDisabled = true;
-
+    
   return (
     <main>
       <div className="w-80">
@@ -41,6 +41,7 @@ export default function Home() {
         <StarRating value={rating} onChange={setRating} />
         <div> 현재 별점 : {rating}</div>
       </div>
+
       반응형, 컬러 시스템 테스트
       <div className='bg-primary md:bg-green lg:bg-yellow h-6 w-full md:mx-5 md:w-[400px] lg:w-[1200px]'></div>
       <h2 className='text-4xl font-bold text-black'>폰트 테스트</h2>
@@ -49,7 +50,6 @@ export default function Home() {
       <h5 className='text-orange text-xl font-medium'>폰트 테스트</h5>
       <h6 className='text-green text-lg'>폰트 테스트</h6>
       <p className='text-base text-black'>폰트 테스트</p>
-      <div className='h-[150vh]'></div>
     </main>
   );
 }
