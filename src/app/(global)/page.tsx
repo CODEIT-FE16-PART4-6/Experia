@@ -1,34 +1,42 @@
 'use client';
-
-
-import InputField from '@/components/InputField';
+import Button from '@/components/Button';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { StarRating } from '@/components/StarRating';
 import { useState } from 'react';
 
-// 폼 데이터 타입 정의
-interface LoginFormInputs {
-  email: string;
-  nickname: string;
-  password: string;
-}
-
-
-
   export default function Home() {
   const [rating, setRating] = useState(0);
-const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormInputs>();
-
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log(data);
-  };
+  // 상태에 따른 버튼 활성화/비활성화
+  const isDisabled = true;
     
   return (
     <main>
+      <div className="w-80">
+        <h2 className="text-xl font-bold mb-2">체험 상세 테스트</h2>
+        <Button variant="POSITIVE" size="lg" disabled={isDisabled}>
+          예약하기
+        </Button>
+      </div>
+
+      <section>
+        <h2 className="text-xl font-bold mb-2">버튼 테스트</h2>
+        <div className="w-1/5 flex flex-col gap-2 mb-5">
+          <Button variant='DEFAULT' size='lg'>로그인 하기</Button>
+          <Button variant='POSITIVE' size='lg' >로그인 하기</Button>
+          <Button variant="NEGATIVE" size="lg" disabled>신청 불가</Button>
+        </div>
+        <div className="w-1/6 flex flex-col gap-2 mb-5">
+          <Button variant='DEFAULT' size='md'>로그인 하기</Button>
+          <Button variant='POSITIVE' size='md'>로그인 하기</Button>
+          <Button variant="NEGATIVE" size="md" disabled>신청 불가</Button>
+        </div>
+        <div className="w-1/16 flex flex-col gap-2 mb-5">
+          <Button variant='DEFAULT' size='sm'>로그인 하기</Button>
+          <Button variant='POSITIVE' size='sm'>로그인 하기</Button>
+          <Button variant="NEGATIVE" size="sm" disabled>신청 불가</Button>
+        </div>
+      </section>
+
       <div>
         <StarRating value={rating} onChange={setRating} />
         <div> 현재 별점 : {rating}</div>
@@ -42,57 +50,6 @@ const {
       <h5 className='text-orange text-xl font-medium'>폰트 테스트</h5>
       <h6 className='text-green text-lg'>폰트 테스트</h6>
       <p className='text-base text-black'>폰트 테스트</p>
-
-      <h2 className="text-4xl font-bold mb-6">로그인</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-7">
-        <InputField
-          label="이메일"
-          placeholder="이메일 입력"
-          type="email"
-          autoComplete="email"
-          {...register('email', { required: '이메일을 입력해주세요' })}
-          error={errors.email?.message}
-        />
-        <InputField
-          label="닉네임"
-          placeholder="닉네임 입력"
-          type="text"
-          autoComplete="name"
-          {...register('nickname', { required: '닉네임을 입력해주세요' })}
-          error={errors.nickname?.message}
-        />
-        <InputField
-          label="비밀번호"
-          placeholder="비밀번호 입력"
-          type="password"
-          autoComplete="current-password"
-          {...register('password', { required: '비밀번호를 입력해주세요' })}
-          error={errors.password?.message}
-        />
-        <button
-          type="submit"
-          className="w-1/12 bg-blue-400 py-3 px-6 rounded-md text-white font-bold mt-2"
-        >
-          로그인
-        </button>
-      </form>
-
-      <h2 className="text-2xl font-bold mt-12 mb-3">예약 가능한 시간대</h2>
-      <div className="flex gap-4 mb-10">
-        <div className="flex flex-col">
-          <label className="text-xl text-gray-900 mb-2.5">날짜</label>
-          <InputField placeholder="yy/mm/dd" type="text" className="h-11 sm:h-14" />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-xl text-gray-900 mb-2.5">시작 시간</label>
-          <InputField placeholder="0:00" type="text" className="h-11 sm:h-14" />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-xl text-gray-900 mb-2.5">종료 시간</label>
-          <InputField placeholder="0:00" type="text" className="h-11 sm:h-14" />
-        </div>
-      </div>
-
     </main>
   );
 }
