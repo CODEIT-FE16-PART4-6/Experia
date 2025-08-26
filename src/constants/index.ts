@@ -6,3 +6,17 @@ export const ROUTES = {
   LOGIN: '/signin',
   NOT_FOUND: '*',
 };
+
+export const BREAKPOINTS = {
+  lg: 1280,
+  md: 720,
+  sm: 520,
+};
+
+export const ITEM_PAGESIZE = {
+  lg: 8,
+  md: 9,
+  sm: 4,
+};
+
+export const ITEM_DEFAULT_PAGESIZE = 8; // 목록 렌더링 갯수 기본값: 8개 (desktop)
