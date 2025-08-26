@@ -8,3 +8,12 @@ export interface SignUpResponseDto {
   createdAt: string,
   updatedAt: string
 }
+
+export interface MyActivitiesDto {
+  date: string,
+  reservations: {
+    completed: number,
+    confirmed: number,
+    pending: number
+  }
+}
