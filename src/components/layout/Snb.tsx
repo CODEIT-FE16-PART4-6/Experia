@@ -15,7 +15,7 @@ const Snb = () => {
 
   return (
     <nav
-      className={`h-[432px] bg-gray-100 font-bold text-gray-700 ${widthClass} items-center rounded-xl border border-gray-400 shadow-2xl`}
+      className={`mt-[72px] h-[432px] bg-gray-100 font-bold text-gray-700 ${widthClass} items-center rounded-xl border border-gray-400 shadow-2xl`}
     >
       <div className='mx-auto mt-6 mb-6 flex items-center justify-center'>
         <Image src='/images/img_user_mock.png' alt='유저 목이미지' width={160} height={160} />
