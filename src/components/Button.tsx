@@ -1,29 +1,30 @@
 'use client'
-import { Button } from '@headlessui/react';
+// Headless UI Button alias
+import { Button as HeadlessButton } from '@headlessui/react';
 import clsx from 'clsx';
 
 // 버튼 스타일 타입
-type ButtonStyle = 'primary' | 'secondary' | 'danger';
+type ButtonStyle = 'DEFAULT' | 'POSITIVE' | 'NEGATIVE';
 // 버튼 크기 타입
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps {
-  variant?: ButtonStyle; // 'primary' | 'secondary' | 'danger'
+  variant?: ButtonStyle; // 'DEFAULT' | 'POSITIVE' | 'NEGATIVE'
   size?: ButtonSize; // 'sm' | 'md' | 'lg'
   disabled?: boolean; // 버튼 비활성화
   children: React.ReactNode;
   className?: string; // 추가 클래스 적용!
 }
 
-const ButtonField = ({ variant = 'secondary', size = 'md', disabled = false, className, children, ...rest }: ButtonProps) => {
+const Button = ({ variant = 'DEFAULT', size = 'md', disabled = false, className, children, ...rest }: ButtonProps) => {
   // 기본 스타일
   const baseStyle = 'w-full rounded-md border font-semibold transition-all flex justify-center items-center'
 
   // variant 클래스
   const variantClasses: Record<ButtonStyle, string> = {
-    primary: 'bg-nomad-black text-white disabled:bg-gray-600',
-    secondary: 'bg-white hover:bg-nomad-black hover:text-white disabled:bg-gray-600',
-    danger: 'bg-gray-600 text-white disabled:bg-gray-600',
+    DEFAULT: 'bg-white hover:bg-nomad-black hover:text-white disabled:bg-gray-600',
+    POSITIVE: 'bg-nomad-black text-white disabled:bg-gray-600',
+    NEGATIVE: 'bg-gray-600 text-white disabled:bg-gray-600',
   }
 
   // size 클래스
@@ -34,13 +35,13 @@ const ButtonField = ({ variant = 'secondary', size = 'md', disabled = false, cla
   };
 
   return (
-    <Button className={clsx(baseStyle, variantClasses[variant], sizeClasses[size], className)}
+    <HeadlessButton className={clsx(baseStyle, variantClasses[variant], sizeClasses[size], className)}
       disabled={disabled}
       {...rest}
     >
       {children}
-    </Button >
+    </HeadlessButton >
   );
 };
 
-export default ButtonField;
+export default Button;
