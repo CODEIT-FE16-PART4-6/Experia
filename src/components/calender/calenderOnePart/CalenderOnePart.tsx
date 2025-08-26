@@ -42,7 +42,7 @@ export default function CalenderOnePartComponent({
 
   return (
     <div
-      className={`${!isLastCol ? '-mr-px' : ''} ${!isLastRow ? '-mb-px' : ''} ${!isLastRowAb ? 'border-b' : ''} ${!isFirstRow ? 'border-t' : ''} flex h-[154px] flex-col justify-between border-r border-l border-[#e8e8e8] ${isLastRow ? 'border-b' : ''}`}
+      className={`${!isLastCol ? '-mr-px' : ''} ${!isLastRow ? '-mb-px' : ''} ${!isFirstRow ? 'border-t' : ''} flex h-[154px] flex-col justify-between border-r border-l border-[#e8e8e8] ${isLastRowAb ? 'border-b' : ''} ${isLastRow ? 'border-b' : ''} ${isLastRow ? 'border-t-[0px]' : ''}`}
     >
       <div className='flex px-3 py-3 text-[21px]'>
         <p>{`${day}`}</p>

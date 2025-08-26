@@ -36,7 +36,7 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
       const isLastCol = col === 6;
       const isLastRow = row === totalRows - 1;
       const isFirstRow = row === 0;
-      const isVisualLastBorder = isLastRow || cellIndex + 7 > firstDay + countDays - 1;
+      const isLastRowAb = row === totalRows - 2;
 
       //******
       arr.push(
@@ -49,6 +49,7 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
           isLastCol={isLastCol}
           isLastRow={isLastRow}
           isFirstRow={isFirstRow}
+          isLastRowAb={isLastRowAb}
         />,
       );
       cellIndex++;
@@ -60,10 +61,8 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
     const row = Math.floor(cellIndex / 7);
     const isLastCol = col === 6;
     const isLastRow = row === totalRows - 1;
-    const isLastRowAb = row === totalRows / 7;
+    const isLastRowAb = row === totalRows - 2;
     const isFirstRow = row === 0;
-
-    const isVisualLastBorder = isLastRow || cellIndex + 7 > firstDay + countDays - 1;
 
     let exist: boolean = false;
     for (let j = 0; j < activities.length; j++) {
@@ -99,6 +98,7 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
           isLastCol={isLastCol}
           isLastRow={isLastRow}
           isFirstRow={isFirstRow}
+          isLastRowAb={isLastRowAb}
         />,
       );
     }
