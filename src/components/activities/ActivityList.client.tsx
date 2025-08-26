@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_MAX_PAGESIZE } from '@/constants';
+import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import { useQuery } from '@tanstack/react-query';
@@ -21,7 +21,7 @@ const getPageSize = (width: number) => {
 
 const ActivityList = ({ initialData, initialPage }: ActivityListProps) => {
   const innerWidth = useWindowWidth();
-  const [pageSize, setPageSize] = useState<number>(ITEM_MAX_PAGESIZE);
+  const [pageSize, setPageSize] = useState<number>(ITEM_DEFAULT_PAGESIZE);
 
   useEffect(() => {
     if (innerWidth !== undefined) {

@@ -2,7 +2,7 @@ import { fetchServerData } from '@/utils/api-server';
 import ActivityList from '@/components/activities/ActivityList.client';
 import { Activities } from '@/types/schema/activitiesSchema';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
-import { ITEM_MAX_PAGESIZE } from '@/constants';
+import { ITEM_DEFAULT_PAGESIZE } from '@/constants';
 
 const fetchActivities = async ({ page, size }: { page: number; size: number }) => {
   const data = await fetchServerData<Activities>({
@@ -15,7 +15,7 @@ const fetchActivities = async ({ page, size }: { page: number; size: number }) =
 
 const MainPage = async () => {
   const initialPage = 1;
-  const initialSize = ITEM_MAX_PAGESIZE;
+  const initialSize = ITEM_DEFAULT_PAGESIZE;
   const initialData = await fetchActivities({ page: initialPage, size: initialSize });
 
   return (
