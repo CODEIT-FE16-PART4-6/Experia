@@ -57,7 +57,7 @@ const ActivityList = ({ initialData, initialPage }: ActivityListProps) => {
           </figure>
 
           <span className='flex gap-1 text-base'>
-            <Image src='/icons/StarSmallIcon.svg' alt='별점' width={20} height={20} />
+            <Image src='/icons/ic_StarSmall.svg' alt='별점' width={20} height={20} />
             {a.rating}
             <span className='text-gray-700'>(리뷰 {a.reviewCount}개)</span>
           </span>
