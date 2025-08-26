@@ -19,4 +19,4 @@ export const ITEM_PAGESIZE = {
   sm: 4,
 };
 
-export const ITEM_MAX_PAGESIZE = 9; // 한 화면에 최대 렌더링 갯수: 9개
+export const ITEM_DEFAULT_PAGESIZE = 8; // 목록 렌더링 갯수 기본값: 8개 (desktop)
