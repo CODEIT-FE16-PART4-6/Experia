@@ -1,8 +1,10 @@
 'use client';
 
+
 import InputField from '@/components/InputField';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
+import { StarRating } from '@/components/StarRating';
+import { useState } from 'react';
 
 // 폼 데이터 타입 정의
 interface LoginFormInputs {
@@ -10,8 +12,12 @@ interface LoginFormInputs {
   nickname: string;
   password: string;
 }
-export default function Home() {
-  const {
+
+
+
+  export default function Home() {
+  const [rating, setRating] = useState(0);
+const {
     register,
     handleSubmit,
     formState: { errors },
@@ -20,9 +26,14 @@ export default function Home() {
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     console.log(data);
   };
-
+    
   return (
     <main>
+      <div>
+        <StarRating value={rating} onChange={setRating} />
+        <div> 현재 별점 : {rating}</div>
+      </div>
+
       반응형, 컬러 시스템 테스트
       <div className='bg-primary md:bg-green lg:bg-yellow h-6 w-full md:mx-5 md:w-[400px] lg:w-[1200px]'></div>
       <h2 className='text-4xl font-bold text-black'>폰트 테스트</h2>
@@ -31,6 +42,7 @@ export default function Home() {
       <h5 className='text-orange text-xl font-medium'>폰트 테스트</h5>
       <h6 className='text-green text-lg'>폰트 테스트</h6>
       <p className='text-base text-black'>폰트 테스트</p>
+
       <h2 className="text-4xl font-bold mb-6">로그인</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-7">
         <InputField
@@ -80,6 +92,7 @@ export default function Home() {
           <InputField placeholder="0:00" type="text" className="h-11 sm:h-14" />
         </div>
       </div>
+
     </main>
   );
 }

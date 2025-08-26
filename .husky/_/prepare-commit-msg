@@ -1,5 +1,5 @@
-#!/bin/bash
- 
+#!/usr/bin/env sh
+
 # 현재 브랜치 이름 가져오기 (예: feat/P6-123 -> P6-123)
 BRANCH_NAME=$(git branch --show-current) # 현재 브랜치명을 가져옴
 BRANCH_NAME="${BRANCH_NAME##*/}" # / 부분을 기준으로 앞 부분을 제거

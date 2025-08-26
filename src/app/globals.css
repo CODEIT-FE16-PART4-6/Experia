@@ -3,7 +3,7 @@
 @theme {
   /* breakpoints */
   --breakpoint-sm: 520px; /* mobile ~ mini tablet */
-  --breakpoint-md: 640px; /* tablet */
+  --breakpoint-md: 720px; /* tablet */
   --breakpoint-lg: 1280px; /* desktop */
 
   /* colors */
@@ -58,6 +58,9 @@
   --text-xs--line-height: 18px;
   --text-xs-tight: 12px;
   --text-xs-tight--line-height: 18px;
+
+  /* shadow */
+  --shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.05);
 }
 
 /* reset */
@@ -76,5 +79,11 @@
 
   input {
     @apply rounded-md border p-3.5 text-base transition-colors duration-300 outline-none;
+  }
+}
+
+@layer components {
+  .nav-list {
+    @apply hover:text-primary px-3 py-2 transition-all hover:font-bold;
   }
 }
