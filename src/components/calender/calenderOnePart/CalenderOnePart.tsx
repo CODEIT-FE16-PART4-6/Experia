@@ -1,5 +1,8 @@
 import CalenderOnePartStatus from './calenderOnePartStatus/CalenderOnePartStatus';
 
+import CalenderEllipseBlue from '@/assets/imgs/calenderEllipseBlue.svg';
+import CalenderEllipseGray from '@/assets/imgs/calenderEllipseGray.svg';
+
 type Props = {
   day: string;
   completed: number;
@@ -41,7 +44,12 @@ export default function CalenderOnePartComponent({
     <div
       className={`${!isLastCol ? '-mr-px' : ''} ${!isLastRow ? '-mb-px' : ''} ${!isLastRowAb ? 'border-b' : ''} ${!isFirstRow ? 'border-t' : ''} flex h-[154px] flex-col justify-between border-r border-l border-[#e8e8e8] ${isLastRow ? 'border-b' : ''}`}
     >
-      <div className='px-3 py-3 text-[21px]'>{`${day}`}</div>
+      <div className='flex px-3 py-3 text-[21px]'>
+        <p>{`${day}`}</p>
+        <div className='mt-1 ml-1'>
+          {pending ? <CalenderEllipseBlue /> : completed ? <CalenderEllipseGray /> : ''}
+        </div>
+      </div>
       <div className='px-[3px] pb-[2px]'>
         <CalenderOnePartStatus status='completed' num={completed} />
         <CalenderOnePartStatus status='confirmed' num={confirmed} />
