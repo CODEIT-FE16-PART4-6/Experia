@@ -1,7 +1,18 @@
+'use client';
+//lib
+import clsx from 'clsx';
+//hook
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import useWindowWidth from '@/hooks/useWindowWidth';
+//img
+import KebabButton from '@/assets/imgs/activityPage/ic_Kebab.svg';
+import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
+import Star from '@/assets/imgs/activityPage/ic_Star.svg';
 
 const ActivityPage = () => {
+  const winWidth = useWindowWidth(); // 가로 값
+  console.log(winWidth);
   //mock****************************
   const ActivityContent = {
     tag: '문화•예술',
@@ -15,12 +26,58 @@ const ActivityPage = () => {
   //*********************************** */
 
   return (
-    <main className='bg-[#fafafa]'>
-      액티비티상세페이지
-      <div className='text-[14px]'>{ActivityContent.tag}</div>
-      <div className='text-[24px] font-bold'>{ActivityContent.title}</div>
-      <div>
-        {ActivityContent.rating} {ActivityContent.adress}
+    <main className='fill bg-[#fafafa]'>
+      <div className='flex flex-row justify-between p-4 md:p-6'>
+        <div className='flex flex-col'>
+          <div className='mb-[10px] text-[14px] text-gray-900'>{ActivityContent.tag}</div>
+          <div className='text-nomad-black mb-[16px] text-[24px] font-bold'>
+            {ActivityContent.title}
+          </div>
+          <div className='flex gap-3 text-[14px] text-gray-900'>
+            <div className='flex gap-1'>
+              <div className='flex flex-col justify-center'>
+                <Star />
+              </div>
+              {ActivityContent.rating}({ActivityContent.reviewCount})
+            </div>
+            <div className='flex gap-[3px]'>
+              <div className='flex flex-col justify-center gap-[3px]'>
+                <MarkInMap />
+              </div>
+              <p className='text-nomad-black'>{ActivityContent.adress}</p>
+            </div>
+          </div>
+        </div>
+        <div className='flex flex-col justify-center'>
+          <button>
+            <KebabButton />
+          </button>
+        </div>
+      </div>
+      <div
+        className={clsx(
+          'h-[310px]',
+          'md:grid',
+          'overflow-hidden md:mr-6 md:ml-6 md:grid-cols-4 md:grid-rows-2 md:gap-1 md:rounded-[10px]',
+        )}
+      >
+        <div className='full h-full bg-[#b3b3b3] md:col-span-2 md:row-span-2'> image 1</div>
+        <div className='bg-[#b3b3b3]'>image 2</div>
+        <div className='bg-[#b3b3b3]'>image 3</div>
+        <div className='bg-[#b3b3b3]'>image 4</div>
+        <div className='bg-[#b3b3b3]'>image 5</div>
+      </div>
+      <div className='mt-[15px] mr-[24px] mb-[40px] ml-[24px]'>
+        <div className='text-nomad-black mb-4 text-[20px] font-bold'>체험 설명</div>
+        <div className='text-nomad-black mb-4'>{ActivityContent.description}</div>
+        <hr className='mb-4 border-gray-400'></hr>
+        <div className='mb-2 h-[482px] rounded-[20px] bg-[#b3b3b3]'>mapLocation</div>
+        <div className='flex gap-[3px]'>
+          <div className='flex flex-col justify-center gap-[3px]'>
+            <MarkInMap />
+          </div>
+          <p className='text-nomad-black'>{ActivityContent.adress}</p>
+        </div>
       </div>
     </main>
   );
