@@ -1,8 +1,8 @@
-import { REQUEST_URL } from "../api-public";
+import { REQUEST_URL } from '../api-public';
 
 interface FetchOptions {
   path: string;
-  query?: Record<string, string | number | boolean>;
+  query?: Record<string, string | number | boolean | null | undefined>;
   revalidate?: number;
 }
 
@@ -15,7 +15,11 @@ export const fetchServerData = async <T>({ path, query, revalidate }: FetchOptio
   const url = new URL(`${REQUEST_URL}${path}`);
 
   if (query) {
-    Object.entries(query).forEach(([key, value]) => url.searchParams.append(key, String(value)));
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) {
+        url.searchParams.append(key, String(value));
+      }
+    });
   }
 
   const options: RequestInit & { next?: { revalidate: number } } = {};
