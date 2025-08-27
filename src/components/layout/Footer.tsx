@@ -21,7 +21,7 @@ const Footer = () => {
             rel='noopener'
             title='클릭 시 페이스북으로 이동합니다.'
           >
-            <Image src='/icons/FacebookIcon.svg' alt='페이스북 로고' width={20} height={20} />
+            <Image src='/icons/ic_Facebook.svg' alt='페이스북 로고' width={20} height={20} />
           </a>
           <a
             href='https://x.com/?lang=ko'
@@ -29,7 +29,7 @@ const Footer = () => {
             rel='noopener'
             title='클릭 시 트위터로 이동합니다.'
           >
-            <Image src='/icons/TwitterIcon.svg' alt='트위터 로고' width={20} height={20} />
+            <Image src='/icons/ic_Twitter.svg' alt='트위터 로고' width={20} height={20} />
           </a>
           <a
             href='https://www.youtube.com/'
@@ -37,7 +37,7 @@ const Footer = () => {
             rel='noopener'
             title='클릭 시 유튜브로 이동합니다.'
           >
-            <Image src='/icons/YoutubeIcon.svg' alt='유튜브 로고' width={20} height={20} />
+            <Image src='/icons/ic_Youtube.svg' alt='유튜브 로고' width={20} height={20} />
           </a>
           <a
             href='https://www.instagram.com/'
@@ -45,7 +45,7 @@ const Footer = () => {
             rel='noopener'
             title='클릭 시 인스타그램으로 이동합니다.'
           >
-            <Image src='/icons/InstaIcon.svg' alt='인스타그램 로고' width={20} height={20} />
+            <Image src='/icons/ic_Instagram.svg' alt='인스타그램 로고' width={20} height={20} />
           </a>
         </div>
       </div>

@@ -1,9 +1,0 @@
-.CalenderArrow {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-}
-
-.CalenderArrow .btn {
-  cursor: pointer;
-}
