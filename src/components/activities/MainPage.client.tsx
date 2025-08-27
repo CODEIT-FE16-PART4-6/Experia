@@ -8,6 +8,7 @@ import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import { useEffect, useState, useRef } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import { InfiniteData } from '@tanstack/react-query';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return ITEM_PAGESIZE.lg;
@@ -25,19 +26,25 @@ const MainPageClient = ({ initialData }: { initialData: Activities }) => {
   }, [innerWidth]);
 
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isError } =
-    useInfiniteQuery({
+    useInfiniteQuery<
+      Activities,
+      Error,
+      InfiniteData<Activities, unknown>,
+      [string, number],
+      number | null
+    >({
       queryKey: ['activities', pageSize],
-      queryFn: ({ pageParam = 1 }) =>
-        fetchServerData({
+      queryFn: ({ pageParam = null }) =>
+        fetchServerData<Activities>({
           path: '/activities',
-          query: { method: 'offset', page: pageParam, size: pageSize },
+          query: { method: 'cursor', cursorId: pageParam ?? undefined, size: pageSize },
         }),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
-        const loadedItems = allPages.flatMap(p => p.activities).length;
-        return loadedItems < lastPage.totalCount ? allPages.length + 1 : undefined;
+      initialPageParam: null, // 첫 요청 시 cursorId 없음
+      getNextPageParam: lastPage => {
+        // 응답에 cursorId가 있으면 다음 요청에 사용
+        return lastPage.activities.length > 0 ? lastPage.cursorId : undefined;
       },
-      initialData: { pages: [initialData], pageParams: [1] }, // 서버에서 받은 데이터로 초기 캐시 세팅
+      initialData: { pages: [initialData], pageParams: [null] }, // 서버에서 받은 데이터로 초기 캐시 세팅
     });
 
   useIntersectionObserver({
