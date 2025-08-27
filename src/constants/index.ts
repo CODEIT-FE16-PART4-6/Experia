@@ -19,4 +19,4 @@ export const ITEM_PAGESIZE = {
   sm: 4,
 };
 
-export const ITEM_DEFAULT_PAGESIZE = 8; // 목록 렌더링 갯수 기본값: 8개 (desktop)
+export const ITEM_DEFAULT_PAGESIZE = 8; // 목록 렌더링 갯수 기본값: 8개
