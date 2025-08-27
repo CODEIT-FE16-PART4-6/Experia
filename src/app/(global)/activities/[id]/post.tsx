@@ -24,7 +24,7 @@ interface SubImage {
 }
 
 interface Activity {
-  adress: string;
+  address: string;
   bannerImageUrl: string;
   category: string;
   createdAt: string;
@@ -39,8 +39,14 @@ interface Activity {
   updatedAt: string;
 }
 
-const ActivityPost = ({ data }: Activity) => {
-  const winWidth = useWindowWidth(); // 가로 값
+interface ActivityProps {
+  data: Activity;
+}
+const ActivityPost = ({ data }: ActivityProps) => {
+  let winWidth = useWindowWidth(); // 가로 값
+  if (!winWidth) {
+    winWidth = 0;
+  }
   console.log('데이터 잘 받아왔나 테스트 타이틀 출력 : ', data.title);
   //mock****************************
   const ActivityContent = {

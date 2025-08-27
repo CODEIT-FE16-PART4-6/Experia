@@ -1,8 +1,9 @@
-import Post from './Post';
+import Post from './post';
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
+
 async function getActivities(id: string) {
   const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}`);
 
@@ -15,7 +16,7 @@ async function getActivities(id: string) {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
   console.log('id 출력:', id);
 
   try {
