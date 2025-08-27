@@ -68,8 +68,8 @@ const ActivityPage = () => {
         <div className='bg-[#b3b3b3]'>image 4</div>
         <div className='bg-[#b3b3b3]'>image 5</div>
       </div>
-      <div className='mt-8 flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1198px] lg:gap-6 lg:px-6'>
-        <div className='lg:w-[790px]'>
+      <div className='mt-8 flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1152px] lg:gap-6'>
+        <div className='lg:w-[786px]'>
           {winWidth > 720 ? <hr className='mb-10 border-gray-400' /> : null}
           <div className='justify-left mt-[15px] mb-[16px] flex flex-col gap-4 pr-[24px] pl-[24px] lg:p-[0px]'>
             <div className='text-nomad-black text-[20px] font-bold'>체험 설명</div>
@@ -93,7 +93,7 @@ const ActivityPage = () => {
         </div>
         <div>
           {winWidth > 720 ? (
-            <div className='h-[423px] w-[251px] rounded-[10px] bg-[#ff00ff] lg:h-[746px] lg:w-[384px]'>
+            <div className='h-[423px] w-[251px] rounded-[10px] bg-[#ff00ff] lg:h-[746px] lg:w-[340px]'>
               예약 컴포넌트
             </div>
           ) : (
