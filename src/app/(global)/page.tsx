@@ -9,6 +9,7 @@ const fetchActivities = async ({ page, size }: { page: number; size: number }) =
   const data = await fetchServerData<Activities>({
     path: '/activities',
     query: { method: 'cursor', page, size },
+    renderType: 'ssg',
   });
 
   return data;
