@@ -27,10 +27,10 @@ const ActivityPage = () => {
 
   return (
     <main className='fill bg-[#fafafa]'>
-      <div className='flex flex-row justify-between p-4 md:p-6'>
+      <div className='flex flex-row justify-between p-4 md:p-6 lg:mx-auto lg:w-[1200px]'>
         <div className='flex flex-col'>
           <div className='mb-[10px] text-[14px] text-gray-900'>{ActivityContent.tag}</div>
-          <div className='text-nomad-black mb-[16px] text-[24px] font-bold'>
+          <div className='text-nomad-black mb-[16px] text-[24px] font-bold md:text-[32px]'>
             {ActivityContent.title}
           </div>
           <div className='flex gap-3 text-[14px] text-gray-900'>
@@ -58,6 +58,7 @@ const ActivityPage = () => {
         className={clsx(
           'h-[310px]',
           'md:grid',
+          'lg:mx-auto lg:h-[534px] lg:w-[1152px] lg:gap-2',
           'overflow-hidden md:mr-6 md:ml-6 md:grid-cols-4 md:grid-rows-2 md:gap-1 md:rounded-[10px]',
         )}
       >
@@ -67,16 +68,37 @@ const ActivityPage = () => {
         <div className='bg-[#b3b3b3]'>image 4</div>
         <div className='bg-[#b3b3b3]'>image 5</div>
       </div>
-      <div className='mt-[15px] mr-[24px] mb-[40px] ml-[24px]'>
-        <div className='text-nomad-black mb-4 text-[20px] font-bold'>체험 설명</div>
-        <div className='text-nomad-black mb-4'>{ActivityContent.description}</div>
-        <hr className='mb-4 border-gray-400'></hr>
-        <div className='mb-2 h-[482px] rounded-[20px] bg-[#b3b3b3]'>mapLocation</div>
-        <div className='flex gap-[3px]'>
-          <div className='flex flex-col justify-center gap-[3px]'>
-            <MarkInMap />
+      <div className='mt-8 flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1198px] lg:gap-6 lg:px-6'>
+        <div className='lg:w-[790px]'>
+          {winWidth > 720 ? <hr className='mb-10 border-gray-400' /> : null}
+          <div className='justify-left mt-[15px] mb-[16px] flex flex-col gap-4 pr-[24px] pl-[24px] lg:p-[0px]'>
+            <div className='text-nomad-black text-[20px] font-bold'>체험 설명</div>
+            <div className='text-nomad-black mb-4'>{ActivityContent.description}</div>
           </div>
-          <p className='text-nomad-black'>{ActivityContent.adress}</p>
+          <hr className='mx-6 mb-4 border-gray-400 md:mx-[0px] md:my-10'></hr>
+          <div className='mt-[15px] mr-[24px] mb-[40px] ml-[24px] lg:mr-[0px] lg:ml-[0px]'>
+            <div className='flex flex-col gap-[3px]'>
+              <div className='mb-2 h-[450px] rounded-[20px] bg-[#b3b3b3] md:h-[276px] lg:h-[450px] lg:w-[790px]'>
+                mapLocation
+              </div>
+              <div className='flex gap-[5px]'>
+                <div className='ml-[5px] flex flex-col justify-center gap-[3px]'>
+                  <MarkInMap />
+                </div>
+                <p className='text-nomad-black'>{ActivityContent.adress}</p>
+              </div>
+            </div>
+          </div>
+          {winWidth > 720 ? <hr className='mt-10 mb-10 border-gray-400' /> : null}
+        </div>
+        <div>
+          {winWidth > 720 ? (
+            <div className='h-[423px] w-[251px] rounded-[10px] bg-[#ff00ff] lg:h-[746px] lg:w-[384px]'>
+              예약 컴포넌트
+            </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </main>
