@@ -8,7 +8,7 @@ type ButtonStyle = 'DEFAULT' | 'POSITIVE' | 'NEGATIVE';
 // 버튼 크기 타입
 type ButtonSize = 'sm' | 'md' | 'lg';
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonStyle; // 'DEFAULT' | 'POSITIVE' | 'NEGATIVE'
   size?: ButtonSize; // 'sm' | 'md' | 'lg'
   disabled?: boolean; // 버튼 비활성화
