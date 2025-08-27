@@ -2,7 +2,7 @@
 import { Field, Input, Label } from '@headlessui/react';
 import { forwardRef } from 'react';
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   placeholder: string;
   label?: string;
