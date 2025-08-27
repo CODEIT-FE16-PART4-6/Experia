@@ -1,4 +1,10 @@
+import SectionTitle from '@/components/ui/Section/SectionTitle';
+
 const MyActivities = () => {
-  return <div>내 체험 관리</div>;
+  return (
+    <div>
+      <SectionTitle title='예약 내역' />
+    </div>
+  );
 };
 export default MyActivities;
