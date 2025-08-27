@@ -8,7 +8,7 @@ import MainPageClient from '@/components/activities/MainPage.client';
 const fetchActivities = async ({ page, size }: { page: number; size: number }) => {
   const data = await fetchServerData<Activities>({
     path: '/activities',
-    query: { method: 'offset', page, size },
+    query: { method: 'cursor', page, size },
   });
 
   return data;
