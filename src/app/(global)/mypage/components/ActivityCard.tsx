@@ -1,3 +1,4 @@
+import Image from 'next/image';
 interface ActivityCardProps {
   reservation: {
     id: number;
@@ -21,50 +22,39 @@ interface ActivityCardProps {
   };
 }
 /**{
-  "cursorId": 0,
-  "reservations": [
-    {
-      "id": 0,
-      "teamId": "string",
-      "userId": 0,
-      "activity": {
-        "bannerImageUrl": "string",
-        "title": "string",
-        "id": 0
-      },
-      "scheduleId": 0,
-      "status": "pending",
-      "reviewSubmitted": true,
-      "totalPrice": 0,
-      "headCount": 0,
-      "date": "string",
-      "startTime": "string",
-      "endTime": "string",
-      "createdAt": "2025-08-27T05:25:18.729Z",
-      "updatedAt": "2025-08-27T05:25:18.729Z"
-    }
-  ],
  *
  * @returns 액티비티 1개 정보를 담고 있는 카드
  * @description 내 체험 관리, 예약 내역 페이지에서 사용
  */
 const ActivityCard = ({ reservation }: ActivityCardProps) => {
   return (
-    <div className='flex'>
+    <div className='h-[204px]rounded-lg mb-6 ml-6 flex w-[792px] overflow-hidden rounded-2xl shadow-2xl'>
       <div>
-        <figure>체험배너{reservation.activity.bannerImageUrl}</figure>
+        <figure>
+          <Image
+            src={reservation.activity.bannerImageUrl}
+            alt='액티비티 배너 사진'
+            width={204}
+            height={204}
+            className='h-[204px] w-[204px] object-cover'
+          />
+        </figure>
       </div>
       <div className=''>
-        <div>상태{reservation.status}</div>
-        <div>제목{reservation.activity.title}</div>
+        <div>예약 {reservation.status}</div>
+        <div>{reservation.activity.title}</div>
 
-        <div className='flex'>
-          <div>날짜{reservation.date}</div>
-          <div>시간{reservation.startTime}</div>
-          <div>인원수{reservation.headCount}</div>
+        <div className='flex gap-2'>
+          <div>{reservation.date}</div>
+          <span>·</span>
+          <div>
+            {reservation.startTime} - {reservation.endTime}
+          </div>
+          <span>·</span>
+          <div>{reservation.headCount}명</div>
         </div>
 
-        <div>가격{reservation.totalPrice}</div>
+        <div>₩ {reservation.totalPrice}</div>
       </div>
     </div>
   );
