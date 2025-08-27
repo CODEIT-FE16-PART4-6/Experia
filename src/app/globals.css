@@ -72,6 +72,14 @@
   button {
     @apply cursor-pointer disabled:cursor-not-allowed;
   }
+
+  label {
+    @apply mb-2 block text-base font-medium;
+  }
+
+  input {
+    @apply rounded-md border p-3.5 text-base transition-colors duration-300 outline-none;
+  }
 }
 
 @layer components {
