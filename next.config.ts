@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  // 이미지 허용 (해당 도메인)
+
+  images: {
+    domains: ['sprint-fe-project.s3.ap-northeast-2.amazonaws.com'],
+  },
 };
 
 export default nextConfig;
