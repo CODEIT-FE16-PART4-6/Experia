@@ -65,7 +65,7 @@ const Header = () => {
                 onClick={handleProfileClick}
               >
                 <Avatar
-                  imgSrc={user.profileImageUrl ?? '/images/ProfileDefaultImg.png'}
+                  imgSrc={user.profileImageUrl}
                   size='md'
                 />
                 정만철

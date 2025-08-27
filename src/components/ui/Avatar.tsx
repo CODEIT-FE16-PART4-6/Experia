@@ -6,7 +6,7 @@ interface AvatarProps {
   size?: 'sm' | 'md';
 }
 
-const Avatar = ({ size = 'md', imgSrc }: AvatarProps) => {
+const Avatar = ({ size = 'md', imgSrc = '/images/ProfileDefaultImg.png' }: AvatarProps) => {
   return (
     <Image
       src={imgSrc ?? '/images/ProfileDefaultImg.png'}
