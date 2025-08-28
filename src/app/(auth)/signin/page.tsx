@@ -1,12 +1,15 @@
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-// 요청 데이터 타입
-interface LoginRequest {
-  email: string;
-  password: string;
-}
+import { useForm, SubmitHandler } from "react-hook-form"
+import Image from 'next/image';
+import Button from '@/components/Button';
+import InputField from '@/components/InputField';
+import Link from 'next/link';
+import { LoginRequestSchema } from '@/types/schema/userSchema';
+// 리액트 훅 폼과 zod를 연결해주는 라이브러리
+import { zodResolver } from '@hookform/resolvers/zod'
 
 // 사용자 정보 타입
 interface UserDto {
@@ -18,65 +21,73 @@ interface UserDto {
   updatedAt: string;
 }
 
-// 응답 데이터 타입
+// 로그인 응답 데이터 타입
 interface LoginResponse {
   user: UserDto;
   refreshToken: string;
   accessToken: string;
 }
 
+// 로그인 요청 데이터 타입
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
 const LoginPage = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async () => {
-    console.log('로그인 버튼 클릭됨');
+  const {
+    register, // input폼 연결
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginRequest>({
+    resolver: zodResolver(LoginRequestSchema),
+    mode: 'onChange', // 입력값이 바뀔 때마다 검사
+  }) // 여기에 연결 해줌!
+
+  // 로그인 요청
+  const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
+    console.log('전송 데이터:', data)
     setLoading(true);
     setError(null);
+
+    // 로그인 데이터 전송
     try {
       const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password } as LoginRequest),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       });
 
       const responseText = await response.text();
       console.log('응답 텍스트:', responseText);
 
-      const data = JSON.parse(responseText);
-      console.log('응답 데이터:', data);
+      const responseData = JSON.parse(responseText);
+      console.log('응답 데이터:', responseData);
 
-      if (!response.ok) {
-        // 서버 응답이 에러인 경우
-        console.error('서버 응답 에러:', response.status, data);
-        throw new Error(`로그인 실패: ${response.status} ${data.message || 'Unknown error'}`);
-      }
-
-      if (!data.accessToken || !data.refreshToken) {
+      if (!response.ok || !responseData.accessToken || !responseData.refreshToken) {
         // 필요한 데이터가 없는 경우
-        console.error('필수 데이터 누락:', data);
+        console.error('로그인 실패:', response.status, responseData);
         throw new Error('로그인 실패: 필수 데이터가 누락되었습니다.');
       }
 
-      localStorage.setItem('access_token', data.accessToken);
-      localStorage.setItem('refresh_token', data.refreshToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('access_token', responseData.accessToken);
+      localStorage.setItem('refresh_token', responseData.refreshToken);
+      localStorage.setItem('user', JSON.stringify(responseData.user));
 
       console.log('저장 후 확인:', {
         accessTokenStored: localStorage.getItem('access_token'),
         refreshTokenStored: localStorage.getItem('refresh_token'),
       });
 
-      router.push('/activities');
+      router.push('/');
     } catch (err) {
-      console.error('로그인 중 오류 발생:', err);
-      setError('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인하세요.');
-    } finally {
+      console.error('로그인 중 오류 발생', err);
+      setError('이메일 혹은 비밀번호가 일치하지 않습니다.');
       setLoading(false);
     }
   };
@@ -109,54 +120,82 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gray-100'>
-      <div className='w-full max-w-md rounded bg-white p-8 shadow'>
-        <h2 className='mb-4 text-center text-2xl font-bold'>임시 로그인</h2>
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            handleLogin();
-          }}
-        >
-          {error && <div className='mb-4 text-sm text-red-500'>{error}</div>}
-          <div className='mb-4'>
-            <label className='mb-1 block' htmlFor='email'>
-              이메일
-            </label>
-            <input
-              id='email'
-              type='email'
-              className='w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none'
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              disabled={loading}
+    <div className='flex min-h-screen items-center justify-center bg-white'>
+      <div className='w-full max-w-2xl px-4'>
+        <div className='flex justify-center mb-14'>
+          <Link href='/'>
+            <Image src='/images/logo.svg' alt='Experia 로고' width={260} height={42} />
+          </Link>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='flex flex-col gap-7'>
+            <InputField
+              label="이메일"
+              placeholder="이메일 입력해 주세요"
+              type="email"
+              autoComplete="email"
+              {...register('email', { required: '이메일 형식에 맞게 입력해주세요' })}
+              error={errors.email?.message}
             />
+            <div className="relative">
+              <InputField
+                label="비밀번호"
+                placeholder="비밀번호 입력해 주세요"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                {...register('password', { required: '8자 이상 작성해주세요' })}
+                error={errors.password?.message}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-15 -translate-y-1/2"
+              >
+                <Image
+                  src={showPassword ? '/icons/ic_EyeOff.svg' : '/icons/ic_Eye.svg'}
+                  alt="비밀번호 표시 토글"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </div>
+
+            <div className='flex flex-col'>
+              {error && <p className='text-red-600 text-sm mb-2'>{error}</p>}
+              <Button
+                type='submit'
+                variant='POSITIVE'
+                size='lg'
+                disabled={!isValid || loading}
+              >
+                {loading ? '로딩 중...' : '로그인 하기'}
+              </Button>
+            </div>
           </div>
-          <div className='mb-4'>
-            <label className='mb-1 block' htmlFor='password'>
-              비밀번호
-            </label>
-            <input
-              id='password'
-              type='text'
-              autoComplete='current-password'
-              className='w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none'
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              disabled={loading}
-            />
+
+          <div className="mt-6 text-center">
+            <div className="text-gray-900 text-base mb-4">
+              회원이 아니신가요?
+              <Link href="/signup" className="text-nomad-black underline ml-1">
+                회원가입하기
+              </Link>
+            </div>
+
+            <div className="flex items-center my-6">
+              <div className="flex-1 h-px bg-gray-300"></div>
+              <p className="mx-9 text-gray-800 text-xl">SNS 계정으로 로그인하기</p>
+              <div className="flex-1 h-px bg-gray-300"></div>
+            </div>
+
+            <div className="flex justify-center mt-4">
+              <Link href='https://www.kakaocorp.com/'>
+                <Image src='/icons/ic_SocialLogo.svg' alt='kakao 로고' width={48} height={48} className="sm:w-18 sm:h-18" />
+              </Link>
+            </div>
           </div>
-          <button
-            type='submit'
-            onClick={handleLogin}
-            className='w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50'
-            disabled={loading}
-          >
-            {loading ? '로딩 중...' : '로그인'}
-          </button>
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
