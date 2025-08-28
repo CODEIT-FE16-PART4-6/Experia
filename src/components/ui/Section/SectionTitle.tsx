@@ -1,37 +1,16 @@
-'use client';
 import Button from '@/components/Button';
-import { useRouter } from 'next/navigation';
+import { ReactNode } from 'react';
 
 interface SectionTitleProps {
   title: string;
-  btnText?: string;
-  href?: string;
-  onClick?: () => void;
+  action?: ReactNode;
 }
 
-const SectionTitle = ({ title, btnText, href, onClick }: SectionTitleProps) => {
-  const router = useRouter();
-  const isBtnLink = btnText && href;
-  const isBtn = btnText && !href;
-
+const SectionTitle = ({ title, action }: SectionTitleProps) => {
   return (
     <div className='mb-4 flex items-center justify-between lg:mb-6'>
       <h2 className='text-4xl font-bold text-black'>{title}</h2>
-      {isBtnLink && (
-        <Button
-          variant='POSITIVE'
-          size='md'
-          onClick={() => router.push(href)}
-          className='!w-auto min-w-[120px]'
-        >
-          {btnText}
-        </Button>
-      )}
-      {isBtn && (
-        <Button variant='POSITIVE' size='md' onClick={onClick} className='!w-auto min-w-[120px]'>
-          {btnText}
-        </Button>
-      )}
+      <div className='w-auto min-w-[120px]'>{action}</div>
     </div>
   );
 };
