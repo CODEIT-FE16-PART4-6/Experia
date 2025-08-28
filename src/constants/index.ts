@@ -16,7 +16,7 @@ export const BREAKPOINTS = {
 export const ITEM_PAGESIZE = {
   lg: 8,
   md: 9,
-  sm: 4,
+  sm: 6,
 };
 
-export const ITEM_DEFAULT_PAGESIZE = 8; // 목록 렌더링 갯수 기본값: 8개
+export const ITEM_DEFAULT_PAGESIZE = 12; // 목록 렌더링 갯수 기본값: 12개 (반응형 그리드 레이아웃에 맞춤)
