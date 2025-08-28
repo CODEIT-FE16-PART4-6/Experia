@@ -1,26 +1,39 @@
 import { z } from 'zod';
 
-export const ReservationRequestShema = z.object({
-  scheduleId: z.number(),
-  headCount: z.number(),
+export const ActivitySchema = z.object({
+  bannerImageUrl: z.string(),
+  title: z.string(),
+  id: z.number(),
 });
 
-export const ReservationResponseShema = z.object({
+export const ReservationWithActivityResponseDtoSchema = z.object({
   id: z.number(),
-  scheduleId: z.number(),
-  headCount: z.number(),
   teamId: z.string(),
   userId: z.number(),
+  activity: ActivitySchema,
+  scheduleId: z.number(),
+  status: z.enum(['pending', 'confirmed', 'declined', 'canceled', 'completed']),
+  reviewSubmitted: z.boolean(),
   totalPrice: z.number(),
-  activitiyId: z.number(),
-  status: z.enum(["pending", "confirmed", "declined", "canceled", "completed"]),
+  headCount: z.number(),
   date: z.string(),
   startTime: z.string(),
   endTime: z.string(),
-  reviewSubmitted: z.boolean(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.string(), // 날짜 문자열
+  updatedAt: z.string(), // 날짜 문자열
 });
 
-export type ReservationReq = z.infer<typeof ReservationRequestShema>;
-export type ReservationResponse = z.infer<typeof ReservationResponseShema>;
+export const ReservationResponseSchema = z.object({
+  cursorId: z.number().nullable(),
+  reservations: z.array(ReservationWithActivityResponseDtoSchema),
+  totalCount: z.number(),
+});
+
+export type ReservationResponse = z.infer<typeof ReservationResponseSchema>;
+
+export const ReservationRequestSchema = z.object({
+  scheduleId: z.number(),
+  headCount: z.number(),
+});
+
+export type ReservationRequest = z.infer<typeof ReservationRequestSchema>;
