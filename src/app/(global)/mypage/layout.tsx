@@ -1,15 +1,18 @@
-import { pretendard } from '@/utils/fonts';
+import Snb from '@/components/layout/Snb';
 
-const MypageLayout = ({
-  children,
-}: Readonly<{
+interface MyPageLayoutProps {
   children: React.ReactNode;
-}>) => {
-  return (
-    <html lang='ko'>
-      <body className={pretendard.className}>{children}</body>
-    </html>
-  );
-};
+}
 
-export default MypageLayout;
+export default function MyPageLayout({ children }: MyPageLayoutProps) {
+  return (
+    <div>
+      <div className='mt-[72px] flex min-h-screen w-[344px] flex-col md:w-[696px] md:flex-row lg:mx-auto lg:w-[1200px]'>
+        <aside>
+          <Snb />
+        </aside>
+        <section className='flex-1 p-4'>{children}</section>
+      </div>
+    </div>
+  );
+}
