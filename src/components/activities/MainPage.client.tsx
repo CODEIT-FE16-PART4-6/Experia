@@ -59,7 +59,7 @@ const MainPageClient = ({ initialData }: { initialData: Activities }) => {
       <div ref={loadMoreRef} className='min-h-10'>
         {isError && (
           <p className='pb-16 text-center'>
-            목록 불러오기에 실패했습니다.{' '}
+            목록 불러오기에 실패했습니다.
             <button className='underline underline-offset-4' onClick={() => fetchNextPage()}>
               다시 시도
             </button>

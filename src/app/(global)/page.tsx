@@ -6,7 +6,7 @@ import MainPageClient from '@/components/activities/MainPage.client';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import ErrorUI from '@/components/ui/ErrorUI';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
 
 const fetchActivities = async ({ page, size }: { page: number; size: number }) => {
   const data = await fetchServerData<Activities>({
@@ -28,7 +28,7 @@ const MainPage = async () => {
         <SectionTitle title='🌏 모든 체험' />
 
         <ErrorBoundary errorComponent={ErrorUI}>
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense fallback={<ActivityListSkeleton />}>
             <MainPageClient initialData={initialData} />
           </Suspense>
         </ErrorBoundary>
