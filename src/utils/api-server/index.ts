@@ -10,7 +10,7 @@ import { FetchOptions } from '@/types/fetchOptions';
 export const fetchServerData = async <T>({
   path,
   query,
-  renderType = 'ssr',
+  renderType,
   revalidate,
 }: FetchOptions): Promise<T> => {
   const url = new URL(`${REQUEST_URL}${path}`);
