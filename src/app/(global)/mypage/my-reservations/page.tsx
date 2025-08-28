@@ -34,7 +34,7 @@ const page = () => {
   const reservations = data || [];
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen'>
       <SectionTitle title='예약 내역' />
       <div className='flex flex-col gap-4'>
         {reservations.map(res => (
