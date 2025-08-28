@@ -1,6 +1,6 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery, InfiniteData } from '@tanstack/react-query';
 import ActivityList from './ActivityList.client';
 import { fetchServerData } from '@/utils/api-server';
 import { Activities } from '@/types/schema/activitiesSchema';
@@ -8,7 +8,7 @@ import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import { useEffect, useState, useRef } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import { InfiniteData } from '@tanstack/react-query';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return ITEM_PAGESIZE.lg;
@@ -25,8 +25,8 @@ const MainPageClient = ({ initialData }: { initialData: Activities }) => {
     if (innerWidth !== undefined) setPageSize(getPageSize(innerWidth));
   }, [innerWidth]);
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isError } =
-    useInfiniteQuery<
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
+    useSuspenseInfiniteQuery<
       Activities,
       Error,
       InfiniteData<Activities, unknown>,
@@ -55,10 +55,17 @@ const MainPageClient = ({ initialData }: { initialData: Activities }) => {
 
   return (
     <>
-      <ActivityList data={data} isFetching={isFetching} isError={isError} />
-
-      <div ref={loadMoreRef} className='h-10'>
-        {isFetchingNextPage ? <div>Loading more...</div> : null}
+      <ActivityList data={data} />
+      <div ref={loadMoreRef} className='min-h-10'>
+        {isError && (
+          <p className='pb-16 text-center'>
+            목록 불러오기에 실패했습니다.{' '}
+            <button className='underline underline-offset-4' onClick={() => fetchNextPage()}>
+              다시 시도
+            </button>
+          </p>
+        )}
+        {isFetchingNextPage && <LoadingSpinner />}
       </div>
     </>
   );
