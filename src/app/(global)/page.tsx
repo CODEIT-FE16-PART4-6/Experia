@@ -16,8 +16,7 @@ const fetchActivities = async ({ page, size }: { page: number; size: number }) =
 
 const MainPage = async () => {
   const initialPage = 1;
-  const initialSize = ITEM_DEFAULT_PAGESIZE;
-  const initialData = await fetchActivities({ page: initialPage, size: initialSize });
+  const initialData = await fetchActivities({ page: initialPage, size: ITEM_DEFAULT_PAGESIZE });
 
   return (
     <main>
