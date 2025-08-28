@@ -1,8 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Activity } from '@/types/schema/activitiesSchema';
+import { useState } from 'react';
 
 const ActivityItem = ({ item }: { item: Activity }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <li className='max-w-none text-black lg:max-w-[282px]'>
       <Link href={`/activities/${item.id}`} className='group block'>
@@ -12,9 +15,8 @@ const ActivityItem = ({ item }: { item: Activity }) => {
             alt={item.description}
             width={282}
             height={282}
-            className='h-full w-full object-cover'
-            blurDataURL={item.blurDataUrl!}
-            placeholder={item.blurDataUrl ? 'blur' : 'empty'}
+            className={`h-full w-full object-cover ${isLoaded ? 'blur-0 scale-100 opacity-100' : 'scale-105 opacity-60 blur-md'} `}
+            onLoad={() => setIsLoaded(true)}
           />
 
           {/* hover 시 썸네일 dimmed 처리 */}
