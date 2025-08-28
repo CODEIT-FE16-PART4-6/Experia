@@ -8,7 +8,7 @@ import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton'
 
 const fetchActivities = async ({ page, size }: { page: number; size: number }) => {
   const data = await fetchServerData<Activities>({
-    path: '/activities1',
+    path: '/activities',
     query: { method: 'cursor', page, size },
     renderType: 'ssg',
   });
