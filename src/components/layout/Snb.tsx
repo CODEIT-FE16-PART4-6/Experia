@@ -2,6 +2,10 @@
 import useWindowWidth from '@/hooks/useWindowWidth';
 import Link from 'next/link';
 import Image from 'next/image';
+import InfoIcon from '@/assets/icons/ic_mypage1.svg';
+import MyReservationIcon from '@/assets/icons/ic_mypage2.svg';
+import MyActivityIcon from '@/assets/icons/ic_mypage3.svg';
+import ReservationIcon from '@/assets/icons/ic_mypage4.svg';
 
 const Snb = () => {
   const windowSize = useWindowWidth();
@@ -29,16 +33,16 @@ const Snb = () => {
         </div>
       </div>
       <ul className='mx-6'>
-        <li className='group hover:text-nomad-black'>
-          <Link href='/mypage' className='hover:bg-green-light mt-2 flex gap-2 rounded p-2'>
-            <Image
+        <li className='hover:text-nomad-black'>
+          <Link href='/mypage' className='group hover:bg-green-light mt-2 flex gap-2 rounded p-2'>
+            <InfoIcon
               src='/icons/ic_mypage1.svg'
               alt='내 정보'
               width={24}
               height={24}
-              className='group-hover:fill-nomad-black fill-current'
+              className='group-hover:text-nomad-black'
             />
-            내 정보
+            <span className='group-hover:text-nomad-black'>내 정보</span>
           </Link>
         </li>
         <li className='group hover:text-nomad-black'>
@@ -46,7 +50,7 @@ const Snb = () => {
             href='/mypage/reservations'
             className='hover:bg-green-light mt-2 flex gap-2 rounded p-2'
           >
-            <Image src='/icons/ic_mypage2.svg' alt='예약 내역' width={24} height={24} />
+            <MyReservationIcon src='/icons/ic_mypage2.svg' alt='예약 내역' width={24} height={24} />
             예약 내역
           </Link>
         </li>
@@ -55,8 +59,8 @@ const Snb = () => {
             href='/mypage/myActivities'
             className='hover:bg-green-light mt-2 flex gap-2 rounded p-2'
           >
-            <Image src='/icons/ic_mypage3.svg' alt='내 체험 관리' width={24} height={24} />내 체험
-            관리
+            <MyActivityIcon src='/icons/ic_mypage3.svg' alt='내 체험 관리' width={24} height={24} />
+            내 체험 관리
           </Link>
         </li>
         <li className='group hover:text-nomad-black'>
@@ -64,7 +68,7 @@ const Snb = () => {
             href='/mypage/myReservation'
             className='hover:bg-green-light mt-2 flex gap-2 rounded p-2'
           >
-            <Image src='/icons/ic_mypage4.svg' alt='예약 현황' width={24} height={24} />
+            <ReservationIcon src='/icons/ic_mypage4.svg' alt='예약 현황' width={24} height={24} />
             예약 현황
           </Link>
         </li>
