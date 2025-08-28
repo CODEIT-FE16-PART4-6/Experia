@@ -47,7 +47,7 @@ const Snb = () => {
         </li>
         <li className='group hover:text-nomad-black'>
           <Link
-            href='/mypage/reservations'
+            href='/mypage/myActivities'
             className='hover:bg-green-light mt-2 flex gap-2 rounded p-2'
           >
             <MyReservationIcon src='/icons/ic_mypage2.svg' alt='예약 내역' width={24} height={24} />
@@ -56,7 +56,7 @@ const Snb = () => {
         </li>
         <li className='group hover:text-nomad-black'>
           <Link
-            href='/mypage/myActivities'
+            href='/mypage/myReservation'
             className='hover:bg-green-light mt-2 flex gap-2 rounded p-2'
           >
             <MyActivityIcon src='/icons/ic_mypage3.svg' alt='내 체험 관리' width={24} height={24} />
@@ -65,7 +65,7 @@ const Snb = () => {
         </li>
         <li className='group hover:text-nomad-black'>
           <Link
-            href='/mypage/myReservation'
+            href='/mypage/reservation'
             className='hover:bg-green-light mt-2 flex gap-2 rounded p-2'
           >
             <ReservationIcon src='/icons/ic_mypage4.svg' alt='예약 현황' width={24} height={24} />
