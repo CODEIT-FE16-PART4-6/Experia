@@ -3,6 +3,8 @@ import SectionTitle from '@/components/ui/Section/SectionTitle';
 import ActivityCard from '../components/ActivityCard';
 import { useQuery } from '@tanstack/react-query';
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
+import DropdownOptions from '@/components/DropdownOptions';
+import { RESERVATION_STATUS } from '@/constants';
 
 const fetchReservations = async () => {
   const response = await fetch(
@@ -35,7 +37,10 @@ const page = () => {
 
   return (
     <div className='min-h-screen'>
-      <SectionTitle title='예약 내역' />
+      <SectionTitle
+        title='예약 내역'
+        action={<DropdownOptions items={RESERVATION_STATUS} placeholderLabel='필터' />}
+      />
       <div className='flex flex-col gap-4'>
         {reservations.map(res => (
           <ActivityCard key={res.id} reservation={res} />
