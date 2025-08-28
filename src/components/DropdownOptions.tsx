@@ -2,25 +2,48 @@
 
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
 import { useState, Fragment } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Button from './Button';
 import Image from 'next/image';
 import RefreshIcon from '@/assets/icons/ic_refresh.svg';
 
-export interface DropdownOptionsItem {
+interface DropdownOptionsItem {
   label: string;
+  value: string;
 }
 
-const DropdownOptions = ({ items }: { items: DropdownOptionsItem[] }) => {
-  const [selectedItem, setSelectedItem] = useState('필터');
+interface DropdownOptionsProps {
+  items: DropdownOptionsItem[];
+  placeholderLabel?: string;
+}
+
+const DropdownOptions = ({ items, placeholderLabel }: DropdownOptionsProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [selectedItem, setSelectedItem] = useState(placeholderLabel ?? items[0].label);
+
+  const handleClick = (item: DropdownOptionsItem) => {
+    setSelectedItem(item.label);
+
+    const currentParams = new URLSearchParams(searchParams);
+    currentParams.set('option', item.value);
+
+    // URL 업데이트 (페이지 이동 없이 쿼리 파라미터만 변경)
+    router.push(`?${currentParams.toString()}`);
+  };
+
+  const handleReset = () => {
+    setSelectedItem('필터');
+
+    const currentParams = new URLSearchParams(searchParams);
+    currentParams.delete('option');
+
+    router.push(`?${currentParams.toString()}`);
+  };
 
   return (
     <div className='flex gap-2'>
-      <Button
-        type='button'
-        className='rounded-2xl'
-        onClick={() => setSelectedItem('필터')}
-        title='필터 초기화'
-      >
+      <Button type='button' className='rounded-2xl' onClick={handleReset} title='필터 초기화'>
         <RefreshIcon />
       </Button>
 
@@ -54,10 +77,10 @@ const DropdownOptions = ({ items }: { items: DropdownOptionsItem[] }) => {
         >
           <MenuItems className='absolute right-0 mt-2 w-40 rounded-2xl border border-gray-300 bg-white shadow-lg focus:outline-none'>
             {items.map((item, index) => (
-              <MenuItem key={index}>
+              <MenuItem key={`${item}-${index}`}>
                 {() => (
                   <button
-                    onClick={() => setSelectedItem(item.label)}
+                    onClick={() => handleClick(item)}
                     className='block w-full border-b border-gray-300 py-[18px] text-lg font-medium text-gray-900 last:border-b-0'
                   >
                     {item.label}
