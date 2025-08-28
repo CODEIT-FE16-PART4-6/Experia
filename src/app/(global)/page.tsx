@@ -4,13 +4,11 @@ import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import MainPageClient from '@/components/activities/MainPage.client';
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
-import ErrorUI from '@/components/ui/ErrorUI';
 import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
 
 const fetchActivities = async ({ page, size }: { page: number; size: number }) => {
   const data = await fetchServerData<Activities>({
-    path: '/activities',
+    path: '/activities1',
     query: { method: 'cursor', page, size },
     renderType: 'ssg',
   });
@@ -27,11 +25,9 @@ const MainPage = async () => {
       <section className='mx-auto mt-[34px] w-full lg:w-[1200px]'>
         <SectionTitle title='🌏 모든 체험' />
 
-        <ErrorBoundary errorComponent={ErrorUI}>
-          <Suspense fallback={<ActivityListSkeleton />}>
-            <MainPageClient initialData={initialData} />
-          </Suspense>
-        </ErrorBoundary>
+        <Suspense fallback={<ActivityListSkeleton />}>
+          <MainPageClient initialData={initialData} />
+        </Suspense>
       </section>
     </main>
   );
