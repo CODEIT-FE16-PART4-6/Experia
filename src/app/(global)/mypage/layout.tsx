@@ -1,5 +1,4 @@
 import Snb from '@/components/layout/Snb';
-import { BREAKPOINTS } from '@/constants';
 
 interface MyPageLayoutProps {
   children: React.ReactNode;
