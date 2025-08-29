@@ -7,19 +7,15 @@ import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import Avatar from '@/components/ui/Avatar';
-
-const user = {
-  id: 2455,
-  email: 'aa@aa.com',
-  nickname: 'aaa',
-  profileImageUrl: null,
-  createdAt: '2025-08-20T17:42:51.615Z',
-  updatedAt: '2025-08-20T17:42:51.615Z',
-};
+import { useUserStore } from '@/stores/userStore';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollY = useScrollY();
+  const { name, profileUrl } = useUserStore(state => ({
+    name: state.name,
+    profileUrl: state.profileUrl,
+  }));
 
   const handleProfileClick = () => {
     console.log('hello');
@@ -43,35 +39,36 @@ const Header = () => {
           <Image src='/images/logo.svg' alt='Experia 로고' width={134} height={42} />
         </Link>
         <nav className='flex gap-3 font-medium text-black'>
-          {/* 로그인 전 */}
-          <Link href='/signin' className='nav-list'>
-            로그인
-          </Link>
-          <Link href='/signup' className='nav-list'>
-            회원가입
-          </Link>
-
-          {/* 로그인 후 */}
-          <ul className='flex items-center divide-x divide-gray-300'>
-            {/* <li className='flex pr-3 md:pr-5'>
-              <button>
-                <AlarmIcon className='hover:text-primary text-gray-700 transition-colors' />
-              </button>
-            </li>
-            <li className='pl-3 md:pl-5'>
-              <button
-                type='button'
-                className='hover:text-primary flex items-center gap-2.5 transition-colors'
-                onClick={handleProfileClick}
-              >
-                <Avatar
-                  imgSrc={user.profileImageUrl}
-                  size='md'
-                />
-                정만철
-              </button>
-            </li> */}
-          </ul>
+          {name ? (
+            <>
+              <ul className='flex items-center divide-x divide-gray-300'>
+                <li className='flex pr-3 md:pr-5'>
+                  <button>
+                    <AlarmIcon className='hover:text-primary text-gray-700 transition-colors' />
+                  </button>
+                </li>
+                <li className='pl-3 md:pl-5'>
+                  <button
+                    type='button'
+                    className='hover:text-primary flex items-center gap-2.5 transition-colors'
+                    onClick={handleProfileClick}
+                  >
+                    <Avatar imgSrc={profileUrl ?? null} size='md' />
+                    {name}
+                  </button>
+                </li>
+              </ul>
+            </>
+          ) : (
+            <>
+              <Link href='/signin' className='nav-list'>
+                로그인
+              </Link>
+              <Link href='/signup' className='nav-list'>
+                회원가입
+              </Link>
+            </>
+          )}
         </nav>
       </div>
     </header>
