@@ -25,7 +25,7 @@ const DropdownSelect = ({ items, label, placeholder = '카테고리' }: Dropdown
   const [selected, setSelected] = useState<DropdownSelectItem | null>(null);
 
   return (
-    <div className='w-64'>
+    <div className='w-full'>
       {label && <label className='mb-1 block font-semibold'>{label}</label>}
 
       <Listbox value={selected} onChange={setSelected}>
