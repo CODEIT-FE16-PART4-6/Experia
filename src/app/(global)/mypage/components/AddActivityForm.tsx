@@ -14,8 +14,16 @@ import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/acti
 import { zodResolver } from '@hookform/resolvers/zod';
 import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
+import { REQUEST_URL } from '@/utils/api-public';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+const STORAGE_KEY = 'add-activity-form';
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjUwOCwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQ4Mjk4OSwiZXhwIjoxNzU2NDg0Nzg5LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.HZWRO4v2b3vUNQi3SYid_QgIUCWOwW4dArOHtxFr2pE'; // sd@email.com(pw:12345678) temp access token
 
 const AddActivityForm = () => {
+  const router = useRouter();
   const methods = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivityFormValueSchema),
     defaultValues: {
@@ -33,18 +41,62 @@ const AddActivityForm = () => {
     handleSubmit,
     register,
     formState: { errors },
+    watch,
+    reset,
   } = methods;
 
-  const onSubmit: SubmitHandler<ActivityFormValues> = data => {
-    console.log(data);
+  const values = watch();
+
+  // 입력값이 바뀔 때마다 sessionStorage에 저장
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+  }, [values]);
+
+  // 페이지 새로고침 시 기존 값 복구
+  useEffect(() => {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        reset(JSON.parse(saved));
+      } catch (e) {
+        console.error('세션 저장 복구 실패:', e);
+      }
+    }
+  }, [reset]);
+
+  const onSubmit: SubmitHandler<ActivityFormValues> = async data => {
+    try {
+      const res = await fetch(`${REQUEST_URL}/activities`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.error('서버 에러:', error);
+        alert(error.message || '체험 등록에 실패했습니다.');
+        return;
+      }
+
+      const result = await res.json();
+      console.log('등록 성공:', result);
+      alert('체험이 등록되었습니다!');
+
+      // 등록 성공 후 상세 페이지로 이동
+      router.push(`/activities/${result.id}`);
+    } catch (err) {
+      console.error('네트워크 에러:', err);
+      alert('서버와의 통신에 실패했습니다.');
+    }
   };
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={handleSubmit(onSubmit, errors => console.log('Errors:', errors))}
-        className='flex flex-col gap-4 pb-[180px]'
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pb-[180px]'>
         <SectionTitle
           title='내 체험 등록'
           action={
@@ -64,9 +116,9 @@ const AddActivityForm = () => {
             <DropdownSelect
               items={ACTIVITY_CATEGORIES}
               selectedItem={
-                ACTIVITY_CATEGORIES.find(category => category.id === field.value) ?? null
+                ACTIVITY_CATEGORIES.find(category => category.value === field.value) ?? null
               }
-              onChange={item => field.onChange(item?.id ?? '')}
+              onChange={item => field.onChange(item?.value ?? '')}
               placeholder='카테고리 선택'
             />
           )}
