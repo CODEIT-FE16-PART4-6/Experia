@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { ComponentType, SVGProps } from 'react';
 
 interface SnbList {
-  icon: ComponentType<SVGProps<SVGElement>>;
+  icon?: ComponentType<SVGProps<SVGElement>>;
   path: string;
   label: string;
 }
@@ -27,13 +27,16 @@ const SnbList = ({ item }: SnbListProps) => {
           'bg-green-light': pathname === path,
         })}
       >
-        <Icon
-          width={24}
-          height={24}
-          className={clsx('group-hover:text-primary', {
-            'text-primary': pathname === path,
-          })}
-        />
+        {/* {Icon && (
+          <Icon
+            width={24}
+            height={24}
+            className={clsx('group-hover:text-primary', {
+              'text-primary': pathname === path,
+            })}
+          />
+        )} */}
+
         <span className={pathname === path ? 'text-primary' : ''}>{label}</span>
       </Link>
     </li>
