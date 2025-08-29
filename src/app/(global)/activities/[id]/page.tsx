@@ -1,10 +1,11 @@
+import { unstable_cache } from 'next/cache';
 import Post from './post';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-async function getActivities(id: string) {
+async function fetchActivities(id: string) {
   const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}`);
 
   if (!res.ok) {
@@ -15,12 +16,19 @@ async function getActivities(id: string) {
   return data;
 }
 
+//****************캐시에 저장
+const initialGetActivity = unstable_cache(fetchActivities, ['activity'], {
+  revalidate: 300, //5 minute
+  tags: ['activity'],
+});
+
+//****************
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
   console.log('id 출력:', id);
 
   try {
-    const data = await getActivities(id);
+    const data = await initialGetActivity(id);
     console.log(data);
 
     return <Post data={data} />;

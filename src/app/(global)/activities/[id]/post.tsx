@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { cache } from 'react';
 //downComponent
 import PostHeader from './postHeader';
 import PostImage from './postImage';
@@ -13,7 +14,6 @@ interface ActivityProps {
 }
 const ActivityPost = ({ data }: ActivityProps) => {
   console.log('데이터 잘 받아왔나 테스트 타이틀 출력 : ', data.title);
-
   const ActivityContent = {
     tag: data.category,
     title: data.title,
