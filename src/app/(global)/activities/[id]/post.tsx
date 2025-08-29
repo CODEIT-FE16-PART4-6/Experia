@@ -38,6 +38,8 @@ const ActivityPost = ({ data }: ActivityProps) => {
           <PostContent
             description={ActivityContent.description}
             address={ActivityContent.address}
+            reviewCount={ActivityContent.reviewCount}
+            rating={ActivityContent.rating}
           />
         </div>
         <div>

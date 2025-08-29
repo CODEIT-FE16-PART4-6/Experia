@@ -3,11 +3,16 @@
 //img
 import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
 
+//component
+import PostReview from './postReview';
+
 interface ContentProps {
   description: string;
   address: string;
+  reviewCount: number;
+  rating: number;
 }
-const PostContent = ({ description, address }: ContentProps) => {
+const PostContent = ({ description, address, reviewCount, rating }: ContentProps) => {
   return (
     <>
       <hr className='hidden md:mb-10 md:block md:border-gray-400 lg:mb-10 lg:border-gray-400' />
