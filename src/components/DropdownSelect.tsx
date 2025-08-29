@@ -1,7 +1,6 @@
 'use client';
 
-import { Fragment, useState } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { Fragment } from 'react';
 import {
   Listbox,
   ListboxButton,
