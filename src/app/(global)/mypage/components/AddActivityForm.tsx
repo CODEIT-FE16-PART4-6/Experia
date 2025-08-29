@@ -13,6 +13,7 @@ import Button from '@/components/Button';
 import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/activitiesSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ImageUploader from '@/components/ImageUpload/ImageUploader';
+import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 
 const AddActivityForm = () => {
   const methods = useForm<ActivityFormValues>({
@@ -23,9 +24,8 @@ const AddActivityForm = () => {
       description: '',
       address: '',
       price: 0,
-      schedules: [{ date: '', startTime: '', endTime: '' }],
       bannerImageUrl: '',
-      // subImageUrls: [],
+      subImageUrls: [],
     },
   });
 
@@ -43,7 +43,7 @@ const AddActivityForm = () => {
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(onSubmit, errors => console.log('Errors:', errors))}
-        className='flex flex-col gap-4 p-4'
+        className='flex flex-col gap-4 pb-[180px]'
       >
         <SectionTitle
           title='내 체험 등록'
@@ -126,15 +126,21 @@ const AddActivityForm = () => {
           {errors && <p className='text-red-500'>{errors?.bannerImageUrl?.message}</p>}
         </div>
 
-        {/* <div className='flex flex-col gap-3 md:gap-4'>
+        <div className='flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='subImg'>상세 이미지</FormLabel>
           <Controller
-            name='schedules'
+            name='subImageUrls'
             control={methods.control}
-            render={({ field }) => <DateTimeInputGroup {...field} />}
+            render={({ field, fieldState }) => (
+              <MultiImageUploader
+                value={field.value ?? []} // field.value undefined면 빈 배열로 초기화
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+                maxCount={4}
+              />
+            )}
           />
-          {errors && <p className='text-red-500'>{errors?.schedules?.message}</p>}
-        </div> */}
+        </div>
       </form>
     </FormProvider>
   );
