@@ -6,7 +6,7 @@ import Image from 'next/image'
 import InputField from '@/components/InputField'
 import Link from 'next/link'
 import Button from '@/components/Button'
-import { SignupRequest, SignupRequestSchema } from "@/types/schema/userSchema"ㄴ
+import { SignupRequest, SignupRequestSchema } from "@/types/schema/userSchema"
 
 const SignupPage = () => {
   const {
