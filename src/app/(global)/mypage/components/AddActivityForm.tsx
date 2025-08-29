@@ -46,7 +46,21 @@ const AddActivityForm = () => {
         <InputField placeholder='제목' className='w-full' {...register('title')} />
         {errors && <p className='text-red-500'>{errors?.title?.message}</p>}
 
-        {/* <DropdownSelect name='category' items={ACTIVITY_CATEGORIES} /> */}
+        <Controller
+          name='category'
+          control={methods.control}
+          render={({ field }) => (
+            <DropdownSelect
+              items={ACTIVITY_CATEGORIES}
+              selectedItem={
+                ACTIVITY_CATEGORIES.find(category => category.id === field.value) ?? null
+              }
+              onChange={item => field.onChange(item?.id ?? '')}
+              placeholder='카테고리 선택'
+            />
+          )}
+        />
+        {errors && <p className='text-red-500'>{errors?.category?.message}</p>}
 
         <TextAreaField placeholder='체험 설명' {...register('description')} />
         {errors && <p className='text-red-500'>{errors?.description?.message}</p>}

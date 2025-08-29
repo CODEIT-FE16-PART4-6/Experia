@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment, useState } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 import {
   Listbox,
   ListboxButton,
@@ -11,7 +12,7 @@ import {
 import clsx from 'clsx';
 
 interface DropdownSelectItem {
-  id: number;
+  id: string | number;
   value: string;
 }
 
@@ -19,23 +20,26 @@ interface DropdownSelectProps {
   items: DropdownSelectItem[];
   label?: string;
   placeholder?: string;
+  selectedItem?: DropdownSelectItem | null;
+  onChange?: (value: DropdownSelectItem | null) => void;
 }
 
-const DropdownSelect = ({ items, label, placeholder = '카테고리' }: DropdownSelectProps) => {
-  const [selected, setSelected] = useState<DropdownSelectItem | null>(null);
-
+const DropdownSelect = ({
+  items,
+  label,
+  placeholder = '카테고리',
+  selectedItem,
+  onChange,
+}: DropdownSelectProps) => {
   return (
     <div className='w-full'>
       {label && <label className='mb-1 block font-semibold'>{label}</label>}
 
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selectedItem} onChange={onChange}>
         <div className='relative'>
           {/* 버튼 */}
           <ListboxButton className='flex w-full cursor-pointer items-center justify-between rounded border border-gray-800 bg-white px-4 py-2 text-left'>
-            {selected ? selected.value : placeholder}
-            {/* <ChevronDown
-              className="ml-2 h-5 w-5 text-gray-500 ui-open:rotate-180 transition-transform duration-200"
-            /> */}
+            {selectedItem ? selectedItem.value : placeholder}
           </ListboxButton>
 
           {/* 옵션 목록 */}
@@ -58,12 +62,7 @@ const DropdownSelect = ({ items, label, placeholder = '카테고리' }: Dropdown
                     )
                   }
                 >
-                  {({ selected }) => (
-                    <div className='flex items-center justify-between'>
-                      <span>{item.value}</span>
-                      {selected && ' 체크'}
-                    </div>
-                  )}
+                  <div className='flex items-center justify-between'>{item.value}</div>
                 </ListboxOption>
               ))}
             </ListboxOptions>

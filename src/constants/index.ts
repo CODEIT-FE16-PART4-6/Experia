@@ -56,10 +56,10 @@ export const PATHS = {
 };
 
 export const ACTIVITY_CATEGORIES = [
-  { id: 1, value: '문화 · 예술' },
-  { id: 2, value: '식음료' },
-  { id: 3, value: '스포츠' },
-  { id: 4, value: '투어' },
-  { id: 5, value: '관광' },
-  { id: 6, value: '웰빙' },
+  { id: '1', value: '문화 · 예술' },
+  { id: '2', value: '식음료' },
+  { id: '3', value: '스포츠' },
+  { id: '4', value: '투어' },
+  { id: '5', value: '관광' },
+  { id: '6', value: '웰빙' },
 ];

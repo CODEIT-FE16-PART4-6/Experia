@@ -69,7 +69,7 @@ export type ActivityDetail = z.infer<typeof ActivityDetail>;
 
 export const ActivityFormValueSchema = z.object({
   title: z.string().min(1, '제목을 입력해주세요'),
-  // category: z.string().min(1, '카테고리를 선택해주세요'),
+  category: z.string().min(1, '카테고리를 선택해주세요'),
   description: z.string().min(1, '설명을 입력해주세요'),
   price: z.number().min(0, '가격은 0 이상이어야 합니다'),
   address: z.string().min(1, '주소를 입력해주세요'),
