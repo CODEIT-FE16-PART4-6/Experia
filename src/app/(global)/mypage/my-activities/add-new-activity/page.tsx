@@ -14,14 +14,6 @@ const AddNewActivityPage = () => {
         <ArrowLeftIcon className='group-hover:text-primary h-4 w-4 text-gray-600' />
         돌아가기
       </Link>
-      <SectionTitle
-        title='내 체험 등록'
-        action={
-          <Button variant='POSITIVE' size='md'>
-            등록하기
-          </Button>
-        }
-      />
       <AddActivityForm />
     </section>
   );
