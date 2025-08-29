@@ -1,17 +1,37 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import InfoIcon from '@/assets/icons/ic_mypage1.svg';
 import MyReservationIcon from '@/assets/icons/ic_mypage2.svg';
 import MyActivityIcon from '@/assets/icons/ic_mypage3.svg';
 import ReservationIcon from '@/assets/icons/ic_mypage4.svg';
 import { PATHS } from '@/constants';
+import SnbList from './Snb/SnbList';
+
+const SNB_LIST = [
+  {
+    label: '내 정보',
+    path: PATHS.MYPAGE,
+    icon: InfoIcon,
+  },
+  {
+    label: '예약 내역',
+    path: PATHS.MY_RESERVATIONS,
+    icon: MyReservationIcon,
+  },
+  {
+    label: '내 체험 관리',
+    path: PATHS.MY_ACTIVITIES,
+    icon: MyActivityIcon,
+  },
+  {
+    label: '예약 현황',
+    path: PATHS.RESERVATIONS,
+    icon: ReservationIcon,
+  },
+];
 
 const Snb = () => {
-  const pathname = usePathname();
-
   return (
     <nav>
       <div className='mb-6 flex items-center justify-center'>
@@ -24,45 +44,9 @@ const Snb = () => {
       </div>
 
       <ul>
-        <li className='group hover:text-nomad-black'>
-          <Link href='/mypage' className='group-hover:bg-green-light mt-2 flex gap-2 rounded p-2'>
-            <InfoIcon
-              src='/icons/ic_mypage1.svg'
-              alt='내 정보'
-              width={24}
-              height={24}
-              className='group-hover:text-nomad-black'
-            />
-            <span className='group-hover:text-nomad-black'>내 정보</span>
-          </Link>
-        </li>
-        <li className='group hover:text-nomad-black'>
-          <Link
-            href='/mypage/my-reservations'
-            className='group-hover:bg-green-light mt-2 flex gap-2 rounded p-2'
-          >
-            <MyReservationIcon src='/icons/ic_mypage2.svg' alt='예약 내역' width={24} height={24} />
-            예약 내역
-          </Link>
-        </li>
-        <li className='group hover:text-nomad-black'>
-          <Link
-            href='/mypage/my-activities'
-            className='group-hover:bg-green-light mt-2 flex gap-2 rounded p-2'
-          >
-            <MyActivityIcon src='/icons/ic_mypage3.svg' alt='내 체험 관리' width={24} height={24} />
-            내 체험 관리
-          </Link>
-        </li>
-        <li className='group hover:text-nomad-black'>
-          <Link
-            href='/mypage/reservations'
-            className='group-hover:bg-green-light mt-2 flex gap-2 rounded p-2'
-          >
-            <ReservationIcon src='/icons/ic_mypage4.svg' alt='예약 현황' width={24} height={24} />
-            예약 현황
-          </Link>
-        </li>
+        {SNB_LIST.map(li => (
+          <SnbList item={li} key={li.label} />
+        ))}
       </ul>
     </nav>
   );
