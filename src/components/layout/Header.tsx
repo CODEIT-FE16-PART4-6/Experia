@@ -12,9 +12,10 @@ import { useUserStore } from '@/stores/userStore';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollY = useScrollY();
-  const { name, profileUrl } = useUserStore(state => ({
+  const { name, profileUrl, isLoggedIn } = useUserStore(state => ({
     name: state.name,
     profileUrl: state.profileUrl,
+    isLoggedIn: state.isLoggedIn,
   }));
 
   const handleProfileClick = () => {
@@ -39,7 +40,7 @@ const Header = () => {
           <Image src='/images/logo.svg' alt='Experia 로고' width={134} height={42} />
         </Link>
         <nav className='flex gap-3 font-medium text-black'>
-          {name ? (
+          {isLoggedIn ? (
             <>
               <ul className='flex items-center divide-x divide-gray-300'>
                 <li className='flex pr-3 md:pr-5'>

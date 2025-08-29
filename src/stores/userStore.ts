@@ -10,8 +10,7 @@ export const useUserStore = create<UserState>(set => ({
   email: '',
   name: '',
   profileUrl: '',
-  accessToken: '',
-  refreshToken: '',
+  isLoggedIn: false,
   setUser: (user: User | null) => set({ ...user }),
-  clearUser: () => set({ email: '', name: '', profileUrl: '', accessToken: '', refreshToken: '' }),
+  clearUser: () => set({ email: '', name: '', profileUrl: '', isLoggedIn: false }),
 }));

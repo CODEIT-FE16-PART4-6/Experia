@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Image from 'next/image';
@@ -17,6 +17,7 @@ import {
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserState, useUserStore } from '@/stores/userStore';
+import { set } from 'zod';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -35,14 +36,17 @@ const LoginPage = () => {
 
   const setUser = useUserStore(state => state.setUser);
   //zustand 이용한 전역 상태 관리
-  const handleLoginSuccess = (userData: User) => {
-    const result = UserSchema.safeParse(userData);
-    if (result.success) {
-      setUser(result.data);
-    } else {
-      console.error('유효성 검사 실패:', result.error);
-    }
-  }; // 로그인 성공시 작동 함수-zod 유효성 검사
+  const handleLoginSuccess = useCallback(
+    (userData: User) => {
+      const result = UserSchema.safeParse(userData);
+      if (result.success) {
+        setUser(result.data);
+      } else {
+        console.error('유효성 검사 실패:', result.error);
+      }
+    },
+    [setUser],
+  ); // 로그인 성공시 작동 함수-zod 유효성 검사
 
   // 로그인 요청
   const onSubmit: SubmitHandler<LoginRequest> = async data => {

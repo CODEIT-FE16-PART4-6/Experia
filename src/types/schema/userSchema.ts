@@ -27,8 +27,7 @@ export const UserSchema = z.object({
   email: z.email(),
   name: z.string().min(2),
   profileUrl: z.url().optional(),
-  accessToken: z.string(),
-  refreshToken: z.string(),
+  isLoggedIn: z.boolean(),
 });
 
 export type User = z.infer<typeof UserSchema>;
