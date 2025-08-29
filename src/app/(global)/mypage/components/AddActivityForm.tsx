@@ -1,14 +1,14 @@
 'use client';
 
-import { DropdownSelect } from '@/components/DropdownSelect';
+import DropdownSelect from '@/components/DropdownSelect';
 import InputField from '@/components/InputField';
-// import { ACTIVITY_CATEGORY } from '@/constants';
+import { ACTIVITY_CATEGORIES } from '@/constants';
 
 const AddActivityForm = () => {
   return (
     <form>
       <InputField placeholder='제목' />
-      {/* <DropdownSelect items={ACTIVITY_CATEGORY} /> */}
+      <DropdownSelect items={ACTIVITY_CATEGORIES} />
     </form>
   );
 };
