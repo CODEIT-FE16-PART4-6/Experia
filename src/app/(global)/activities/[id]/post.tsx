@@ -6,14 +6,20 @@ import PostImage from './postImage';
 import PostContent from './postContent';
 import ReservateIn from './reservateIn';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
+import { ActivityReview } from '@/types/schema/activitiesSchema';
 
 type Activity = z.infer<typeof ActivityDetail>;
+type ActivityReviewList = z.infer<typeof ActivityReview>;
 
 interface ActivityProps {
   data: Activity;
 }
-const ActivityPost = ({ data }: ActivityProps) => {
-  console.log('데이터 잘 받아왔나 테스트 타이틀 출력 : ', data.title);
+interface ActivityReviewProps {
+  reviewData: ActivityReviewList;
+}
+
+const ActivityPost = ({ data, reviewData }: ActivityProps & ActivityReviewProps) => {
+  console.log('데이터 잘 받아왔나 테스트 리뷰 객체 출력 : ', reviewData);
   const ActivityContent = {
     tag: data.category,
     title: data.title,
@@ -38,8 +44,9 @@ const ActivityPost = ({ data }: ActivityProps) => {
           <PostContent
             description={ActivityContent.description}
             address={ActivityContent.address}
-            reviewCount={ActivityContent.reviewCount}
-            rating={ActivityContent.rating}
+            reviewTotalCount={reviewData.totalCount}
+            averageRating={reviewData.averageRating}
+            reviews={reviewData.reviews}
           />
         </div>
         <div>

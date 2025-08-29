@@ -6,8 +6,8 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-let callCount = 0;
 async function fetchActivities(id: string) {
+  let callCount = 0;
   //*** cache check
   /*
   callCount++;

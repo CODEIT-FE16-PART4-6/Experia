@@ -1,11 +1,27 @@
 import Star from '@/assets/imgs/activityPage/ic_Star.svg';
-
-interface ReviewType {
-  reviewCount: number;
-  rating: number;
+interface ReviewUserType {
+  profileImageUrl: string;
+  nickname: string;
+  id: number;
 }
 
-const PostReview = ({ reviewCount = 0, rating = 0 }: ReviewType) => {
+interface ReviewType {
+  id: number;
+  user: ReviewUserType[];
+  activityId: number;
+  rating: number;
+  content: string;
+  createdAt: string;
+  updtatedAt: string;
+}
+
+interface ReviewType {
+  reviewTotalCount: number;
+  averageRating: number;
+  reviews: ReviewType[];
+}
+
+const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewType) => {
   return (
     <div className='pr-[24px] pl-[24px]'>
       <p className='text-nomad-black mb-[18px] text-[20px] font-bold lg:text-[18px]'>후기</p>
@@ -13,7 +29,7 @@ const PostReview = ({ reviewCount = 0, rating = 0 }: ReviewType) => {
         <div className='flex justify-between'>
           <div className='flex gap-4'>
             <p className='text-nomad-black flex flex-col justify-center text-[50px] font-semibold'>
-              {rating}
+              {averageRating}
             </p>
             <div className='flex flex-col justify-center gap-2'>
               <p className='text-nomad-black text-[18px]'>매우 만족</p>
@@ -21,7 +37,7 @@ const PostReview = ({ reviewCount = 0, rating = 0 }: ReviewType) => {
                 <div className='flex flex-col justify-center'>
                   <Star />
                 </div>
-                {reviewCount}개 후기
+                {reviewTotalCount}개 후기
               </div>
             </div>
           </div>
