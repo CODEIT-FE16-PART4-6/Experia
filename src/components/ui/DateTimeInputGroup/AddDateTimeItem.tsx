@@ -1,33 +1,25 @@
 import { useFormContext } from 'react-hook-form';
+import TimePicker from '../TimePicker';
 
-type Props = {
-  index: number;
+interface Props {
+  name: string;
+  register: any;
   onAdd: () => void;
-  onRemove: () => void;
-};
+}
 
-const AddDateTimeItem = ({ index, onAdd, onRemove }: Props) => {
-  const { register } = useFormContext();
-
+const AddDateTimeItem = ({ name, register, onAdd }: Props) => {
   return (
-    <div className='flex items-center gap-2'>
-      <input type='date' {...register(`dateTimes.${index}.date` as const)} className='border p-1' />
-      <input
-        type='time'
-        {...register(`dateTimes.${index}.startTime` as const)}
-        className='border p-1'
-      />
-      <input
-        type='time'
-        {...register(`dateTimes.${index}.endTime` as const)}
-        className='border p-1'
-      />
+    <div className='col-span-4 grid grid-cols-[2fr_1fr_1fr_56px] gap-5'>
+      <input type='date' id='date' {...register(`${name}.0.date`)} className='border p-1' />
+      <input type='time' {...register(`${name}.0.startTime`)} className='border p-1' />
+      <input type='time' {...register(`${name}.0.endTime`)} className='border p-1' />
 
-      <button type='button' onClick={onAdd} className='rounded bg-blue-500 px-2 py-1 text-white'>
-        + 추가
-      </button>
-      <button type='button' onClick={onRemove} className='rounded bg-red-500 px-2 py-1 text-white'>
-        삭제
+      <button
+        type='button'
+        onClick={onAdd}
+        className='bg-primary flex h-[56px] w-[56px] items-center justify-center rounded px-2 py-1 text-white'
+      >
+        +
       </button>
     </div>
   );

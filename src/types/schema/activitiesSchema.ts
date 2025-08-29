@@ -74,15 +74,15 @@ export const ActivityFormValueSchema = z.object({
   price: z.number().min(0, '가격은 0 이상이어야 합니다'),
   address: z.string().min(1, '주소를 입력해주세요'),
 
-  // schedules: z
-  //   .array(
-  //     z.object({
-  //       date: z.string().min(1, '날짜를 입력해주세요'),
-  //       startTime: z.string().min(1, '시작 시간을 입력해주세요'),
-  //       endTime: z.string().min(1, '종료 시간을 입력해주세요'),
-  //     }),
-  //   )
-  //   .min(1, '예약 가능한 시간대를 하나 이상 추가해주세요'),
+  schedules: z
+    .array(
+      z.object({
+        date: z.string().min(1, '날짜를 입력해주세요'),
+        startTime: z.string().min(1, '시작 시간을 입력해주세요'),
+        endTime: z.string().min(1, '종료 시간을 입력해주세요'),
+      }),
+    )
+    .min(1, '예약 가능한 시간대를 하나 이상 추가해주세요'),
 
   // bannerImageUrl: z.string().nullable(),
   // subImageUrls: z.array(z.string().nullable()).nullable(),

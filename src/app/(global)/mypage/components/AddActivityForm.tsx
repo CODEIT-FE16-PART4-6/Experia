@@ -91,7 +91,12 @@ const AddActivityForm = () => {
 
         <div className='flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='date'>예약 가능한 시간대</FormLabel>
-          {/* <DateTimeInputGroup name='schedules' /> */}
+          <Controller
+            name='schedules'
+            control={methods.control}
+            render={({ field }) => <DateTimeInputGroup {...field} />}
+          />
+          {errors && <p className='text-red-500'>{errors?.schedules?.message}</p>}
         </div>
       </form>
     </FormProvider>
