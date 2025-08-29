@@ -1,26 +1,33 @@
-import { REQUEST_URL } from "../api-public";
-
-interface FetchOptions {
-  path: string;
-  query?: Record<string, string | number | boolean>;
-  revalidate?: number;
-}
+import { REQUEST_URL } from '../api-public';
+import { FetchOptions } from '@/types/fetchOptions';
 
 /**
  * @param path: 엔드포인트 (e.g. '/activities')
- * @param query: 쿼리 파라미터 (e.g. '?method=offset&page=1', 사용 시 {method: 'offset'} 과 같은 객체 형태로 전달)
- * @param revalidate: 재요청 주기 (초 단위)
+ * @param query?: 쿼리 파라미터 (e.g. '?method=offset&page=1', 사용 시 {method: 'offset'} 과 같은 객체 형태로 전달)
+ * @param renderType?: 렌더링 방식 선택 ('ssg' | 'isr' | 'ssr')
+ * @param revalidate?: 재요청 주기 (초 단위)
  */
-export const fetchServerData = async <T>({ path, query, revalidate }: FetchOptions): Promise<T> => {
+export const fetchServerData = async <T>({
+  path,
+  query,
+  renderType,
+  revalidate,
+}: FetchOptions): Promise<T> => {
   const url = new URL(`${REQUEST_URL}${path}`);
 
   if (query) {
-    Object.entries(query).forEach(([key, value]) => url.searchParams.append(key, String(value)));
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) {
+        url.searchParams.append(key, String(value));
+      }
+    });
   }
 
-  const options: RequestInit & { next?: { revalidate: number } } = {};
+  const options: RequestInit = {};
 
-  if (typeof revalidate === 'number') options.next = { revalidate }; // revalidate 인자를 받았을 때만 fetch option에 추가
+  if (renderType === 'ssr' || renderType === 'csr') options.cache = 'no-store';
+  if (renderType === 'ssg') options.cache = 'force-cache';
+  if (renderType === 'isr') options.next = { revalidate };
 
   const res = await fetch(url.toString(), options);
 

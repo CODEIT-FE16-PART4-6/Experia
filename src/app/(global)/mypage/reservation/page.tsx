@@ -1,9 +1,10 @@
 import CalenderPage from '@/components/calender/Calender';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
 
 const ReservationPage = () => {
   return (
     <div>
-      <h2>ReservationPage</h2>
+      <SectionTitle title='예약 현황' />
       <CalenderPage />
     </div>
   );

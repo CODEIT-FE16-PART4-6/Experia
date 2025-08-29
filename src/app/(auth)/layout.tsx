@@ -1,5 +1,5 @@
 import { pretendard } from '@/utils/fonts';
-import '@/app/globals.css'
+import '@/app/globals.css';
 
 const AuthLayout = ({
   children,

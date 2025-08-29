@@ -29,6 +29,7 @@
   --color-red-light: #ffe4e0;
 
   --color-green: #00ac07;
+  --color-green-light: #ced8d5;
 
   --color-orange: #ff7c1d;
   --color-orange-light: #fff4e8;
@@ -78,7 +79,7 @@
   }
 
   input {
-    @apply rounded-md border p-3.5 text-base transition-colors duration-300 outline-none;
+    @apply w-full rounded-md border p-3.5 text-base transition-colors duration-300 outline-none;
   }
 }
 
