@@ -1,14 +1,20 @@
 'use client'
 
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import InputField from '@/components/InputField'
 import Link from 'next/link'
 import Button from '@/components/Button'
 import { SignupRequest, SignupRequestSchema } from "@/types/schema/userSchema"
+import { useState } from "react"
+import { useRouter } from 'next/navigation';
 
 const SignupPage = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -18,9 +24,37 @@ const SignupPage = () => {
     mode: 'onChange',
   })
 
-  const onSumit = (data: SignupRequest) => {
-    console.log('회원가입 요청 데이터:', data)
-  }
+  const onSubmit: SubmitHandler<SignupRequest> = async (data) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || '회원가입 실패');
+      }
+
+      router.push('/signin');
+
+    } catch (err: unknown) {
+      console.error('로그인 중 오류 발생', err);
+
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
+
+      setLoading(false);
+    }
+  };
 
   return (
     <main className='flex min-h-screen items-center justify-center bg-white'>
@@ -31,7 +65,7 @@ const SignupPage = () => {
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit(onSumit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-7'>
             <InputField
               label="이메일"
@@ -82,7 +116,7 @@ const SignupPage = () => {
           <div className="mt-6 text-center">
             <div className="text-gray-900 text-base mb-4">
               이미 회원이신가요?
-              <Link href="/login" className="text-nomad-black underline ml-1">
+              <Link href="/signin" className="text-nomad-black underline ml-1">
                 로그인하기
               </Link>
             </div>
