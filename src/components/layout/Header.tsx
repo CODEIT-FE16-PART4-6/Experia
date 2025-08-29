@@ -6,6 +6,16 @@ import useScrollY from '@/hooks/useScrollY';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
+import Avatar from '@/components/ui/Avatar';
+
+const user = {
+  id: 2455,
+  email: 'aa@aa.com',
+  nickname: 'aaa',
+  profileImageUrl: null,
+  createdAt: '2025-08-20T17:42:51.615Z',
+  updatedAt: '2025-08-20T17:42:51.615Z',
+};
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,7 +32,7 @@ const Header = () => {
   return (
     <header
       className={clsx(
-        'sticky top-0 left-0 z-10 flex h-[70px] w-full items-center border border-gray-300 bg-white transition-shadow',
+        'sticky top-0 left-0 z-10 flex h-[70px] w-full items-center border border-x-0 border-t-0 border-b-gray-300 bg-white transition-shadow',
         {
           shadow: isScrolled,
         },
@@ -42,8 +52,8 @@ const Header = () => {
           </Link>
 
           {/* 로그인 후 */}
-          {/* <ul className='flex items-center divide-x divide-gray-300'>
-            <li className='flex pr-3 md:pr-5'>
+          <ul className='flex items-center divide-x divide-gray-300'>
+            {/* <li className='flex pr-3 md:pr-5'>
               <button>
                 <AlarmIcon className='hover:text-primary text-gray-700 transition-colors' />
               </button>
@@ -54,17 +64,14 @@ const Header = () => {
                 className='hover:text-primary flex items-center gap-2.5 transition-colors'
                 onClick={handleProfileClick}
               >
-                <Image
-                  src='/images/ProfileDefaultImg.png'
-                  alt='프로필 사진'
-                  width={32}
-                  height={32}
-                  className='rounded-full'
+                <Avatar
+                  imgSrc={user.profileImageUrl}
+                  size='md'
                 />
                 정만철
               </button>
-            </li>
-          </ul> */}
+            </li> */}
+          </ul>
         </nav>
       </div>
     </header>
