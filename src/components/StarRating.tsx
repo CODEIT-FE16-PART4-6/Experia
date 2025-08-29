@@ -4,8 +4,8 @@
 import { useState } from 'react';
 
 // img
-import StarFilled from '@/assets/imgs/starFilled.svg';
-import StarEmpty from '@/assets/imgs/starEmpty.svg';
+import StarFilled from '@/assets/imgs/starRatingComp/starFilled.svg';
+import StarEmpty from '@/assets/imgs/starRatingComp/starEmpty.svg';
 
 interface StarRatingProps {
   value?: number;
