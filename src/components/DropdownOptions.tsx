@@ -43,17 +43,22 @@ const DropdownOptions = ({ items, placeholderLabel }: DropdownOptionsProps) => {
 
   return (
     <div className='flex gap-2'>
-      <Button type='button' className='rounded-2xl' onClick={handleReset} title='필터 초기화'>
-        <RefreshIcon />
+      <Button
+        type='button'
+        className='flex h-[42px] w-[42px] items-center justify-center rounded-xl p-0 lg:h-[56px] lg:w-[56px] lg:rounded-2xl'
+        onClick={handleReset}
+        title='필터 초기화'
+      >
+        <RefreshIcon className='aspect-square h-[20px] w-[20px] lg:h-6 lg:w-6' />
       </Button>
 
-      <Menu as='div' className='relative w-full'>
+      <Menu as='div' className='relative w-[120px] lg:w-[160px]'>
         {/* 트리거 버튼 */}
         <MenuButton as='div' className='cursor-pointer'>
           <Button
             size='md'
             type='button'
-            className='border-primary hover:text-primary w-[160px] justify-between rounded-2xl py-[14px] text-lg font-medium hover:bg-white'
+            className='border-primary text-primary hover:text-primary text-md justify-between rounded-xl py-2 font-medium hover:bg-white lg:rounded-2xl lg:py-[14px] lg:text-lg'
           >
             {selectedItem}
             <Image
@@ -75,17 +80,15 @@ const DropdownOptions = ({ items, placeholderLabel }: DropdownOptionsProps) => {
           leaveFrom='transform translate-y-2 opacity-100'
           leaveTo='transform -translate-y-2 opacity-0'
         >
-          <MenuItems className='absolute right-0 mt-2 w-40 rounded-2xl border border-gray-300 bg-white shadow-lg focus:outline-none'>
+          <MenuItems className='absolute right-0 mt-2 w-full rounded-xl border border-gray-300 bg-white shadow-lg focus:outline-none lg:rounded-2xl'>
             {items.map((item, index) => (
               <MenuItem key={`${item}-${index}`}>
-                {() => (
-                  <button
-                    onClick={() => handleClick(item)}
-                    className='block w-full border-b border-gray-300 py-[18px] text-lg font-medium text-gray-900 last:border-b-0'
-                  >
-                    {item.label}
-                  </button>
-                )}
+                <button
+                  onClick={() => handleClick(item)}
+                  className='text-md hover:text-primary block w-full border-b border-gray-300 py-2.5 font-medium text-gray-900 last:border-b-0 hover:font-bold lg:py-[18px] lg:text-lg'
+                >
+                  {item.label}
+                </button>
               </MenuItem>
             ))}
           </MenuItems>
