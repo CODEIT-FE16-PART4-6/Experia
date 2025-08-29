@@ -3,7 +3,7 @@ import AddDateTimeItem from './AddDateTimeItem';
 import DateTimeItem from './DateTimeItem';
 
 interface Props {
-  name: 'schedules'; // RHF fieldArray 이름
+  name: 'schedules'; // RHF field name
 }
 
 interface DateTimeValues {
@@ -15,15 +15,23 @@ interface DateTimeValues {
 }
 
 const DateTimeInputGroup = ({ name }: Props) => {
-  const {
-    control,
-    register,
-    formState: { errors },
-  } = useFormContext<DateTimeValues>();
+  const { control, setError, clearErrors } = useFormContext<DateTimeValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name,
   });
+
+  const handleAdd = (value: DateTimeValues['schedules'][number]) => {
+    if (!value.date || !value.startTime || !value.endTime) {
+      setError('schedules', {
+        type: 'manual',
+        message: '시간대를 하나 이상 추가해주세요.',
+      });
+      return;
+    }
+    append(value);
+    clearErrors('schedules');
+  };
 
   return (
     <>
@@ -35,20 +43,10 @@ const DateTimeInputGroup = ({ name }: Props) => {
       </div>
 
       <div className='grid-row col-span-3 grid grid-cols-4 gap-5'>
-        <AddDateTimeItem
-          onAdd={() => append({ date: '', startTime: '', endTime: '' })}
-          register={register}
-          name={name}
-        />
+        <AddDateTimeItem onAdd={handleAdd} addedSchedules={fields} />
+
         {fields.map((field, i) => (
-          <DateTimeItem
-            key={field.id}
-            index={i}
-            onRemove={() => remove(i)}
-            register={register}
-            name={name}
-            error={errors.schedules?.[i]}
-          />
+          <DateTimeItem key={field.id} index={i} value={field} onRemove={() => remove(i)} />
         ))}
       </div>
     </>
