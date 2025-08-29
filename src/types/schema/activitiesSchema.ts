@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-export const MyActivities = z.object({
-  cursorId: z.number().optional(),
+export const Activities = z.object({
+  cursorId: z.number().optional().nullable(),
   totalCount: z.number(),
   activities: z.array(
     z.object({
@@ -21,9 +21,7 @@ export const MyActivities = z.object({
   ),
 });
 
-export type MyActivities = z.infer<typeof MyActivities>;
-
-export type Activities = Omit<MyActivities, 'cursorId'>;
+export type Activities = z.infer<typeof Activities>;
 
 export const Activity = z.object({
   id: z.number().optional(),
