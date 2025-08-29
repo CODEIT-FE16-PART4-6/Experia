@@ -1,3 +1,4 @@
+import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 import { REQUEST_URL, tokenTmp } from '.';
 import { MyActivitiesDto, SignUpResponseDto } from './api';
 // import { REQUEST_URL, tokenTmp } from "./index.ts";
@@ -18,7 +19,7 @@ export async function FindAllMyActivities(
       method: 'get',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ3MCwidGVhbUlkIjoiMTYtNCIsImlhdCI6MTc1NjEyNDM0NywiZXhwIjoxNzU3MzMzOTQ3LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.Yi-_nIWQwIyS4GVOBfGRBOupd6I86iuWvx4PV5KLkLY`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
       }),
     },
   )
@@ -41,6 +42,181 @@ export async function FindAllMyActivities(
   } else {
     body = (await response.json()) as unknown as SignUpResponseDto;
   }
+
+  return {
+    status,
+    body,
+  };
+}
+
+export async function FindAllMyActivitiesOneDay(activityId: number, date: string): Promise<{
+  status: number,
+  body: {
+    "scheduleId": number,
+    "startTime": string,
+    "endTime": string,
+    "count": {
+      "declined": number,
+      "confirmed": number,
+      "pending": number
+    }
+  }[]
+}> {
+  const response1 = await fetch(
+    `${URL}/${activityId}/reserved-schedule?date=${date}`,
+    {
+      method: 'get',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
+      }),
+    },
+  )
+    .catch(err => {
+      console.log('api-my-activities.api.ts SignUpByEmail error : ', err);
+      return err;
+    })
+    .finally(() => console.log('api-my-activities.api.ts SignUpByEmail request finish'));
+  console.log('response : ', response1);
+
+  // 서버의 응답값 코드
+  const status: number = response1.status;
+
+  // 서버의 body값
+  let body: any = null;
+
+  if (!response1.ok) {
+    console.error('API 호출 실패:', response1);
+    body = await response1.json();
+  } else {
+    body = (await response1.json())
+  }
+
+
+  return {
+    status,
+    body,
+  };
+}
+
+export async function FindAllMyActivitiesOnePart(activityId: number, scheduleId: number, size: number, coursorId?: number, statusType: MyActivitiesStatus = MyActivitiesStatus.pending): Promise<{
+  status: number,
+  body: {
+    "reservations": [
+      {
+        "id": number,
+        "status": MyActivitiesStatus,
+        "totalPrice": number,
+        "headCount": number,
+        "nickname": string,
+        "userId": number,
+        "date": string,
+        "startTime": string,
+        "endTime": string,
+        "createdAt": string,
+        "updatedAt": string,
+        "activityId": number,
+        "scheduleId": number,
+        "reviewSubmitted": boolean,
+        "teamId": string
+      }
+    ],
+    "totalCount": number,
+    "cursorId": number
+  }
+}> {
+  const response1 = await fetch(
+    `${URL}/${activityId}/reservations?${!coursorId ? '' : 'coursorId=' + coursorId}&size=${size}&scheduleId=${scheduleId}&status=${statusType}`,
+    {
+      method: 'get',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
+      }),
+    },
+  )
+    .catch(err => {
+      console.log('api-my-activities.api.ts SignUpByEmail error : ', err);
+      return err;
+    })
+    .finally(() => console.log('api-my-activities.api.ts SignUpByEmail request finish'));
+  console.log('response : ', response1);
+
+  // 서버의 응답값 코드
+  const status: number = response1.status;
+
+  // 서버의 body값
+  let body: any = null;
+
+  if (!response1.ok) {
+    console.error('API 호출 실패:', response1);
+    body = await response1.json();
+  } else {
+    body = (await response1.json())
+  }
+
+
+  return {
+    status,
+    body,
+  };
+}
+
+export async function UpdateMyActivitiesReserveOneByReservationId(activityId: number, reservationId: number, myActivitiesStatus: MyActivitiesStatus = MyActivitiesStatus.confirmed): Promise<{
+  status: number,
+  body: {
+    "id": number,
+    "status": MyActivitiesStatus,
+    "totalPrice": number,
+    "headCount": number,
+    "nickname": string,
+    "userId": number,
+    "date": string,
+    "startTime": string,
+    "endTime": string,
+    "createdAt": string,
+    "updatedAt": string,
+    "activityId": number,
+    "scheduleId": number,
+    "reviewSubmitted": boolean,
+    "teamId": string
+  }
+}> {
+  console.log("URL : ", URL)
+  const response1 = await fetch(
+    `${URL}/${activityId}/reservations/${reservationId}`,
+    {
+      method: 'patch',
+      headers: new Headers({
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
+      }),
+      body: JSON.stringify({
+        status: myActivitiesStatus
+      })
+    },
+  )
+    .catch(err => {
+      console.log('api-my-activities.api.ts UpdateMyActivitiesReserveOneByReservationId error : ', err);
+      return err;
+    })
+    .finally(() => console.log('api-my-activities.api.ts UpdateMyActivitiesReserveOneByReservationId request finish'));
+  console.log('response : ', response1);
+
+  // 서버의 응답값 코드
+  const status: number = response1.status;
+
+  // 서버의 body값
+  let body: any = null;
+
+  if (!response1.ok) {
+    console.error('API 호출 실패:', response1);
+    body = await response1.json();
+  } else {
+    body = (await response1.json())
+  }
+
 
   return {
     status,
