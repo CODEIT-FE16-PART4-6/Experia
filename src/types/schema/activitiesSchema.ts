@@ -77,15 +77,15 @@ export const ActivityFormValueSchema = z.object({
   schedules: z
     .array(
       z.object({
-        date: z.string().min(1, '날짜를 입력해주세요.'),
-        startTime: z.string().min(1, '시작 시간을 입력해주세요.'),
-        endTime: z.string().min(1, '종료 시간을 입력해주세요.'),
+        date: z.string(),
+        startTime: z.string(),
+        endTime: z.string(),
       }),
     )
-    .min(1, '예약 가능한 시간대를 하나 이상 추가해주세요.'),
+    .min(1, '시간대를 하나 이상 추가해주세요.'),
 
   bannerImageUrl: z.string().min(1, '대표 이미지를 등록해주세요.'),
-  // subImageUrls: z.array(z.string().nullable()).nullable(),
+  subImageUrls: z.array(z.string()).nullable(),
 });
 
 export type ActivityFormValues = z.infer<typeof ActivityFormValueSchema>;
