@@ -7,32 +7,9 @@ import Image from 'next/image';
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import Link from 'next/link';
-import { LoginRequestSchema } from '@/types/schema/userSchema';
+import { LoginRequestSchema, LoginResponse, LoginRequest } from '@/types/schema/userSchema';
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
 import { zodResolver } from '@hookform/resolvers/zod'
-
-// 사용자 정보 타입
-interface UserDto {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// 로그인 응답 데이터 타입
-interface LoginResponse {
-  user: UserDto;
-  refreshToken: string;
-  accessToken: string;
-}
-
-// 로그인 요청 데이터 타입
-interface LoginRequest {
-  email: string;
-  password: string;
-}
 
 const LoginPage = () => {
   const router = useRouter();
@@ -63,18 +40,25 @@ const LoginPage = () => {
         body: JSON.stringify(data)
       });
 
-      const responseText = await response.text();
-      console.log('응답 텍스트:', responseText);
-
-      const responseData = JSON.parse(responseText);
+      //
+      const responseData = await response.json();
       console.log('응답 데이터:', responseData);
 
-      if (!response.ok || !responseData.accessToken || !responseData.refreshToken) {
-        // 필요한 데이터가 없는 경우
-        console.error('로그인 실패:', response.status, responseData);
-        throw new Error('로그인 실패: 필수 데이터가 누락되었습니다.');
+      // HTTP 상태 코드 체크
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error('이메일 혹은 비밀번호가 일치하지 않습니다.');
+        } else {
+          throw new Error('로그인 실패: 서버 응답 오류입니다.');
+        }
       }
 
+      // 응답은 성공적이지만 필수 데이터가 없는 경우
+      if (!responseData.accessToken || !responseData.refreshToken) {
+        throw new Error('로그인 실패: 서버로부터 필수 데이터(토큰)를 받지 못했습니다.');
+      }
+
+      // 성공적으로 로그인 처리
       localStorage.setItem('access_token', responseData.accessToken);
       localStorage.setItem('refresh_token', responseData.refreshToken);
       localStorage.setItem('user', JSON.stringify(responseData.user));
@@ -85,10 +69,17 @@ const LoginPage = () => {
       });
 
       router.push('/');
-    } catch (err) {
+
+    } catch (err: unknown) {
       console.error('로그인 중 오류 발생', err);
-      setError('이메일 혹은 비밀번호가 일치하지 않습니다.');
-      setLoading(false);
+
+      if (err instanceof Error) {
+        setError(err.message); // 실제 Error 메시지 표시
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
+
+      setLoading(false); // 로딩 상태 해제
     }
   };
 
@@ -134,7 +125,7 @@ const LoginPage = () => {
               placeholder="이메일 입력해 주세요"
               type="email"
               autoComplete="email"
-              {...register('email', { required: '이메일 형식에 맞게 입력해주세요' })}
+              {...register('email')} // zod 스키마와 연결되어 유효성 검사 자동 실행
               error={errors.email?.message}
             />
             <div className="relative">
@@ -143,7 +134,7 @@ const LoginPage = () => {
                 placeholder="비밀번호 입력해 주세요"
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
-                {...register('password', { required: '8자 이상 작성해주세요' })}
+                {...register('password')}
                 error={errors.password?.message}
               />
               <button
@@ -168,7 +159,7 @@ const LoginPage = () => {
                 size='lg'
                 disabled={!isValid || loading}
               >
-                {loading ? '로딩 중...' : '로그인 하기'}
+                {loading ? '로그인 중...' : '로그인 하기'}
               </Button>
             </div>
           </div>
