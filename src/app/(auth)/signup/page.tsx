@@ -14,6 +14,8 @@ const SignupPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const {
     register,
@@ -36,22 +38,41 @@ const SignupPage = () => {
       });
 
       const result = await response.json();
+      console.log('응답 데이터:', result);
 
+      // HTTP 상태 코드 체크
       if (!response.ok) {
+        if (response.status === 409) {
+          throw new Error('중복된 이메일입니다.');
+        }
         throw new Error(result.message || '회원가입 실패');
       }
+
+      // 응답은 성공적이지만 필수 데이터가 없는 경우를 체크하여 에러를 발생시킵니다.
+      if (!result.accessToken || !result.refreshToken) {
+        throw new Error('회원가입 실패: 서버로부터 필수 데이터(토큰)를 받지 못했습니다.');
+      }
+
+      localStorage.setItem('access_token', result.accessToken);
+      localStorage.setItem('refresh_token', result.refreshToken);
+      localStorage.setItem('user', JSON.stringify(result.user));
+
+      console.log('저장 후 확인:', {
+        accessTokenStored: localStorage.getItem('access_token'),
+        refreshTokenStored: localStorage.getItem('refresh_token'),
+      });
 
       router.push('/signin');
 
     } catch (err: unknown) {
-      console.error('로그인 중 오류 발생', err);
+      console.error('회원가입 중 오류 발생', err);
 
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError('알 수 없는 오류가 발생했습니다.');
       }
-
+    } finally {
       setLoading(false);
     }
   };
@@ -80,37 +101,67 @@ const SignupPage = () => {
               label="닉네임"
               placeholder="닉네임을 입력해 주세요"
               type="text"
-              autoComplete="nickname"
+              autoComplete="username"
               {...register('nickname')}
               error={errors.nickname?.message}
             />
 
-            <InputField
-              label="비밀번호"
-              placeholder="비밀번호 입력해 주세요"
-              type="password"
-              autoComplete="new-password"
-              {...register('password')}
-              error={errors.password?.message}
-            />
+            <div className="relative">
+              <InputField
+                label="비밀번호"
+                placeholder="비밀번호 입력해 주세요"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                {...register('password')}
+                error={errors.password?.message}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-[50px]"
+              >
+                <Image
+                  src={showPassword ? '/icons/ic_EyeOff.svg' : '/icons/ic_Eye.svg'}
+                  alt="비밀번호 표시 토글"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </div>
+            <div className="relative">
+              <InputField
+                label="비밀번호 확인"
+                placeholder="비밀번호 한번 더 입력해 주세요"
+                type={showPasswordConfirm ? "text" : "password"}
+                autoComplete="new-password"
+                {...register('passwordConfirm')}
+                error={errors.passwordConfirm?.message}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                className="absolute right-4 top-[50px]"
+              >
+                <Image
+                  src={showPasswordConfirm ? '/icons/ic_EyeOff.svg' : '/icons/ic_Eye.svg'}
+                  alt="비밀번호 확인 표시 토글"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </div>
 
-            <InputField
-              label="비밀번호 확인"
-              placeholder="비밀번호 한번 더 입력해 주세요"
-              type="password"
-              autoComplete="new-password"
-              {...register('passwordConfirm')}
-              error={errors.passwordConfirm?.message}
-            />
-
-            <Button
-              type='submit'
-              variant='POSITIVE'
-              size='lg'
-              disabled={!isValid}
-            >
-              회원가입 하기
-            </Button>
+            <div className='flex flex-col'>
+              {error && <p className='text-red-600 text-sm mb-2'>{error}</p>}
+              <Button
+                type='submit'
+                variant='POSITIVE'
+                size='lg'
+                disabled={!isValid || loading}
+              >
+                {loading ? '회원가입 중...' : '회원가입 하기'}
+              </Button>
+            </div>
           </div>
 
           <div className="mt-6 text-center">
@@ -145,4 +196,4 @@ const SignupPage = () => {
   )
 }
 
-export default SignupPage
+export default SignupPage;
