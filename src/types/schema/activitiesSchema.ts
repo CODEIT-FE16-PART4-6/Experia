@@ -65,4 +65,24 @@ export const ActivityDetail = z.object({
   ),
 });
 
+export const ActivityReview = z.object({
+  averageRating: z.number(),
+  totalCount: z.number(),
+  reviews: z.array(
+    z.object({
+      id: z.number(),
+      user: z.object({
+        profileImageUrl: z.string(),
+        nickname: z.string(),
+        id: z.number(),
+      }),
+      activityId: z.number(),
+      rating: z.number(),
+      content: z.string(),
+      createdAt: z.string(),
+      updateedAt: z.string(),
+    }),
+  ),
+});
+
 export type ActivityDetail = z.infer<typeof ActivityDetail>;
