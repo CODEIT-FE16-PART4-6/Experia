@@ -4,7 +4,7 @@ import Image from 'next/image';
 //SSR
 interface SubImage {
   id: number;
-  imageUrl: string;
+  imageUrl?: string | null; //<=@
 }
 
 interface ImagePropType {
@@ -28,7 +28,7 @@ const PostImage = ({ bannerImageUrl, subImages }: ImagePropType) => {
       {subImages.map((subimg: SubImage) => (
         <div key={subimg.id} className='full relative bg-[#b3b3b3]'>
           <Image
-            src={subimg.imageUrl}
+            src={subimg.imageUrl!}
             alt={`서브 이미지${subimg.id}`}
             fill
             className='object-cover'

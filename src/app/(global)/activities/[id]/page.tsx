@@ -5,7 +5,12 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+let callCount = 0;
 async function fetchActivities(id: string) {
+  //*** cache check
+  callCount++;
+  console.log(`API 호출 : ${callCount} 
+    ID:${id}`); //revalidate 준 만큼의 텀 이후에 이 로그가 다시 실행됨. (만약 새로고침 마다 발생 = 캐싱 안됨)
   const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}`);
 
   if (!res.ok) {
@@ -17,11 +22,11 @@ async function fetchActivities(id: string) {
 }
 
 //****************캐시에 저장
-const initialGetActivity = unstable_cache(fetchActivities, ['activity'], {
+// fn, keyParts, option
+const initialGetActivity = unstable_cache(async (id: string) => fetchActivities(id), ['activity'], {
   revalidate: 300, //5 minute
   tags: ['activity'],
 });
-
 //****************
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
