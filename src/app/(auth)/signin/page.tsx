@@ -16,7 +16,7 @@ import {
 } from '@/types/schema/userSchema';
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
 import { zodResolver } from '@hookform/resolvers/zod';
-import { userState, useUserStore } from '@/store/userStore';
+import { UserState, useUserStore } from '@/stores/userStore';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -33,7 +33,7 @@ const LoginPage = () => {
     mode: 'onChange', // 입력값이 바뀔 때마다 검사
   }); // 여기에 연결 해줌!
 
-  const setUser = useUserStore<userState>(state => state.setUser);
+  const setUser = useUserStore(state => state.setUser);
   //zustand 이용한 전역 상태 관리
   const handleLoginSuccess = (userData: User) => {
     const result = UserSchema.safeParse(userData);
