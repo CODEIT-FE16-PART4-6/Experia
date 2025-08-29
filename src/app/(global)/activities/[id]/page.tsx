@@ -1,4 +1,4 @@
-import { unstable_cache } from 'next/cache';
+//import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 import Post from './post';
 
@@ -27,6 +27,19 @@ async function fetchActivities(id: string) {
   return data;
 }
 
+async function fetchReviews(id: string) {
+  const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}/reviews`, {
+    next: { revalidate: 300, tags: ['activity_reviews'] },
+  });
+
+  if (!res.ok) {
+    throw new Error('Fetch 실패');
+  }
+  const data = await res.json();
+  console.log('받아온 데이터:', data);
+  return data;
+}
+
 //****************캐시에 저장
 /*
 // fn, keyParts, option
@@ -39,6 +52,10 @@ const initialGetActivity = cache(async (id: string) => {
   return fetchActivities(id);
 });
 
+const initialGetReviews = cache(async (id: string) => {
+  return fetchReviews(id);
+});
+
 //****************
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
@@ -47,8 +64,9 @@ export default async function Page({ params }: PageProps) {
   try {
     const data = await initialGetActivity(id);
     console.log(data);
+    const reviewData = await initialGetReviews(id);
 
-    return <Post data={data} />;
+    return <Post data={data} reviewData={reviewData} />;
   } catch (error) {
     console.log(error);
     return (

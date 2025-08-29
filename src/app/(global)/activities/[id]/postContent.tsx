@@ -35,6 +35,7 @@ const PostContent = ({ description, address, reviewCount, rating }: ContentProps
         </div>
       </div>
       <hr className='hidden md:mt-10 md:mb-10 md:block md:border-gray-400' />
+      <PostReview />
     </>
   );
 };

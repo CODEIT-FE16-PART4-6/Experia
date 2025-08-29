@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { cache } from 'react';
+
 //downComponent
 import PostHeader from './postHeader';
 import PostImage from './postImage';
