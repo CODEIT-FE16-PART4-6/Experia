@@ -12,10 +12,21 @@ import SectionTitle from '@/components/ui/Section/SectionTitle';
 import Button from '@/components/Button';
 import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/activitiesSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ImageUploader from '@/components/ImageUpload/ImageUploader';
 
 const AddActivityForm = () => {
   const methods = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivityFormValueSchema),
+    defaultValues: {
+      title: '',
+      category: '',
+      description: '',
+      address: '',
+      price: 0,
+      schedules: [{ date: '', startTime: '', endTime: '' }],
+      bannerImageUrl: '',
+      // subImageUrls: [],
+    },
   });
 
   const {
@@ -98,6 +109,32 @@ const AddActivityForm = () => {
           />
           {errors && <p className='text-red-500'>{errors?.schedules?.message}</p>}
         </div>
+
+        <div className='flex flex-col gap-3 md:gap-4'>
+          <FormLabel inputId='bannerImg'>배너 이미지</FormLabel>
+          <Controller
+            name='bannerImageUrl'
+            control={methods.control}
+            render={({ field, fieldState }) => (
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+              />
+            )}
+          />
+          {errors && <p className='text-red-500'>{errors?.bannerImageUrl?.message}</p>}
+        </div>
+
+        {/* <div className='flex flex-col gap-3 md:gap-4'>
+          <FormLabel inputId='subImg'>상세 이미지</FormLabel>
+          <Controller
+            name='schedules'
+            control={methods.control}
+            render={({ field }) => <DateTimeInputGroup {...field} />}
+          />
+          {errors && <p className='text-red-500'>{errors?.schedules?.message}</p>}
+        </div> */}
       </form>
     </FormProvider>
   );

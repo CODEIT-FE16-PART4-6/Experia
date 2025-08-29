@@ -68,23 +68,23 @@ export const ActivityDetail = z.object({
 export type ActivityDetail = z.infer<typeof ActivityDetail>;
 
 export const ActivityFormValueSchema = z.object({
-  title: z.string().min(1, '제목을 입력해주세요'),
-  category: z.string().min(1, '카테고리를 선택해주세요'),
-  description: z.string().min(1, '설명을 입력해주세요'),
-  price: z.number().min(0, '가격은 0 이상이어야 합니다'),
-  address: z.string().min(1, '주소를 입력해주세요'),
+  title: z.string().min(1, '제목을 입력해주세요.'),
+  category: z.string().min(1, '카테고리를 선택해주세요.'),
+  description: z.string().min(1, '설명을 입력해주세요.'),
+  price: z.number().min(0, '가격은 0원 이상이어야 합니다.'),
+  address: z.string().min(1, '주소를 입력해주세요.'),
 
   schedules: z
     .array(
       z.object({
-        date: z.string().min(1, '날짜를 입력해주세요'),
-        startTime: z.string().min(1, '시작 시간을 입력해주세요'),
-        endTime: z.string().min(1, '종료 시간을 입력해주세요'),
+        date: z.string().min(1, '날짜를 입력해주세요.'),
+        startTime: z.string().min(1, '시작 시간을 입력해주세요.'),
+        endTime: z.string().min(1, '종료 시간을 입력해주세요.'),
       }),
     )
-    .min(1, '예약 가능한 시간대를 하나 이상 추가해주세요'),
+    .min(1, '예약 가능한 시간대를 하나 이상 추가해주세요.'),
 
-  // bannerImageUrl: z.string().nullable(),
+  bannerImageUrl: z.string().min(1, '대표 이미지를 등록해주세요.'),
   // subImageUrls: z.array(z.string().nullable()).nullable(),
 });
 
