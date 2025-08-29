@@ -2,14 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler } from 'react-hook-form';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import Link from 'next/link';
-import { LoginRequestSchema, LoginResponse, LoginRequest } from '@/types/schema/userSchema';
+import {
+  LoginRequestSchema,
+  LoginResponse,
+  LoginRequest,
+  User,
+  UserSchema,
+} from '@/types/schema/userSchema';
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
-import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { userState, useUserStore } from '@/store/userStore';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -24,11 +31,22 @@ const LoginPage = () => {
   } = useForm<LoginRequest>({
     resolver: zodResolver(LoginRequestSchema),
     mode: 'onChange', // 입력값이 바뀔 때마다 검사
-  }) // 여기에 연결 해줌!
+  }); // 여기에 연결 해줌!
+
+  const setUser = useUserStore<userState>(state => state.setUser);
+  //zustand 이용한 전역 상태 관리
+  const handleLoginSuccess = (userData: User) => {
+    const result = UserSchema.safeParse(userData);
+    if (result.success) {
+      setUser(result.data);
+    } else {
+      console.error('유효성 검사 실패:', result.error);
+    }
+  }; // 로그인 성공시 작동 함수-zod 유효성 검사
 
   // 로그인 요청
-  const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
-    console.log('전송 데이터:', data)
+  const onSubmit: SubmitHandler<LoginRequest> = async data => {
+    console.log('전송 데이터:', data);
     setLoading(true);
     setError(null);
 
@@ -37,7 +55,7 @@ const LoginPage = () => {
       const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       //
@@ -68,8 +86,9 @@ const LoginPage = () => {
         refreshTokenStored: localStorage.getItem('refresh_token'),
       });
 
-      router.push('/');
+      handleLoginSuccess(responseData.user);
 
+      router.push('/');
     } catch (err: unknown) {
       console.error('로그인 중 오류 발생', err);
 
@@ -113,7 +132,7 @@ const LoginPage = () => {
   return (
     <div className='flex min-h-screen items-center justify-center bg-white'>
       <div className='w-full max-w-2xl px-4'>
-        <div className='flex justify-center mb-14'>
+        <div className='mb-14 flex justify-center'>
           <Link href='/'>
             <Image src='/images/logo.svg' alt='Experia 로고' width={260} height={42} />
           </Link>
@@ -121,30 +140,30 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-7'>
             <InputField
-              label="이메일"
-              placeholder="이메일 입력해 주세요"
-              type="email"
-              autoComplete="email"
+              label='이메일'
+              placeholder='이메일 입력해 주세요'
+              type='email'
+              autoComplete='email'
               {...register('email')} // zod 스키마와 연결되어 유효성 검사 자동 실행
               error={errors.email?.message}
             />
-            <div className="relative">
+            <div className='relative'>
               <InputField
-                label="비밀번호"
-                placeholder="비밀번호 입력해 주세요"
+                label='비밀번호'
+                placeholder='비밀번호 입력해 주세요'
                 type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
+                autoComplete='current-password'
                 {...register('password')}
                 error={errors.password?.message}
               />
               <button
-                type="button"
+                type='button'
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-15 -translate-y-1/2"
+                className='absolute top-15 right-4 -translate-y-1/2'
               >
                 <Image
                   src={showPassword ? '/icons/ic_EyeOff.svg' : '/icons/ic_Eye.svg'}
-                  alt="비밀번호 표시 토글"
+                  alt='비밀번호 표시 토글'
                   width={24}
                   height={24}
                 />
@@ -152,41 +171,42 @@ const LoginPage = () => {
             </div>
 
             <div className='flex flex-col'>
-              {error && <p className='text-red-600 text-sm mb-2'>{error}</p>}
-              <Button
-                type='submit'
-                variant='POSITIVE'
-                size='lg'
-                disabled={!isValid || loading}
-              >
+              {error && <p className='mb-2 text-sm text-red-600'>{error}</p>}
+              <Button type='submit' variant='POSITIVE' size='lg' disabled={!isValid || loading}>
                 {loading ? '로그인 중...' : '로그인 하기'}
               </Button>
             </div>
           </div>
 
-          <div className="mt-6 text-center">
-            <div className="text-gray-900 text-base mb-4">
+          <div className='mt-6 text-center'>
+            <div className='mb-4 text-base text-gray-900'>
               회원이 아니신가요?
-              <Link href="/signup" className="text-nomad-black underline ml-1">
+              <Link href='/signup' className='text-nomad-black ml-1 underline'>
                 회원가입하기
               </Link>
             </div>
 
-            <div className="flex items-center my-6">
-              <div className="flex-1 h-px bg-gray-300"></div>
-              <p className="mx-9 text-gray-800 text-xl">SNS 계정으로 로그인하기</p>
-              <div className="flex-1 h-px bg-gray-300"></div>
+            <div className='my-6 flex items-center'>
+              <div className='h-px flex-1 bg-gray-300'></div>
+              <p className='mx-9 text-xl text-gray-800'>SNS 계정으로 로그인하기</p>
+              <div className='h-px flex-1 bg-gray-300'></div>
             </div>
 
-            <div className="flex justify-center mt-4">
+            <div className='mt-4 flex justify-center'>
               <Link href='https://www.kakaocorp.com/'>
-                <Image src='/icons/ic_SocialLogo.svg' alt='kakao 로고' width={48} height={48} className="sm:w-18 sm:h-18" />
+                <Image
+                  src='/icons/ic_SocialLogo.svg'
+                  alt='kakao 로고'
+                  width={48}
+                  height={48}
+                  className='sm:h-18 sm:w-18'
+                />
               </Link>
             </div>
           </div>
         </form>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

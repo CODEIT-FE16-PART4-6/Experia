@@ -22,3 +22,14 @@ export const LoginResponseSchema = z.object({
 
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;
+
+export const UserSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+  nickname: z.string(),
+  profileImageUrl: z.string().nullable(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export type User = z.infer<typeof UserSchema>;
