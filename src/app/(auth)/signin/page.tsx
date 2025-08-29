@@ -137,7 +137,7 @@ const LoginPage = () => {
                 {...register('password')}
                 error={errors.password?.message}
               />
-              <button
+              <Button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-15 -translate-y-1/2"
@@ -148,7 +148,7 @@ const LoginPage = () => {
                   width={24}
                   height={24}
                 />
-              </button>
+              </Button>
             </div>
 
             <div className='flex flex-col'>
