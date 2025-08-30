@@ -7,9 +7,10 @@ interface PageProps {
 }
 
 async function fetchActivities(id: string) {
-  let callCount = 0;
   //*** cache check
+
   /*
+  let callCount = 0;
   callCount++;
   console.log(`API 호출 : ${callCount} 
     ID:${id}`); //revalidate 준 만큼의 텀 이후에 이 로그가 다시 실행됨. (만약 새로고침 마다 발생 = 캐싱 안됨)
