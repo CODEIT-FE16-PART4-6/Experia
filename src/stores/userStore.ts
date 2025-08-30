@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import { User } from '@/types/schema/userSchema';
 
-export interface UserState extends User {
+export interface UserState {
+  user: User | null;
   setUser: (user: User | null) => void;
   clearUser: () => void;
+  isLoggedIn: boolean;
 }
 
 export const useUserStore = create<UserState>(set => ({
-  email: '',
-  name: '',
-  profileUrl: '',
+  user: null,
+  setUser: user => set({ user, isLoggedIn: true }),
+  clearUser: () => set({ user: null, isLoggedIn: false }),
   isLoggedIn: false,
-  setUser: (user: User | null) => set({ ...user }),
-  clearUser: () => set({ email: '', name: '', profileUrl: '', isLoggedIn: false }),
 }));

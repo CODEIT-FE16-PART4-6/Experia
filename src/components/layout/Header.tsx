@@ -12,11 +12,8 @@ import { useUserStore } from '@/stores/userStore';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollY = useScrollY();
-  const { name, profileUrl, isLoggedIn } = useUserStore(state => ({
-    name: state.name,
-    profileUrl: state.profileUrl,
-    isLoggedIn: state.isLoggedIn,
-  }));
+  const { user } = useUserStore(); // 유저정보 가져오기
+  const isLoggedIn = user?.isLoggedIn ?? false; // isLoggedIn 정의
 
   const handleProfileClick = () => {
     console.log('hello');
@@ -40,7 +37,7 @@ const Header = () => {
           <Image src='/images/logo.svg' alt='Experia 로고' width={134} height={42} />
         </Link>
         <nav className='flex gap-3 font-medium text-black'>
-          {isLoggedIn ? (
+          {isLoggedIn ? ( // isLoggedIn true 일때
             <>
               <ul className='flex items-center divide-x divide-gray-300'>
                 <li className='flex pr-3 md:pr-5'>
@@ -54,13 +51,14 @@ const Header = () => {
                     className='hover:text-primary flex items-center gap-2.5 transition-colors'
                     onClick={handleProfileClick}
                   >
-                    <Avatar imgSrc={profileUrl ?? null} size='md' />
-                    {name}
+                    <Avatar imgSrc={user?.profileUrl ?? null} size='md' />
+                    {user?.name}
                   </button>
                 </li>
               </ul>
             </>
           ) : (
+            // isLoggedIn false 로그인 아닐때
             <>
               <Link href='/signin' className='nav-list'>
                 로그인

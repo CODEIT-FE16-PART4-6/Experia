@@ -23,6 +23,7 @@ export const LoginResponseSchema = z.object({
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;
 
+//유저 상태 저장용 스키마
 export const UserSchema = z.object({
   email: z.email(),
   name: z.string().min(2),

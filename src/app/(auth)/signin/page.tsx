@@ -1,29 +1,23 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import Link from 'next/link';
-import {
-  LoginRequestSchema,
-  LoginResponse,
-  LoginRequest,
-  User,
-  UserSchema,
-} from '@/types/schema/userSchema';
+import { LoginRequestSchema, LoginRequest } from '@/types/schema/userSchema';
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserState, useUserStore } from '@/stores/userStore';
-import { set } from 'zod';
+import { useUserStore } from '@/stores/userStore';
 
 const LoginPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const setUser = useUserStore(state => state.setUser);
 
   const {
     register, // input폼 연결
@@ -33,20 +27,6 @@ const LoginPage = () => {
     resolver: zodResolver(LoginRequestSchema),
     mode: 'onChange', // 입력값이 바뀔 때마다 검사
   }); // 여기에 연결 해줌!
-
-  const setUser = useUserStore(state => state.setUser);
-  //zustand 이용한 전역 상태 관리
-  const handleLoginSuccess = useCallback(
-    (userData: User) => {
-      const result = UserSchema.safeParse(userData);
-      if (result.success) {
-        setUser(result.data);
-      } else {
-        console.error('유효성 검사 실패:', result.error);
-      }
-    },
-    [setUser],
-  ); // 로그인 성공시 작동 함수-zod 유효성 검사
 
   // 로그인 요청
   const onSubmit: SubmitHandler<LoginRequest> = async data => {
@@ -64,7 +44,6 @@ const LoginPage = () => {
 
       //
       const responseData = await response.json();
-      console.log('응답 데이터:', responseData);
 
       // HTTP 상태 코드 체크
       if (!response.ok) {
@@ -73,11 +52,6 @@ const LoginPage = () => {
         } else {
           throw new Error('로그인 실패: 서버 응답 오류입니다.');
         }
-      }
-
-      // 응답은 성공적이지만 필수 데이터가 없는 경우
-      if (!responseData.accessToken || !responseData.refreshToken) {
-        throw new Error('로그인 실패: 서버로부터 필수 데이터(토큰)를 받지 못했습니다.');
       }
 
       // 성공적으로 로그인 처리
@@ -90,7 +64,11 @@ const LoginPage = () => {
         refreshTokenStored: localStorage.getItem('refresh_token'),
       });
 
-      handleLoginSuccess(responseData.user);
+      // 전역 상태에 유저 정보 저장
+      if (response.ok && responseData.user) {
+        setUser(responseData.user);
+        console.log('User state updated:', responseData.user);
+      }
 
       router.push('/');
     } catch (err: unknown) {
