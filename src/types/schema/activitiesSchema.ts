@@ -65,6 +65,8 @@ export const ActivityDetail = z.object({
   ),
 });
 
+export type ActivityDetail = z.infer<typeof ActivityDetail>;
+
 export const ActivityReview = z.object({
   averageRating: z.number(),
   totalCount: z.number(),
@@ -80,9 +82,9 @@ export const ActivityReview = z.object({
       rating: z.number(),
       content: z.string(),
       createdAt: z.string(),
-      updateedAt: z.string(),
+      updatedAt: z.string(),
     }),
   ),
 });
 
-export type ActivityDetail = z.infer<typeof ActivityDetail>;
+export type ActivityReview = z.infer<typeof ActivityDetail>;

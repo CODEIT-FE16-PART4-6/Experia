@@ -1,29 +1,14 @@
 import Star from '@/assets/imgs/activityPage/ic_Star.svg';
 import Image from 'next/image';
+import { ReviewUserType, ReviewType } from './postContentTypes';
 
-interface ReviewUserType {
-  profileImageUrl: string;
-  nickname: string;
-  id: number;
-}
-
-interface ReviewType {
-  id: number;
-  user: ReviewUserType[];
-  activityId: number;
-  rating: number;
-  content: string;
-  createdAt: string;
-  updtatedAt: string;
-}
-
-interface ReviewType {
+interface ReviewConentType {
   reviewTotalCount: number;
   averageRating: number;
   reviews: ReviewType[];
 }
 
-const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewType) => {
+const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewConentType) => {
   //********************************* 목데이터
   const MockReviewTotalCount = 10; //reviewTotalCount
   const MockAvarageRating = 3.2; //averageRating
@@ -38,7 +23,7 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewType) =>
       },
       activityId: 12,
       rating: 4.3,
-      content: '리뷰 내용 1리뷰 내용 1리뷰 내용 1리뷰 내용 1리뷰 내용 1리뷰 내용 1',
+      content: '리뷰 용 1리뷰 내용 1',
       createdAt: '2025-08-29T18:38:08',
       updatedAt: '2025-08-29T18:38:08',
     },
@@ -53,7 +38,7 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewType) =>
       activityId: 12,
       rating: 4.3,
       content:
-        'testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest',
+        'tsttesttestteststtesttest testtestt etsttesttest testtestt etsttesttest testtestt esttests ttestteststt esttesttest',
       createdAt: '2025-08-29T18:38:08',
       updatedAt: '2025-08-29T18:38:08',
     },
@@ -68,7 +53,7 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewType) =>
       activityId: 12,
       rating: 4.3,
       content:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        'Long elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       createdAt: '2025-08-29T18:38:08',
       updatedAt: '2025-08-29T18:38:08',
     },
@@ -115,7 +100,12 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewType) =>
           {(index === 1 || index === 2) && <hr className='border-gray-400' />}
           <div className='my-[25px] flex gap-4 pr-[24px] pl-[24px]'>
             <div className='bg-nomad-black h-[45px] w-[45px] rounded-[30px]'>
-              <Image alt='프로필 이미지' fill src={reviewContent.user.profileImageUrl} />
+              <Image
+                alt='프로필 이미지'
+                width={45}
+                height={45}
+                src={reviewContent.user.profileImageUrl}
+              />
             </div>
             <div className='flex flex-col gap-2'>
               <div className='flex gap-[4.5px]'>
@@ -125,7 +115,7 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewType) =>
                 <p>|</p>
                 <p className='text-gray-600'>{formatDateFunction(reviewContent.updatedAt)}</p>
               </div>
-              <p className='text-nomad-black'>{reviewContent.content}</p>
+              <p className='text-nomad-black break-words'>{reviewContent.content}</p>
             </div>
           </div>
         </div>

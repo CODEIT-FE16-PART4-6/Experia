@@ -6,21 +6,8 @@ import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
 //component
 import PostReview from './postReview';
 
-interface ReviewUserType {
-  profileImageUrl: string;
-  nickname: string;
-  id: number;
-}
-
-interface ReviewType {
-  id: number;
-  user: ReviewUserType[];
-  activityId: number;
-  rating: number;
-  content: string;
-  createdAt: string;
-  updtatedAt: string;
-}
+//types
+import { ReviewType } from './postContentTypes';
 
 interface ContentProps {
   description: string;
