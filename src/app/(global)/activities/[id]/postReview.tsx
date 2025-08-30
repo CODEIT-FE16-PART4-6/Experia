@@ -1,6 +1,7 @@
 import Star from '@/assets/imgs/activityPage/ic_Star.svg';
 import Image from 'next/image';
 import { ReviewUserType, ReviewType } from './postContentTypes';
+import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
 
 interface ReviewConentType {
   reviewTotalCount: number;
@@ -59,6 +60,7 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewConentTy
     },
   ];
   //*********************************** */
+
   const formatDateFunction = (date: string) => {
     const updateTime = new Date(date);
     const year = updateTime.getFullYear();
@@ -95,16 +97,21 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewConentTy
           </div>
         </div>
       </div>
-      {MockReview.map((reviewContent, index) => (
+      {reviews.map((reviewContent, index) => (
         <div key={reviewContent.id}>
           {(index === 1 || index === 2) && <hr className='border-gray-400' />}
           <div className='my-[25px] flex gap-4 pr-[24px] pl-[24px]'>
-            <div className='bg-nomad-black h-[45px] w-[45px] rounded-[30px]'>
+            <div className='over-hidden h-[45px] w-[45px]'>
               <Image
                 alt='프로필 이미지'
                 width={45}
                 height={45}
-                src={reviewContent.user.profileImageUrl}
+                src={
+                  reviewContent.user.profileImageUrl
+                    ? reviewContent.user.profileImageUrl
+                    : defaultProfile
+                }
+                className='rounded-[30px]'
               />
             </div>
             <div className='flex flex-col gap-2'>
