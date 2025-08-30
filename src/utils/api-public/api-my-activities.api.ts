@@ -19,7 +19,7 @@ export async function FindAllMyActivities(
       method: 'get',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
+        Authorization: `Bearer ${token}`,
       }),
     },
   )
@@ -65,10 +65,10 @@ export async function FindAllMyActivitiesOneDay(activityId: number, date: string
   const response1 = await fetch(
     `${URL}/${activityId}/reserved-schedule?date=${date}`,
     {
-      method: 'get',
+      method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
+        Authorization: `Bearer ${token}`,
       }),
     },
   )
@@ -131,7 +131,7 @@ export async function FindAllMyActivitiesOnePart(activityId: number, scheduleId:
       method: 'get',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
+        Authorization: `Bearer ${token}`,
       }),
     },
   )
@@ -186,11 +186,11 @@ export async function UpdateMyActivitiesReserveOneByReservationId(activityId: nu
   const response1 = await fetch(
     `${URL}/${activityId}/reservations/${reservationId}`,
     {
-      method: 'patch',
+      method: 'PATCH',
       headers: new Headers({
         'accept': 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQxODk4OCwiZXhwIjoxNzU3NjI4NTg4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VK8ZdANud1xI6dkySwNoyAA1aYwkYd5kD3Mnfq66QPw`,
+        Authorization: `Bearer ${token}`,
       }),
       body: JSON.stringify({
         status: myActivitiesStatus

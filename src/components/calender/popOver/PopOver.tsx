@@ -45,6 +45,7 @@ const PopOverPage = ({ activityId, date }: Props) => {
   const [status, setStatus] = useState<MyActivitiesStatus>(MyActivitiesStatus.pending);
   const [values, setSelectedValues] = useState<React.JSX.Element[]>([]);
   const [options, setSelectedOptions] = useState<React.JSX.Element[]>([]);
+  const [update, setUpdate] = useState<number>(0);
 
   const arrayDate: string[] = date.split('-');
 
@@ -52,11 +53,14 @@ const PopOverPage = ({ activityId, date }: Props) => {
     console.log('onClickConfirm id : ', id);
     await UpdateMyActivitiesReserveOneByReservationId(activityId, id, MyActivitiesStatus.confirmed);
 
-    onClickStatus(status);
+    setUpdate(update + 1);
   };
 
-  const onClickDeclined = (id: number) => {
+  const onClickDeclined = async (id: number) => {
     console.log('onClickDeclined id : ', id);
+    await UpdateMyActivitiesReserveOneByReservationId(activityId, id, MyActivitiesStatus.declined);
+
+    setUpdate(update + 1);
   };
 
   useEffect(() => {
@@ -93,6 +97,7 @@ const PopOverPage = ({ activityId, date }: Props) => {
               id: ele['id'],
               nickname: ele['nickname'],
               headCount: ele['headCount'],
+              needBtn: ele['status'] == MyActivitiesStatus.pending,
               onClickConfirm,
               onClickDeclined,
             });
@@ -112,7 +117,7 @@ const PopOverPage = ({ activityId, date }: Props) => {
     };
 
     fetchData();
-  }, []);
+  }, [update]);
 
   const onClickStatus = (statusSet: MyActivitiesStatus) => {
     setStatus(statusSet);
@@ -135,6 +140,7 @@ const PopOverPage = ({ activityId, date }: Props) => {
             id: ele['id'],
             nickname: ele['nickname'],
             headCount: ele['headCount'],
+            needBtn: ele['status'] == MyActivitiesStatus.pending,
             onClickConfirm,
             onClickDeclined,
           });
@@ -168,6 +174,7 @@ const PopOverPage = ({ activityId, date }: Props) => {
             id: ele['id'],
             nickname: ele['nickname'],
             headCount: ele['headCount'],
+            needBtn: ele['status'] == MyActivitiesStatus.pending,
             onClickConfirm,
             onClickDeclined,
           });
