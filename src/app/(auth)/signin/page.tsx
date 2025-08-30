@@ -17,7 +17,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const setUser = useUserStore(state => state.setUser);
+  const setUser = useUserStore(state => state.setUser); // 전역 상태 관리 훅
 
   const {
     register, // input폼 연결
