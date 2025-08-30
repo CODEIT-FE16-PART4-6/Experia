@@ -10,57 +10,6 @@ interface ReviewConentType {
 }
 
 const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewConentType) => {
-  //********************************* 목데이터
-  const MockReviewTotalCount = 10; //reviewTotalCount
-  const MockAvarageRating = 3.2; //averageRating
-  const MockReview = [
-    {
-      id: 1,
-      user: {
-        profileImageUrl:
-          'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png',
-        nickname: '홍길동',
-        id: 1,
-      },
-      activityId: 12,
-      rating: 4.3,
-      content: '리뷰 용 1리뷰 내용 1',
-      createdAt: '2025-08-29T18:38:08',
-      updatedAt: '2025-08-29T18:38:08',
-    },
-    {
-      id: 2,
-      user: {
-        profileImageUrl:
-          'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png',
-        nickname: '강길동',
-        id: 1,
-      },
-      activityId: 12,
-      rating: 4.3,
-      content:
-        'tsttesttestteststtesttest testtestt etsttesttest testtestt etsttesttest testtestt esttests ttestteststt esttesttest',
-      createdAt: '2025-08-29T18:38:08',
-      updatedAt: '2025-08-29T18:38:08',
-    },
-    {
-      id: 3,
-      user: {
-        profileImageUrl:
-          'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png',
-        nickname: '닉네임',
-        id: 1,
-      },
-      activityId: 12,
-      rating: 4.3,
-      content:
-        'Long elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      createdAt: '2025-08-29T18:38:08',
-      updatedAt: '2025-08-29T18:38:08',
-    },
-  ];
-  //*********************************** */
-
   const formatDateFunction = (date: string) => {
     const updateTime = new Date(date);
     const year = updateTime.getFullYear();
