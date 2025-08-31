@@ -1,92 +1,75 @@
 'use client';
-import { useState, useRef, useEffect, useCallback } from 'react';
-import Image from 'next/image';
+
+import { Fragment } from 'react';
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+  Transition,
+} from '@headlessui/react';
 import clsx from 'clsx';
-export interface Activity {
-  id: number;
-  name: string;
+
+interface DropdownSelectItem {
+  id: string | number;
+  value: string;
 }
 
-export interface DropdownProps {
-  activities: Activity[];
-  value: Activity | null;
-  onChange: (value: number) => void;
+interface DropdownSelectProps {
+  items: DropdownSelectItem[];
   label?: string;
   placeholder?: string;
+  selectedItem?: DropdownSelectItem | null;
+  onChange?: (value: DropdownSelectItem | null) => void;
 }
-/**
- * 드롭다운 선택 컴포넌트
- * @param onChange 선택된 activity.id를 부모 컴포넌트로 전달하는 콜백 함수
- * @param value 현재 선택된 activity
- * @param activities 드롭다운에 표시할 활동 목록
- */
-export const DropdownSelect = ({
-  activities,
-  value,
-  onChange,
+
+const DropdownSelect = ({
+  items,
   label,
-  placeholder,
-}: DropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // 외부 클릭 시 드롭다운 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleSelect = useCallback(
-    (activity: Activity) => {
-      onChange(activity.id);
-      setIsOpen(false);
-    },
-    [onChange],
-  );
-
-  const displayValue = value ? value.name : placeholder || '카테고리';
-
+  placeholder = '카테고리',
+  selectedItem,
+  onChange,
+}: DropdownSelectProps) => {
   return (
-    <div className='border' ref={containerRef}>
+    <div className='w-full'>
       {label && <label className='mb-1 block font-semibold'>{label}</label>}
-      <div
-        className='flex cursor-pointer items-center justify-between rounded border border-gray-800 px-4 py-2'
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span>{displayValue}</span>
-        <Image
-          src='icons/ic_chevron_down.svg'
-          alt='Dropdown Icon'
-          width={24}
-          height={24}
-          style={{
-            transform: `rotate(${isOpen ? 180 : 0}deg)`,
-            transition: 'transform 0.2s ease',
-          }}
-        />
-      </div>
-      {isOpen && (
-        <div className='absolute z-50 mt-1 max-h-60 w-64 overflow-y-auto rounded border border-gray-800 bg-white shadow-lg'>
-          {activities.map(activity => (
-            <div
-              key={activity.id}
-              className={clsx('cursor-pointer px-4 py-2 hover:bg-blue-500 hover:text-white', {
-                'bg-blue-500 text-white': value?.id === activity.id,
-              })}
-              onClick={() => handleSelect(activity)}
-            >
-              {activity.name}
-            </div>
-          ))}
+
+      <Listbox value={selectedItem} onChange={onChange}>
+        <div className='relative'>
+          {/* 버튼 */}
+          <ListboxButton className='flex w-full cursor-pointer items-center justify-between rounded border border-gray-800 bg-white px-4 py-2 text-left'>
+            {selectedItem ? selectedItem.value : placeholder}
+          </ListboxButton>
+
+          {/* 옵션 목록 */}
+          <Transition
+            as={Fragment}
+            leave='transition ease-in duration-100'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
+          >
+            <ListboxOptions className='absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded border border-gray-800 bg-white shadow-lg'>
+              {items.map(item => (
+                <ListboxOption
+                  key={item.id}
+                  value={item}
+                  className={({ active, selected }) =>
+                    clsx(
+                      'cursor-pointer px-4 py-2 select-none',
+                      active && 'bg-blue-500 text-white',
+                      selected && 'bg-blue-500 text-white',
+                    )
+                  }
+                >
+                  <div className='flex items-center justify-between'>{item.value}</div>
+                </ListboxOption>
+              ))}
+            </ListboxOptions>
+          </Transition>
         </div>
-      )}
+      </Listbox>
     </div>
   );
 };
+
+export default DropdownSelect;
