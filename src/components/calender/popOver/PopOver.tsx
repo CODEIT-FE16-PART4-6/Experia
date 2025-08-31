@@ -1,5 +1,7 @@
 'use client';
 
+import '@/app/globals.css';
+
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 import { UpdateMyActivitiesReserveOneByReservationId } from '@/utils/api-public/api-my-activities.api';
 import React, { useEffect, useState } from 'react';
@@ -41,74 +43,56 @@ const PopOverPage = ({ activityId, date }: Props) => {
     confirmed: 0,
     todayData: {},
   });
+
   const [selectedKey, setSelectedKey] = useState<string>('');
   const [status, setStatus] = useState<MyActivitiesStatus>(MyActivitiesStatus.pending);
   const [values, setSelectedValues] = useState<React.JSX.Element[]>([]);
   const [options, setSelectedOptions] = useState<React.JSX.Element[]>([]);
   const [update, setUpdate] = useState<number>(0);
+  const [activeStatus, setActiveStatus] = useState<MyActivitiesStatus>(MyActivitiesStatus.pending);
 
   const arrayDate: string[] = date.split('-');
 
   const onClickConfirm = async (id: number) => {
-    console.log('onClickConfirm id : ', id);
     await UpdateMyActivitiesReserveOneByReservationId(activityId, id, MyActivitiesStatus.confirmed);
-
     setUpdate(update + 1);
   };
 
   const onClickDeclined = async (id: number) => {
-    console.log('onClickDeclined id : ', id);
     await UpdateMyActivitiesReserveOneByReservationId(activityId, id, MyActivitiesStatus.declined);
-
     setUpdate(update + 1);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await PopOverCurrentData(activityId, date);
-      console.log('PopOver.tsx useEffect fetchData data : ', data);
       setCurrentData(data);
 
-      // 첫 번째 key를 초기 선택값으로 설정
       const keys = Object.keys(data.todayData);
-      console.log('PopOver.tsx useEffect fetchData keys : ', keys);
-
-      const optionsData: React.JSX.Element[] = keys.map(ele => {
-        return (
-          <option key={ele} value={ele}>
-            {ele}
-          </option>
-        );
-      });
-
+      const optionsData: React.JSX.Element[] = keys.map(ele => (
+        <option key={ele} value={ele}>
+          {ele}
+        </option>
+      ));
       setSelectedOptions(optionsData);
 
       if (keys.length > 0) {
-        console.log('date.todayDate 0 index values : ', data.todayData);
         const arrValues: React.JSX.Element[] = [];
-
-        console.log('PopOverPage useEffect fetchData status : ', status);
         const dataValue = data.todayData[keys[0]];
-        console.log('PopOverPage useEffect fetchData dataValue : ', dataValue);
         const val = dataValue
           .filter(ele => ele.status == status)
-          .map(ele => {
-            return UpdateReserveStatus({
-              id: ele['id'],
-              nickname: ele['nickname'],
-              headCount: ele['headCount'],
-              needBtn: ele['status'] == MyActivitiesStatus.pending,
+          .map(ele =>
+            UpdateReserveStatus({
+              id: ele.id,
+              nickname: ele.nickname,
+              headCount: ele.headCount,
+              needBtn: ele.status == MyActivitiesStatus.pending,
+              type: ele.status,
               onClickConfirm,
               onClickDeclined,
-            });
-          });
-
-        if (val.length > 0) {
-          val.forEach(ele => arrValues.push(ele));
-        }
-
-        console.log('arrValues : ', arrValues);
-
+            }),
+          );
+        if (val.length > 0) val.forEach(ele => arrValues.push(ele));
         setSelectedValues(arrValues);
         setSelectedKey(keys[0]);
       } else {
@@ -117,41 +101,29 @@ const PopOverPage = ({ activityId, date }: Props) => {
     };
 
     fetchData();
-  }, [update]);
+  }, [activityId, date, update]);
 
   const onClickStatus = (statusSet: MyActivitiesStatus) => {
     setStatus(statusSet);
-    console.log('PopOver.tsx onClickStatus statusSet : ', statusSet);
-    console.log('갯수 : ', currentData[statusSet]);
-    if (currentData[statusSet] > 0) {
-      // 첫 번째 key를 초기 선택값으로 설정
-      setSelectedKey(selectedKey);
-      console.log('date.todayDate 0 index values : ', currentData.todayData);
-      const arrValues: React.JSX.Element[] = [];
+    setActiveStatus(statusSet);
 
-      console.log('PopOverPage useEffect fetchData status : ', status);
-      const dataValue = currentData.todayData[selectedKey];
-      console.log('PopOverPage useEffect fetchData dataValue : ', dataValue);
+    if (currentData[statusSet] > 0) {
+      const arrValues: React.JSX.Element[] = [];
+      const dataValue = currentData.todayData[selectedKey] ?? [];
       const val = dataValue
-        .filter(ele => ele.status == MyActivitiesStatus[statusSet])
-        .map((ele: any) => {
-          console.log('update status ele : ', ele);
-          return UpdateReserveStatus({
-            id: ele['id'],
-            nickname: ele['nickname'],
-            headCount: ele['headCount'],
-            needBtn: ele['status'] == MyActivitiesStatus.pending,
+        .filter(ele => ele.status == statusSet)
+        .map(ele =>
+          UpdateReserveStatus({
+            id: ele.id,
+            nickname: ele.nickname,
+            headCount: ele.headCount,
+            needBtn: ele.status == MyActivitiesStatus.pending,
+            type: ele.status,
             onClickConfirm,
             onClickDeclined,
-          });
-        });
-
-      if (val.length > 0) {
-        val.forEach(ele => arrValues.push(ele));
-      }
-
-      console.log('arrValues : ', arrValues);
-
+          }),
+        );
+      if (val.length > 0) val.forEach(ele => arrValues.push(ele));
       setSelectedValues(arrValues);
     } else {
       setSelectedValues([]);
@@ -159,57 +131,85 @@ const PopOverPage = ({ activityId, date }: Props) => {
   };
 
   const onChangeOption = (value: string) => {
-    console.log('onChangeSelectItem run : ', value);
-    if (currentData.todayData[value].length > 0) {
-      console.log('date.todayDate 0 index values : ', currentData.todayData);
+    if ((currentData.todayData[value] ?? []).length > 0) {
       const arrValues: React.JSX.Element[] = [];
-
-      console.log('PopOverPage useEffect fetchData status : ', status);
       const dataValue = currentData.todayData[value];
-      console.log('PopOverPage useEffect fetchData dataValue : ', dataValue);
       const val = dataValue
         .filter(ele => ele.status == status)
-        .map((ele: any) => {
-          return UpdateReserveStatus({
-            id: ele['id'],
-            nickname: ele['nickname'],
-            headCount: ele['headCount'],
-            needBtn: ele['status'] == MyActivitiesStatus.pending,
+        .map(ele =>
+          UpdateReserveStatus({
+            id: ele.id,
+            nickname: ele.nickname,
+            headCount: ele.headCount,
+            needBtn: ele.status == MyActivitiesStatus.pending,
+            type: ele.status,
             onClickConfirm,
             onClickDeclined,
-          });
-        });
-
-      if (val.length > 0) {
-        val.forEach(ele => arrValues.push(ele));
-      }
-
-      console.log('arrValues : ', arrValues);
-
+          }),
+        );
+      if (val.length > 0) val.forEach(ele => arrValues.push(ele));
       setSelectedValues(arrValues);
       setSelectedKey(value);
     }
   };
 
+  // 공통 버튼 베이스 클래스 (기존 .btn 대체)
+  const baseBtn =
+    'appearance-none bg-transparent m-0 mx-2.5 text-xl font-normal outline-none' +
+    ' border-b border-b-transparent transition-[border-color,font-weight] cursor-pointer';
+  const activeBtn = 'border-b-[3px] border-black font-semibold';
+  const hoverBtn = 'hover:border-b-[3px] hover:border-black hover:font-semibold';
+
   return (
-    <>
-      <h1>예약 정보</h1>
-      <button value={'신청'} onClick={() => onClickStatus(MyActivitiesStatus.pending)}>
-        신청 {currentData.pending}
-      </button>
-      <button value={'승인'} onClick={() => onClickStatus(MyActivitiesStatus.confirmed)}>
-        승인 {currentData.confirmed}
-      </button>
-      <button value={'거절'} onClick={() => onClickStatus(MyActivitiesStatus.declined)}>
-        거절 {currentData.declined}
-      </button>
-      <p>예약 날짜</p>
-      <p>{`${arrayDate[0]}년 ${arrayDate[1]}월 ${arrayDate[2]}일`}</p>
-      <select name='select-item' onChange={e => onChangeOption(e.target.value)}>
+    <div className='m-4'>
+      <h3 className='text-2xl font-bold'>예약 정보</h3>
+
+      <div className='border-b border-dotted border-black'>
+        <button
+          type='button'
+          className={`${baseBtn} ${hoverBtn} ${
+            activeStatus === MyActivitiesStatus.pending ? activeBtn : ''
+          }`}
+          onClick={() => onClickStatus(MyActivitiesStatus.pending)}
+        >
+          신청 {currentData.pending}
+        </button>
+
+        <button
+          type='button'
+          className={`${baseBtn} ${hoverBtn} ${
+            activeStatus === MyActivitiesStatus.confirmed ? activeBtn : ''
+          }`}
+          onClick={() => onClickStatus(MyActivitiesStatus.confirmed)}
+        >
+          승인 {currentData.confirmed}
+        </button>
+
+        <button
+          type='button'
+          className={`${baseBtn} ${hoverBtn} ${
+            activeStatus === MyActivitiesStatus.declined ? activeBtn : ''
+          }`}
+          onClick={() => onClickStatus(MyActivitiesStatus.declined)}
+        >
+          거절 {currentData.declined}
+        </button>
+      </div>
+
+      <p className='mt-3 text-xl font-semibold'>예약 날짜</p>
+      <p className='text-xl font-normal'>{`${arrayDate[0]}년 ${arrayDate[1]}월 ${arrayDate[2]}일`}</p>
+
+      <select
+        name='select-item'
+        onChange={e => onChangeOption(e.target.value)}
+        className='mt-2 h-14 w-full rounded border border-gray-300 px-3 text-base font-normal'
+      >
         {options}
       </select>
+
+      <p className='mt-4 text-xl font-semibold'>예약내역</p>
       {values}
-    </>
+    </div>
   );
 };
 
