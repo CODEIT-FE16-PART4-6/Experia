@@ -1,7 +1,13 @@
+'use client';
+
 //lib
 import clsx from 'clsx';
 import Image from 'next/image';
 //SSR
+//img
+import imageArrowLeft from '@/assets/imgs/activityPage/imageArrowLeft.svg';
+import imageArrowRight from '@/assets/imgs/activityPage/imageArrowRight.svg';
+
 interface SubImage {
   id: number;
   imageUrl?: string | null; //<=@
@@ -10,9 +16,24 @@ interface SubImage {
 interface ImagePropType {
   bannerImageUrl: string;
   subImages: SubImage[];
+  tag: string;
 }
 
-const PostImage = ({ bannerImageUrl, subImages }: ImagePropType) => {
+const MAX_SUB_ITEMS = 4; // 서브 이미지의 최대 개수
+
+const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
+  const emptySlots = MAX_SUB_ITEMS - subImages.length;
+
+  const tagName = new Map([
+    ['문화 · 예술', 'culture'],
+    ['식음료', 'foodNdrinks'],
+    ['스포츠', 'sports'],
+    ['투어', 'tour'],
+    ['관광', 'sightseeing'],
+    ['웰빙', 'wellbeing'],
+  ]);
+  const englishTag = tagName.get(tag) || 'default';
+  console.log(englishTag);
   return (
     <div
       className={clsx(
@@ -35,7 +56,20 @@ const PostImage = ({ bannerImageUrl, subImages }: ImagePropType) => {
           />
         </div>
       ))}
-      <div className='bg-[#b3b3b3]'>이미지 준비중 . . .</div>
+      {emptySlots > 0 &&
+        Array.from({ length: emptySlots }).map((_, index) => (
+          <div
+            key={`placeholder-${index}`}
+            className='flex items-center justify-center bg-[#b3b3b3] text-gray-500'
+          >
+            <Image
+              src={`/images/ActivityPageImgs/${englishTag}.png`}
+              alt='공백 이미지'
+              width={30}
+              height={30}
+            />
+          </div>
+        ))}
     </div>
   );
 };

@@ -30,9 +30,13 @@ const ActivityPost = ({ data, reviewData }: ActivityProps) => {
         reviewCount={ActivityContent.reviewCount}
         address={ActivityContent.address}
       />
-      <PostImage bannerImageUrl={data.bannerImageUrl} subImages={data?.subImages || []} />
+      <PostImage
+        bannerImageUrl={data.bannerImageUrl}
+        subImages={data?.subImages || []}
+        tag={ActivityContent.tag}
+      />
       <div className='mt-8 flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1152px] lg:gap-6'>
-        <div className='lg:w-[786px]'>
+        <div className='md:w-[100%] lg:w-[786px]'>
           <PostContent
             description={ActivityContent.description}
             address={ActivityContent.address}
