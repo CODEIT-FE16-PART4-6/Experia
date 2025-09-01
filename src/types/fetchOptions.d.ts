@@ -1,6 +1,7 @@
 interface BaseFetchOptions {
   path: string;
   query?: Record<string, string | number | boolean | null | undefined>;
+  token?: string;
 }
 
 interface ISRFetchOptions extends BaseFetchOptions {
