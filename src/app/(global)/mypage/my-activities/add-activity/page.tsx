@@ -1,8 +1,6 @@
 import AddActivityForm from '../../components/AddActivityForm';
-import SectionTitle from '@/components/ui/Section/SectionTitle';
 import Link from 'next/link';
 import ArrowLeftIcon from '@/assets/icons/ic_arrowLeftLine.svg';
-import Button from '@/components/Button';
 
 const AddNewActivityPage = () => {
   return (
