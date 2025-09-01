@@ -21,9 +21,8 @@ interface ActivityFormProps {
   initialData?: ActivityFormValues;
 }
 
-const STORAGE_KEY = 'add-activity-form';
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY'; // sd@email.com(pw:12345678) temp access token
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';
 
 const ActivityForm = ({ initialData }: ActivityFormProps) => {
   const router = useRouter();
@@ -50,12 +49,16 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
 
   const isEdit = Boolean(initialData);
 
-  const defaultSubImages: string[] = initialData?.subImages?.map(img => img.imageUrl) ?? [];
-
   const onSubmit: SubmitHandler<ActivityFormValues> = async data => {
     try {
-      const res = await fetch(`${REQUEST_URL}/activities`, {
-        method: 'POST',
+      const url = isEdit
+        ? `${REQUEST_URL}/activities/${initialData?.id}`
+        : `${REQUEST_URL}/activities`;
+
+      const method = isEdit ? 'PATCH' : 'POST';
+
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -65,16 +68,18 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
 
       if (!res.ok) {
         const error = await res.json();
+        const errorDefaultMsg = `체험 ${isEdit ? '수정' : '등록'}에 실패했습니다.`;
+
         console.error('서버 에러:', error);
-        alert(error.message || '체험 등록에 실패했습니다.');
+        alert(error.message || errorDefaultMsg);
         return;
       }
 
       const result = await res.json();
-      console.log('등록 성공:', result);
-      alert('체험이 등록되었습니다!');
+      const alertMsg = `체험이 ${isEdit ? '수정' : '등록'}되었습니다.`;
+      alert(alertMsg);
 
-      // 등록 성공 후 상세 페이지로 이동
+      // 등록/수정 후 상세 페이지로 이동
       router.push(`/activities/${result.id}`);
     } catch (err) {
       console.error('네트워크 에러:', err);
@@ -86,10 +91,10 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pb-[180px]'>
         <SectionTitle
-          title='내 체험 등록'
+          title={isEdit ? '내 체험 수정' : '내 체험 등록'}
           action={
             <Button variant='POSITIVE' size='md' type='submit'>
-              등록하기
+              {isEdit ? '수정하기' : '등록하기'}
             </Button>
           }
         />

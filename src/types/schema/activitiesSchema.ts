@@ -68,6 +68,7 @@ export const ActivityDetail = z.object({
 export type ActivityDetail = z.infer<typeof ActivityDetail>;
 
 export const ActivityFormValueSchema = z.object({
+  id: z.number().optional(),
   title: z.string().min(1, '제목을 입력해주세요.'),
   category: z.string().min(1, '카테고리를 선택해주세요.'),
   description: z.string().min(1, '설명을 입력해주세요.'),
