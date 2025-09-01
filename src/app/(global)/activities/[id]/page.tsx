@@ -1,6 +1,8 @@
 //import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 import Post from './Post';
+import ErrorPrint from './error';
+import PostReview from './PostReview';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -62,18 +64,9 @@ export default async function Page({ params }: PageProps) {
   const { id } = await params;
   console.log('id 출력:', id);
 
-  try {
-    const data = await initialGetActivity(id);
+  const Postdata = await initialGetActivity(id);
 
-    const reviewData = await initialGetReviews(id);
-    console.log(reviewData);
-    return <Post data={data} reviewData={reviewData} />;
-  } catch (error) {
-    console.log(error);
-    return (
-      <div className='error'>
-        <h2>오류가 발생했습니다.</h2>
-      </div>
-    );
-  }
+  const reviewData = await initialGetReviews(id);
+  console.log(reviewData);
+  return <Post data={Postdata} reviewData={reviewData} />;
 }

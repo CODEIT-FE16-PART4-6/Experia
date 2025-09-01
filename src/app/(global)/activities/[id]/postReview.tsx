@@ -1,15 +1,18 @@
 import Star from '@/assets/imgs/activityPage/ic_Star.svg';
 import Image from 'next/image';
-import { ReviewUserType, ReviewType } from './PostContentTypes';
+import { ReviewType } from './PostContentTypes';
 import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
 
 interface ReviewConentType {
-  reviewTotalCount: number;
+  totalCount: number;
   averageRating: number;
   reviews: ReviewType[];
 }
+interface ReviewData {
+  reviewData: ReviewConentType;
+}
 
-const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewConentType) => {
+const PostReview = ({ reviewData }: ReviewData) => {
   const formatDateFunction = (date: string) => {
     const updateTime = new Date(date);
     const year = updateTime.getFullYear();
@@ -27,15 +30,27 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewConentTy
         <div className='flex justify-between'>
           <div className='flex gap-4'>
             <p className='text-nomad-black flex flex-col justify-center text-[50px] font-semibold'>
-              {averageRating}
+              {reviewData.averageRating}
             </p>
             <div className='flex flex-col justify-center gap-2'>
-              <p className='text-nomad-black text-[18px]'>매우 만족</p>
+              <p className='text-nomad-black text-[18px]'>
+                {reviewData.averageRating >= 4
+                  ? '매우 만족'
+                  : reviewData.averageRating >= 3
+                    ? '만족'
+                    : reviewData.averageRating >= 2
+                      ? '보통'
+                      : reviewData.averageRating >= 1
+                        ? '복합적'
+                        : reviewData.averageRating == 0
+                          ? '리뷰 없음'
+                          : '불만족'}
+              </p>
               <div className='flex gap-[6px]'>
                 <div className='flex flex-col justify-center'>
                   <Star />
                 </div>
-                {reviewTotalCount}개 후기
+                {reviewData.totalCount}개 후기
               </div>
             </div>
           </div>
@@ -46,36 +61,40 @@ const PostReview = ({ reviewTotalCount, averageRating, reviews }: ReviewConentTy
           </div>
         </div>
       </div>
-      {reviews.map((reviewContent, index) => (
-        <div key={reviewContent.id}>
-          {(index === 1 || index === 2) && <hr className='border-gray-400' />}
-          <div className='my-[25px] flex gap-4 pr-[24px] pl-[24px]'>
-            <div className='over-hidden h-[45px] w-[45px]'>
-              <Image
-                alt='프로필 이미지'
-                width={45}
-                height={45}
-                src={
-                  reviewContent.user.profileImageUrl
-                    ? reviewContent.user.profileImageUrl
-                    : defaultProfile
-                }
-                className='rounded-[30px]'
-              />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <div className='flex gap-[4.5px]'>
-                <p className='text-nomad-black text-[16px] font-bold'>
-                  {reviewContent.user.nickname}
-                </p>
-                <p>|</p>
-                <p className='text-gray-600'>{formatDateFunction(reviewContent.updatedAt)}</p>
+      <div className='mb-10'>
+        <ol>
+          {reviewData.reviews.map((reviewContent, index) => (
+            <li key={reviewContent.id}>
+              {(index === 1 || index === 2) && <hr className='border-gray-400' />}
+              <div className='my-[25px] flex gap-4 pr-[24px] pl-[24px]'>
+                <div className='over-hidden h-[45px] w-[45px]'>
+                  <Image
+                    alt='프로필 이미지'
+                    width={45}
+                    height={45}
+                    src={
+                      reviewContent.user.profileImageUrl
+                        ? reviewContent.user.profileImageUrl
+                        : defaultProfile
+                    }
+                    className='rounded-[30px]'
+                  />
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <div className='flex gap-[4.5px]'>
+                    <p className='text-nomad-black text-[16px] font-bold'>
+                      {reviewContent.user.nickname}
+                    </p>
+                    <p>|</p>
+                    <p className='text-gray-600'>{formatDateFunction(reviewContent.updatedAt)}</p>
+                  </div>
+                  <p className='text-nomad-black break-words'>{reviewContent.content}</p>
+                </div>
               </div>
-              <p className='text-nomad-black break-words'>{reviewContent.content}</p>
-            </div>
-          </div>
-        </div>
-      ))}
+            </li>
+          ))}
+        </ol>
+      </div>
       {/* 페이지네이션 컴포넌트 위치 */}
     </div>
   );

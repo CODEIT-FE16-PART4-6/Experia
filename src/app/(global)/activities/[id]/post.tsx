@@ -6,27 +6,28 @@ import PostImage from './PostImage';
 import PostContent from './PostContent';
 import ReservateIn from './reservateIn';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
-import { ActivityReview } from '@/types/schema/activitiesSchema';
+import { ReviewType } from './PostContentTypes';
 
 type Activity = z.infer<typeof ActivityDetail>;
-type ActivityReviewList = z.infer<typeof ActivityReview>;
+
+interface ReviewConentType {
+  totalCount: number;
+  averageRating: number;
+  reviews: ReviewType[];
+}
+interface ReviewData {
+  reviewData: ReviewConentType;
+}
 
 interface ActivityProps {
   data: Activity;
-}
-interface ActivityReviewProps {
-  reviewData: ActivityReviewList;
+  reviewData: ReviewData;
 }
 
-const ActivityPost = ({ data, reviewData }: ActivityProps & ActivityReviewProps) => {
-  console.log('데이터 잘 받아왔나 테스트 리뷰 객체 출력 : ', reviewData);
+const ActivityPost = ({ data, reviewData }: ActivityProps) => {
   const ActivityContent = {
+    ...data,
     tag: data.category,
-    title: data.title,
-    rating: data.rating,
-    reviewCount: data.reviewCount,
-    address: data.address,
-    description: data.description,
   };
 
   return (
@@ -44,9 +45,7 @@ const ActivityPost = ({ data, reviewData }: ActivityProps & ActivityReviewProps)
           <PostContent
             description={ActivityContent.description}
             address={ActivityContent.address}
-            reviewTotalCount={reviewData.totalCount}
-            averageRating={reviewData.averageRating}
-            reviews={reviewData.reviews}
+            reviewData={reviewData}
           />
         </div>
         <div>
