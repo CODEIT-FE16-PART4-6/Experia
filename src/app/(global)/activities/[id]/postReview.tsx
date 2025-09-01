@@ -1,6 +1,6 @@
 import Star from '@/assets/imgs/activityPage/ic_Star.svg';
 import Image from 'next/image';
-import { ReviewUserType, ReviewType } from './postContentTypes';
+import { ReviewUserType, ReviewType } from './PostContentTypes';
 import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
 
 interface ReviewConentType {

@@ -4,10 +4,10 @@
 import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
 
 //component
-import PostReview from './postReview';
+import PostReview from './PostReview';
 
 //types
-import { ReviewType } from './postContentTypes';
+import { ReviewType } from './PostContentTypes';
 
 interface ContentProps {
   description: string;
