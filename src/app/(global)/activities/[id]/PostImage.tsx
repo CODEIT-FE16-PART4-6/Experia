@@ -5,10 +5,14 @@ import { useState } from 'react';
 //lib
 import clsx from 'clsx';
 import Image from 'next/image';
+import 'photoswipe/style.css';
+import { Gallery, Item } from 'react-photoswipe-gallery';
 //SSR
 //img
 import ImageArrowLeft from '@/assets/imgs/activityPage/imageArrowLeft.svg';
 import ImageArrowRight from '@/assets/imgs/activityPage/imageArrowRight.svg';
+//comp
+import ImageRef from '@/components/ImageRef';
 
 interface SubImage {
   id: number;
@@ -71,16 +75,17 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
             <div className='group'>
               <button
                 onClick={handlePrev}
-                className='absolute top-1/2 left-3 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100'
+                className='absolute top-1/2 left-3 -translate-y-1/2 opacity-50 transition-opacity duration-300 group-hover:opacity-100'
               >
                 <ImageArrowLeft size={24} />
               </button>
               <button
                 onClick={handleNext}
-                className='absolute top-1/2 right-3 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100'
+                className='absolute top-1/2 right-3 -translate-y-1/2 opacity-50 transition-opacity duration-300 group-hover:opacity-100'
               >
                 <ImageArrowRight size={24} />
               </button>
+              {/* 인디케이터 */}
               <div className='absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-[5px] bg-black/70 px-2 py-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
                 {mobileImages.map((_, idx) => (
                   <button
@@ -95,41 +100,72 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
         </div>
       </div>
 
-      <div
-        className={clsx(
-          'hidden h-[310px] md:grid',
-          'lg:mx-auto lg:h-[534px] lg:w-[1152px] lg:gap-2',
-          'overflow-hidden md:mr-6 md:ml-6 md:grid-cols-4 md:grid-rows-2 md:gap-1 md:rounded-[10px]',
-        )}
-      >
-        <div className='full relative h-full bg-[#b3b3b3] md:col-span-2 md:row-span-2'>
-          <Image src={bannerImageUrl} alt='대표 이미지' fill className='object-cover' />
-        </div>
-        {subImages.map((subimg: SubImage) => (
-          <div key={subimg.id} className='full relative bg-[#b3b3b3]'>
-            <Image
-              src={subimg.imageUrl!}
-              alt={`서브 이미지${subimg.id}`}
-              fill
-              className='object-cover'
-            />
-          </div>
-        ))}
-        {emptySlots > 0 &&
-          Array.from({ length: emptySlots }).map((_, index) => (
-            <div
-              key={`placeholder-${index}`}
-              className='flex items-center justify-center bg-[#b3b3b3] text-gray-500'
+      <Gallery options={{ fitRatio: 0.5 } as any}>
+        <div
+          className={clsx(
+            'hidden h-[310px] md:grid',
+            'lg:mx-auto lg:h-[534px] lg:w-[1152px] lg:gap-2',
+            'overflow-hidden md:mr-6 md:ml-6 md:grid-cols-4 md:grid-rows-2 md:gap-1 md:rounded-[10px]',
+          )}
+        >
+          <div className='aspect-ratio full relative h-full bg-[#b3b3b3] md:col-span-2 md:row-span-2'>
+            <Item
+              original={mobileImages[0].url ?? undefined}
+              thumbnail={mobileImages[0].url ?? undefined}
+              width={600}
+              height={400}
             >
-              <Image
-                src={`/images/ActivityPageImgs/${englishTag}.png`}
-                alt='공백 이미지'
-                width={30}
-                height={30}
-              />
+              {({ ref, open }) => (
+                <ImageRef
+                  ref={ref}
+                  onClick={() => open()}
+                  src={bannerImageUrl}
+                  alt='대표 이미지'
+                  fill
+                  className='cursor-pointer object-cover'
+                  unoptimized
+                />
+              )}
+            </Item>
+          </div>
+          {subImages.map((subimg: SubImage, idx: number) => (
+            <div key={subimg.id} className='full relative bg-[#b3b3b3]'>
+              <Item
+                original={mobileImages[idx + 1].url ?? undefined}
+                thumbnail={mobileImages[idx + 1].url ?? undefined}
+                width={600}
+                height={380}
+              >
+                {({ ref, open }) => (
+                  <ImageRef
+                    ref={ref}
+                    onClick={() => open()}
+                    src={subimg.imageUrl!}
+                    alt={`서브 이미지${subimg.id}`}
+                    fill
+                    className='object-cover'
+                    unoptimized
+                  />
+                )}
+              </Item>
             </div>
           ))}
-      </div>
+          {emptySlots > 0 &&
+            Array.from({ length: emptySlots }).map((_, index) => (
+              <div
+                key={`placeholder-${index}`}
+                className='flex items-center justify-center bg-[#b3b3b3] text-gray-500'
+              >
+                <Image
+                  src={`/images/ActivityPageImgs/${englishTag}.png`}
+                  alt='공백 이미지'
+                  width={30}
+                  height={30}
+                />
+              </div>
+            ))}
+        </div>
+      </Gallery>
     </>
   );
 };
