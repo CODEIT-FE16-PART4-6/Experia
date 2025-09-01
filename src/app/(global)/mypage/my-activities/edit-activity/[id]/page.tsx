@@ -4,8 +4,13 @@ import ArrowLeftIcon from '@/assets/icons/ic_arrowLeftLine.svg';
 import { fetchServerData } from '@/utils/api-server';
 import { ActivityFormValues } from '@/types/schema/activitiesSchema';
 
-const EditActivityPage = async ({ params }: { params: { id: string } }) => {
-  const activity = await fetchServerData<ActivityFormValues>({ path: `/activities/${params.id}` });
+interface EditActivityPageProps {
+  params: Promise<{ id: string }>;
+}
+
+const EditActivityPage = async ({ params }: EditActivityPageProps) => {
+  const { id } = await params; // activityId
+  const activity = await fetchServerData<ActivityFormValues>({ path: `/activities/${id}` });
 
   return (
     <section>
