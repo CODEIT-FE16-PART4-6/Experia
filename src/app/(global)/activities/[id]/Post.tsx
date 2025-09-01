@@ -3,10 +3,9 @@ import { z } from 'zod';
 //downComponent
 import PostHeader from './PostHeader';
 import PostImage from './PostImage';
-import PostContent from './PostContent';
+import PostContent from './postContent';
 import ReservateIn from './reservateIn';
 import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
-import { ReviewType } from './PostContentTypes';
 
 type Activity = z.infer<typeof ActivityDetail>;
 type ActivityReviewList = z.infer<typeof ActivityReview>;

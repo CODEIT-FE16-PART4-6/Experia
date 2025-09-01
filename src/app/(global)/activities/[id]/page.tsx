@@ -1,6 +1,6 @@
 //import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
-import Post from './Post';
+import Post from './post';
 
 interface PageProps {
   params: Promise<{ id: string }>;
