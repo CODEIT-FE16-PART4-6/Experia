@@ -1,4 +1,5 @@
 import AddActivityForm from '../../components/AddActivityForm';
+import ActivityForm from '../../components/ActivityForm';
 import Link from 'next/link';
 import ArrowLeftIcon from '@/assets/icons/ic_arrowLeftLine.svg';
 
@@ -12,7 +13,7 @@ const AddNewActivityPage = () => {
         <ArrowLeftIcon className='group-hover:text-primary h-4 w-4 text-gray-600' />
         돌아가기
       </Link>
-      <AddActivityForm />
+      <ActivityForm />
     </section>
   );
 };

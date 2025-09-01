@@ -1,49 +1,53 @@
 import debounce from '@/utils/debounce';
 import { useState, forwardRef, useMemo, InputHTMLAttributes } from 'react';
+import { Field, Input } from '@headlessui/react';
 
 interface AddressFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
-  value?: string;
-  onChange?: (value: string) => void;
+  // value?: string;
+  // onChange?: (value: string) => void;
   placeholder?: string;
 }
 
 const AddressField = forwardRef<HTMLInputElement, AddressFieldProps>(
-  ({ value: propValue, onChange, placeholder, ...rest }, ref) => {
-    const [searchValue, setSearchValue] = useState('');
-    const [results, setResults] = useState<any[]>([]);
-    const [isOpen, setIsOpen] = useState(false);
+  ({ placeholder, ...rest }, ref) => {
+    // ({ value: propValue, onChange, placeholder, ...rest }, ref) => {
+    // const [searchValue, setSearchValue] = useState('');
+    // const [results, setResults] = useState<any[]>([]);
+    // const [isOpen, setIsOpen] = useState(false);
 
-    const searchAddress = async (query: string) => {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
-      );
-      const data = await res.json();
-      setResults(data);
-    };
+    // const searchAddress = async (query: string) => {
+    //   const res = await fetch(
+    //     `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
+    //   );
+    //   const data = await res.json();
+    //   setResults(data);
+    // };
 
-    const debouncedSearchAddress = useMemo(() => debounce(searchAddress), []);
+    // const debouncedSearchAddress = useMemo(() => debounce(searchAddress), []);
 
-    const handleSelect = (selected: string) => {
-      onChange?.(selected); // form state에 반영
-      setIsOpen(false);
-      setSearchValue(''); // 검색창 초기화
-      setResults([]);
-    };
+    // const handleSelect = (selected: string) => {
+    //   onChange?.(selected); // form state에 반영
+    //   setIsOpen(false);
+    //   setSearchValue(''); // 검색창 초기화
+    //   setResults([]);
+    // };
 
     return (
       <>
-        <input
-          ref={ref}
-          type='text'
-          value={propValue || ''}
-          readOnly
-          onClick={() => setIsOpen(true)}
-          placeholder='주소를 입력해주세요'
-          className='w-full rounded border px-3 py-2'
-          {...rest}
-        />
+        <Field>
+          <Input
+            ref={ref}
+            type='text'
+            // value={propValue || ''}
+            // readOnly
+            // onClick={() => setIsOpen(true)}
+            placeholder='주소를 입력해주세요'
+            className='w-full rounded border px-3 py-2'
+            {...rest}
+          />
+        </Field>
 
-        {isOpen && (
+        {/* {isOpen && (
           <div className='fixed top-1/2 left-1/2 z-10 w-96 -translate-x-1/2 -translate-y-1/2 rounded border bg-white p-4 shadow-lg'>
             <button onClick={() => setIsOpen(false)}>닫기</button>
             <input
@@ -71,7 +75,7 @@ const AddressField = forwardRef<HTMLInputElement, AddressFieldProps>(
               ))}
             </ul>
           </div>
-        )}
+        )} */}
       </>
     );
   },

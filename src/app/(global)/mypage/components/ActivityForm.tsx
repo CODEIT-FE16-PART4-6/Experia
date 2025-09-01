@@ -49,13 +49,83 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
 
   const isEdit = Boolean(initialData);
 
+  const preparePatchPayload = (
+    formValues: ActivityFormValues,
+    initialData: ActivityFormValues | undefined,
+  ) => {
+    if (!initialData) return formValues; // 폼 등록
+
+    // 수정 시 patch 요청 구조
+    //삭제된 상세 이미지
+    const subImageIdsToRemove = initialData.subImages
+      .filter(initImg => !formValues.subImages.some(fvImg => fvImg.imageUrl === initImg.imageUrl))
+      .map(img => img.id!); // 초기 데이터에 있는 이미지 중 제거된 것
+
+    //추가된 상세 이미지
+    const subImageUrlsToAdd = formValues.subImages
+      .filter(fvImg => !initialData.subImages.some(initImg => initImg.imageUrl === fvImg.imageUrl))
+      .map(img => img.imageUrl);
+
+    // 삭제된 예약 시간대
+    const scheduleIdsToRemove = initialData.schedules
+      .filter(
+        initSched =>
+          !formValues.schedules.some(
+            fvSched =>
+              fvSched.date === initSched.date &&
+              fvSched.startTime === initSched.startTime &&
+              fvSched.endTime === initSched.endTime,
+          ),
+      )
+      .map(s => s.id!);
+
+    // 추가된 예약 시간대
+    const schedulesToAdd = formValues.schedules.filter(
+      fvSched =>
+        !initialData.schedules.some(
+          initSched =>
+            initSched.date === fvSched.date &&
+            initSched.startTime === fvSched.startTime &&
+            initSched.endTime === fvSched.endTime,
+        ),
+    );
+
+    return {
+      title: formValues.title,
+      category: formValues.category,
+      description: formValues.description,
+      price: formValues.price,
+      address: formValues.address,
+      bannerImageUrl: formValues.bannerImageUrl,
+      subImageIdsToRemove,
+      subImageUrlsToAdd,
+      scheduleIdsToRemove,
+      schedulesToAdd,
+    };
+  };
+
   const onSubmit: SubmitHandler<ActivityFormValues> = async data => {
     try {
       const url = isEdit
-        ? `${REQUEST_URL}/activities/${initialData?.id}`
+        ? `${REQUEST_URL}/my-activities/${initialData?.id}`
         : `${REQUEST_URL}/activities`;
 
       const method = isEdit ? 'PATCH' : 'POST';
+
+      const payload = isEdit
+        ? preparePatchPayload(data, initialData)
+        : {
+            title: data.title,
+            category: data.category,
+            description: data.description,
+            address: data.address,
+            price: data.price,
+            schedules: data.schedules,
+            bannerImageUrl: data.bannerImageUrl,
+            subImageUrls: (data.subImages ?? []).map(img => img.imageUrl),
+          };
+
+      console.log(payload);
 
       const res = await fetch(url, {
         method,
@@ -63,7 +133,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -178,7 +248,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
             control={methods.control}
             render={({ field, fieldState }) => (
               <MultiImageUploader
-                images={field.value ?? []} // field.value undefined면 빈 배열로 초기화
+                images={field.value}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
                 maxCount={4}
