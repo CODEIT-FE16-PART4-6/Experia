@@ -2,12 +2,24 @@
 
 //img
 import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
+import PostReview from './PostReview';
+//types
+import { ReviewType } from './PostContentTypes';
+
+interface ReviewContentType {
+  totalCount: number;
+  averageRating: number;
+  reviews: ReviewType[];
+}
+interface ReviewData {
+  reviewData: ReviewContentType;
+}
 
 interface ContentProps {
   description: string;
   address: string;
 }
-const PostContent = ({ description, address }: ContentProps) => {
+const PostContent = ({ description, address, reviewData }: ContentProps & ReviewData) => {
   return (
     <>
       <hr className='hidden md:mb-10 md:block md:border-gray-400 lg:mb-10 lg:border-gray-400' />
@@ -30,6 +42,7 @@ const PostContent = ({ description, address }: ContentProps) => {
         </div>
       </div>
       <hr className='hidden md:mt-10 md:mb-10 md:block md:border-gray-400' />
+      <PostReview reviewData={reviewData} />
     </>
   );
 };
