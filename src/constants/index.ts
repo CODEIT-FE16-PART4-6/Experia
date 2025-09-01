@@ -21,7 +21,7 @@ export const ITEM_PAGESIZE = {
 
 export const ITEM_DEFAULT_PAGESIZE = 12; // 목록 렌더링 갯수 기본값: 12개 (반응형 그리드 레이아웃에 맞춤)
 
-export const RESERVATION_STATUS = [
+export const RESERVATION_STATUS = {
   {
     label: '예약 신청',
     value: 'pending',
@@ -41,8 +41,7 @@ export const RESERVATION_STATUS = [
   {
     label: '체험 완료',
     value: 'completed',
-  },
-];
+  },};
 
 export const PATHS = {
   MAIN: '/',

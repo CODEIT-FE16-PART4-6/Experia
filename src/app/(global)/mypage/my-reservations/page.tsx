@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
 import DropdownOptions from '@/components/DropdownOptions';
 import { RESERVATION_STATUS } from '@/constants';
+import { ReservationType } from '@/types/schema/reservationSchema';
 
 const fetchReservations = async () => {
   const response = await fetch(
@@ -43,7 +44,7 @@ const page = () => {
       />
       <div className='flex flex-col gap-4'>
         {reservations.map(res => (
-          <ActivityCard key={res.id} reservation={res} />
+          <ActivityCard type='reservation' data={res as ReservationType} />
         ))}
       </div>
     </div>

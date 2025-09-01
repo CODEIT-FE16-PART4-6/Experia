@@ -5,7 +5,14 @@ interface ActivityCardProps {
   data: ReservationType | ActivityType;
   type: 'reservation' | 'activity';
 }
-/**{
+const RESERVATION_STATUS = {
+  pending: '예약 신청',
+  canceled: '예약 취소',
+  confirmed: '예약 승인',
+  declined: '예약 거절',
+  completed: '체험 완료',
+};
+/**
  *
  * @returns 액티비티 1개 정보를 담고 있는 카드
  * @description my-activities, my-reservations 페이지에서 사용
@@ -27,7 +34,7 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
           </figure>
         </div>
         <div className=''>
-          <div>예약 {reservation.status}</div>
+          <div>{RESERVATION_STATUS[reservation.status]}</div>
           <div>{reservation.activity.title}</div>
 
           <div className='flex gap-2'>
