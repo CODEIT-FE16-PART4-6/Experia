@@ -67,9 +67,9 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
           </figure>
         </div>
         <div className=''>
+          <div>{activity.rating}</div>
           <div>{activity.title}</div>
-          <div>{activity.description}</div>
-          <div>₩ {activity.price}</div>
+          <div>₩ {activity.price}/인</div>
         </div>
       </div>
     );
