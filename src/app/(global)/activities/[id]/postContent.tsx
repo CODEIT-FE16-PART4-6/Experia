@@ -6,21 +6,20 @@ import PostReview from './PostReview';
 //types
 import { ReviewType } from './PostContentTypes';
 
-interface ReviewConentType {
+interface ReviewContentType {
   totalCount: number;
   averageRating: number;
   reviews: ReviewType[];
 }
 interface ReviewData {
-  reviewData: ReviewConentType;
+  reviewData: ReviewContentType;
 }
 
 interface ContentProps {
   description: string;
   address: string;
-  reviewData: ReviewData;
 }
-const PostContent = ({ description, address, reviewData }: ContentProps) => {
+const PostContent = ({ description, address, reviewData }: ContentProps & ReviewData) => {
   return (
     <>
       <hr className='hidden md:mb-10 md:block md:border-gray-400 lg:mb-10 lg:border-gray-400' />

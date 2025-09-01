@@ -3,13 +3,13 @@ import Image from 'next/image';
 import { ReviewType } from './PostContentTypes';
 import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
 
-interface ReviewConentType {
+interface ReviewContentType {
   totalCount: number;
   averageRating: number;
   reviews: ReviewType[];
 }
 interface ReviewData {
-  reviewData: ReviewConentType;
+  reviewData: ReviewContentType;
 }
 
 const PostReview = ({ reviewData }: ReviewData) => {
@@ -23,10 +23,10 @@ const PostReview = ({ reviewData }: ReviewData) => {
 
   return (
     <div>
-      <p className='text-nomad-black mb-[18px] pr-[24px] pl-[24px] text-[20px] font-bold lg:text-[18px]'>
+      <p className='text-nomad-black mb-[18px] pr-[24px] pl-[24px] text-[20px] font-bold lg:pr-0 lg:pl-0 lg:text-[18px]'>
         후기
       </p>
-      <div className='flex flex-col pr-[24px] pl-[24px]'>
+      <div className='flex flex-col pr-[24px] pl-[24px] lg:pr-0 lg:pl-0'>
         <div className='flex justify-between'>
           <div className='flex gap-4'>
             <p className='text-nomad-black flex flex-col justify-center text-[50px] font-semibold'>
@@ -61,12 +61,12 @@ const PostReview = ({ reviewData }: ReviewData) => {
           </div>
         </div>
       </div>
-      <div className='mb-10'>
+      <div className='mb-10 pr-[24px] pl-[24px] lg:pr-0 lg:pl-0'>
         <ol>
           {reviewData.reviews.map((reviewContent, index) => (
             <li key={reviewContent.id}>
               {(index === 1 || index === 2) && <hr className='border-gray-400' />}
-              <div className='my-[25px] flex gap-4 pr-[24px] pl-[24px]'>
+              <div className='my-[25px] flex gap-4'>
                 <div className='over-hidden h-[45px] w-[45px]'>
                   <Image
                     alt='프로필 이미지'

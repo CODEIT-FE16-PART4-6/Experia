@@ -5,23 +5,15 @@ import PostHeader from './PostHeader';
 import PostImage from './PostImage';
 import PostContent from './PostContent';
 import ReservateIn from './reservateIn';
-import { ActivityDetail } from '@/types/schema/activitiesSchema';
+import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
 import { ReviewType } from './PostContentTypes';
 
 type Activity = z.infer<typeof ActivityDetail>;
-
-interface ReviewConentType {
-  totalCount: number;
-  averageRating: number;
-  reviews: ReviewType[];
-}
-interface ReviewData {
-  reviewData: ReviewConentType;
-}
+type ActivityReviewList = z.infer<typeof ActivityReview>;
 
 interface ActivityProps {
   data: Activity;
-  reviewData: ReviewData;
+  reviewData: ActivityReviewList;
 }
 
 const ActivityPost = ({ data, reviewData }: ActivityProps) => {
