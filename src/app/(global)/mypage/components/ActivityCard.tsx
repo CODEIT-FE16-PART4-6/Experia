@@ -8,7 +8,7 @@ interface ActivityCardProps {
 /**{
  *
  * @returns 액티비티 1개 정보를 담고 있는 카드
- * @description 내 체험 관리, 예약 내역 페이지에서 사용
+ * @description my-activities, my-reservations 페이지에서 사용
  */
 const ActivityCard = ({ data, type }: ActivityCardProps) => {
   if (type === 'reservation') {
