@@ -38,7 +38,7 @@ const SignupPage = () => {
       });
 
       const result = await response.json();
-      console.log('응답 데이터:', result);
+      console.log('회원가입 응답:', result);
 
       // HTTP 상태 코드 체크
       if (!response.ok) {
@@ -48,25 +48,29 @@ const SignupPage = () => {
         throw new Error(result.message || '회원가입 실패');
       }
 
-      // 응답은 성공적이지만 필수 데이터가 없는 경우를 체크하여 에러를 발생시킵니다.
-      if (!result.accessToken || !result.refreshToken) {
-        throw new Error('회원가입 실패: 서버로부터 필수 데이터(토큰)를 받지 못했습니다.');
+      // 로그인 API 호출
+      const loginResponse = await fetch('https://sp-globalnomad-api.vercel.app/16-6/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      })
+
+      const loginResult = await loginResponse.json()
+      console.log('자동 로그인 응답:', loginResult)
+
+      if (!loginResult.accessToken || !loginResult.refreshToken) {
+        throw new Error('자동 로그인 실패: 토큰을 받지 못했습니다.')
       }
 
-      localStorage.setItem('access_token', result.accessToken);
-      localStorage.setItem('refresh_token', result.refreshToken);
-      localStorage.setItem('user', JSON.stringify(result.user));
+      // 토큰 & 사용자 정보 저장
+      localStorage.setItem('access_token', loginResult.accessToken);
+      localStorage.setItem('refresh_token', loginResult.refreshToken);
+      localStorage.setItem('user', JSON.stringify(loginResult.user));
 
-      console.log('저장 후 확인:', {
-        accessTokenStored: localStorage.getItem('access_token'),
-        refreshTokenStored: localStorage.getItem('refresh_token'),
-      });
-
-      router.push('/signin');
+      router.push('/');
 
     } catch (err: unknown) {
       console.error('회원가입 중 오류 발생', err);
-
       if (err instanceof Error) {
         setError(err.message);
       } else {

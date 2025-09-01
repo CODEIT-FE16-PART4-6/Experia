@@ -46,8 +46,12 @@ export const SignupResponseSchema = z.object({
     createdAt: z.string(),
     updatedAt: z.string(),
   }),
-  accessToken: z.string(),
-  refreshToken: z.string(),
+  /**
+   * 현재 서버의 회원가입 API는 토큰을 반환하지 않으므로,
+   * 스키마와 실제 응답을 일치시키기 위해 accessToken과 refreshToken 필드를 제거합니다.
+   */
+  // accessToken: z.string(),
+  // refreshToken: z.string(),
 });
 
 export type SignupRequest = z.infer<typeof SignupRequestSchema>;
