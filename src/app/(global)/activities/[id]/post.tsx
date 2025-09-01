@@ -1,26 +1,25 @@
 import { z } from 'zod';
-import { cache } from 'react';
+
 //downComponent
-import PostHeader from './postHeader';
-import PostImage from './postImage';
-import PostContent from './postContent';
+import PostHeader from './PostHeader';
+import PostImage from './PostImage';
+import PostContent from './PostContent';
 import ReservateIn from './reservateIn';
-import { ActivityDetail } from '@/types/schema/activitiesSchema';
+import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
+import { ReviewType } from './PostContentTypes';
 
 type Activity = z.infer<typeof ActivityDetail>;
+type ActivityReviewList = z.infer<typeof ActivityReview>;
 
 interface ActivityProps {
   data: Activity;
+  reviewData: ActivityReviewList;
 }
-const ActivityPost = ({ data }: ActivityProps) => {
-  console.log('데이터 잘 받아왔나 테스트 타이틀 출력 : ', data.title);
+
+const ActivityPost = ({ data, reviewData }: ActivityProps) => {
   const ActivityContent = {
+    ...data,
     tag: data.category,
-    title: data.title,
-    rating: data.rating,
-    reviewCount: data.reviewCount,
-    address: data.address,
-    description: data.description,
   };
 
   return (
@@ -38,6 +37,7 @@ const ActivityPost = ({ data }: ActivityProps) => {
           <PostContent
             description={ActivityContent.description}
             address={ActivityContent.address}
+            reviewData={reviewData}
           />
         </div>
         <div>
