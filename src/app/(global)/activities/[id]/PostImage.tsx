@@ -68,14 +68,29 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
           />
           {/* 이미지가 두개 이상일때 이미지 넘기는 버튼 렌더링*/}
           {mobileImages.length > 1 && (
-            <>
-              <button onClick={handlePrev} className='absolute top-1/2 left-3 -translate-y-1/2'>
+            <div className='group'>
+              <button
+                onClick={handlePrev}
+                className='absolute top-1/2 left-3 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100'
+              >
                 <ImageArrowLeft size={24} />
               </button>
-              <button onClick={handleNext} className='absolute top-1/2 right-3 -translate-y-1/2'>
+              <button
+                onClick={handleNext}
+                className='absolute top-1/2 right-3 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100'
+              >
                 <ImageArrowRight size={24} />
               </button>
-            </>
+              <div className='absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-[5px] bg-black/70 px-2 py-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+                {mobileImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`h-2 w-2 rounded-full ${idx === currentIndex ? 'bg-white' : 'bg-white/50'}`}
+                  />
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </div>
