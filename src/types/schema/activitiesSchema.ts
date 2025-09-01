@@ -67,6 +67,11 @@ export const ActivityDetail = z.object({
 
 export type ActivityDetail = z.infer<typeof ActivityDetail>;
 
+export enum MyActivitiesStatus {
+  declined = 'declined',
+  pending = 'pending',
+  confirmed = 'confirmed'
+}
 export const ActivityReview = z.object({
   averageRating: z.number(),
   totalCount: z.number(),
