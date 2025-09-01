@@ -4,7 +4,7 @@
 import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
 import PostReview from './PostReview';
 //types
-import { ReviewType } from './PostContentTypes';
+import { ReviewType } from './postContentTypes';
 
 interface ReviewContentType {
   totalCount: number;
