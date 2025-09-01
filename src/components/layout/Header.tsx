@@ -13,7 +13,11 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollY = useScrollY();
   const { user } = useUserStore(); // 유저정보 가져오기
-  const isLoggedIn = user?.isLoggedIn ?? false; // isLoggedIn 정의
+  const [localUser, setLocalUser] = useState(user); // 로컬 상태 추가
+
+  useEffect(() => {
+    setLocalUser(user);
+  }, [user?.profileUrl, user?.nickname]);
 
   const handleProfileClick = () => {
     console.log('hello');
@@ -22,6 +26,10 @@ const Header = () => {
   useEffect(() => {
     scrollY > 100 ? setIsScrolled(true) : setIsScrolled(false);
   }, [scrollY]);
+
+  useEffect(() => {
+    console.log('유저정보:', localUser);
+  }, [localUser]); //디버깅용 useEffect
 
   return (
     <header
@@ -37,7 +45,7 @@ const Header = () => {
           <Image src='/images/logo.svg' alt='Experia 로고' width={134} height={42} />
         </Link>
         <nav className='flex gap-3 font-medium text-black'>
-          {isLoggedIn ? ( // isLoggedIn true 일때
+          {localUser ? (
             <>
               <ul className='flex items-center divide-x divide-gray-300'>
                 <li className='flex pr-3 md:pr-5'>
@@ -51,8 +59,8 @@ const Header = () => {
                     className='hover:text-primary flex items-center gap-2.5 transition-colors'
                     onClick={handleProfileClick}
                   >
-                    <Avatar imgSrc={user?.profileUrl ?? null} size='md' />
-                    {user?.name}
+                    <Avatar imgSrc={localUser?.profileUrl ?? null} size='md' />
+                    {localUser?.nickname}
                   </button>
                 </li>
               </ul>

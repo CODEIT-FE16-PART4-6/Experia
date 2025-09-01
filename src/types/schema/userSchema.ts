@@ -26,9 +26,8 @@ export type LoginResponse = z.infer<typeof LoginResponseSchema>;
 //유저 상태 저장용 스키마
 export const UserSchema = z.object({
   email: z.email(),
-  name: z.string().min(2),
+  nickname: z.string().min(2),
   profileUrl: z.url().optional(),
-  isLoggedIn: z.boolean(),
 });
 
 export type User = z.infer<typeof UserSchema>;
