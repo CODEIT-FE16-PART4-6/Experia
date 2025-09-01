@@ -66,3 +66,26 @@ export const ActivityDetail = z.object({
 });
 
 export type ActivityDetail = z.infer<typeof ActivityDetail>;
+
+export const ActivityFormValueSchema = z.object({
+  title: z.string().min(1, '제목을 입력해주세요.'),
+  category: z.string().min(1, '카테고리를 선택해주세요.'),
+  description: z.string().min(1, '설명을 입력해주세요.'),
+  price: z.number().min(0, '가격은 0원 이상이어야 합니다.'),
+  address: z.string().min(1, '주소를 입력해주세요.'),
+
+  schedules: z
+    .array(
+      z.object({
+        date: z.string(),
+        startTime: z.string(),
+        endTime: z.string(),
+      }),
+    )
+    .min(1, '시간대를 하나 이상 추가해주세요.'),
+
+  bannerImageUrl: z.string().min(1, '대표 이미지를 등록해주세요.'),
+  subImageUrls: z.array(z.string()).nullable(),
+});
+
+export type ActivityFormValues = z.infer<typeof ActivityFormValueSchema>;
