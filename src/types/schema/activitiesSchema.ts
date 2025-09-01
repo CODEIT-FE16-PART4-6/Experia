@@ -73,7 +73,6 @@ export const ActivityFormValueSchema = z.object({
   description: z.string().min(1, '설명을 입력해주세요.'),
   price: z.number().min(0, '가격은 0원 이상이어야 합니다.'),
   address: z.string().min(1, '주소를 입력해주세요.'),
-
   schedules: z
     .array(
       z.object({
@@ -83,9 +82,13 @@ export const ActivityFormValueSchema = z.object({
       }),
     )
     .min(1, '시간대를 하나 이상 추가해주세요.'),
-
-  bannerImageUrl: z.string().min(1, '대표 이미지를 등록해주세요.'),
-  subImageUrls: z.array(z.string()).nullable(),
+  bannerImageUrl: z.url('이미지 URL이 올바르지 않습니다').min(1, '대표 이미지를 등록해주세요.'),
+  subImages: z.array(
+    z.object({
+      id: z.number().optional(),
+      imageUrl: z.url('이미지 URL이 올바르지 않습니다'),
+    }),
+  ),
 });
 
 export type ActivityFormValues = z.infer<typeof ActivityFormValueSchema>;
