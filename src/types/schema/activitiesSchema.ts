@@ -116,3 +116,5 @@ export const ActivityFormValueSchema = z.object({
 });
 
 export type ActivityFormValues = z.infer<typeof ActivityFormValueSchema>;
+
+export type ActivityType = z.infer<typeof Activities>['activities'][number]; //액티비티 배열의 요소 타입
