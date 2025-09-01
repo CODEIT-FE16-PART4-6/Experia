@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { ReservationType } from '@/types/schema/reservationSchema';
 import { ActivityType } from '@/types/schema/activitiesSchema';
+import StarIcon from '@/assets/icons/ic_StarSmall.svg';
 interface ActivityCardProps {
   data: ReservationType | ActivityType;
   type: 'reservation' | 'activity';
@@ -67,7 +68,9 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
           </figure>
         </div>
         <div className=''>
+          <StarIcon />
           <div>{activity.rating}</div>
+          <div>({activity.reviewCount})</div>
           <div>{activity.title}</div>
           <div>₩ {activity.price}/인</div>
         </div>
