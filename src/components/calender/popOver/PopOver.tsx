@@ -13,7 +13,7 @@ type Props = {
   date: string;
 };
 
-const PopOverPage = ({ activityId, date }: Props) => {
+const PopOver = ({ activityId, date }: Props) => {
   const [currentData, setCurrentData] = useState<{
     declined: number;
     confirmed: number;
@@ -213,4 +213,4 @@ const PopOverPage = ({ activityId, date }: Props) => {
   );
 };
 
-export default PopOverPage;
+export default PopOver;

@@ -72,6 +72,28 @@ export enum MyActivitiesStatus {
   pending = 'pending',
   confirmed = 'confirmed'
 }
+export const ActivityReview = z.object({
+  averageRating: z.number(),
+  totalCount: z.number(),
+  reviews: z.array(
+    z.object({
+      id: z.number(),
+      user: z.object({
+        profileImageUrl: z.string(),
+        nickname: z.string(),
+        id: z.number(),
+      }),
+      activityId: z.number(),
+      rating: z.number(),
+      content: z.string(),
+      createdAt: z.string(),
+      updatedAt: z.string(),
+    }),
+  ),
+});
+
+export type ActivityReview = z.infer<typeof ActivityDetail>;
+
 export const ActivityFormValueSchema = z.object({
   title: z.string().min(1, '제목을 입력해주세요.'),
   category: z.string().min(1, '카테고리를 선택해주세요.'),
