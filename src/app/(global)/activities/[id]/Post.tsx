@@ -35,7 +35,7 @@ const ActivityPost = ({ data, reviewData }: ActivityProps) => {
         subImages={data?.subImages || []}
         tag={ActivityContent.tag}
       />
-      <div className='mt-8 flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1152px] lg:gap-6'>
+      <div className='flex md:mt-8 md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1152px] lg:gap-6'>
         <div className='md:w-[100%] lg:w-[786px]'>
           <PostContent
             description={ActivityContent.description}
