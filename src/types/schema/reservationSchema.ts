@@ -6,7 +6,7 @@ export const ActivitySchema = z.object({
   id: z.number(),
 });
 
-export const ReservationWithActivityResponseDtoSchema = z.object({
+export const ReservationDetailsSchema = z.object({
   id: z.number(),
   teamId: z.string(),
   userId: z.number(),
@@ -25,7 +25,7 @@ export const ReservationWithActivityResponseDtoSchema = z.object({
 
 export const ReservationResponseSchema = z.object({
   cursorId: z.number().nullable(),
-  reservations: z.array(ReservationWithActivityResponseDtoSchema),
+  reservations: z.array(ReservationDetailsSchema),
   totalCount: z.number(),
 });
 
@@ -37,3 +37,5 @@ export const ReservationRequestSchema = z.object({
 });
 
 export type ReservationRequest = z.infer<typeof ReservationRequestSchema>;
+
+export type ReservationType = z.infer<typeof ReservationDetailsSchema>;
