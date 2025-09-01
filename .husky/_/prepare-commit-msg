@@ -17,3 +17,5 @@ BRANCH_IN_COMMIT=$(grep -c "\[$JIRA_ISSUE_KEY\]" "$COMMIT_MSG_FILE")
 if [ -n "$JIRA_ISSUE_KEY" ] && [ "$BRANCH_IN_COMMIT" -eq 0 ]; then
   sed -i.bak -e "1s/^/[$JIRA_ISSUE_KEY] /" "$COMMIT_MSG_FILE"
 fi
+
+
