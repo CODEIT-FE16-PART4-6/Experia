@@ -99,7 +99,7 @@ export const ActivityFormValueSchema = z.object({
   schedules: z
     .array(
       z.object({
-        id: z.number(),
+        id: z.number().optional(),
         date: z.string(),
         startTime: z.string(),
         endTime: z.string(),
