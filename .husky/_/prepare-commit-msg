@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-
 # 현재 브랜치 이름 가져오기 (예: feat/P6-123 -> P6-123)
 BRANCH_NAME=$(git branch --show-current) # 현재 브랜치명을 가져옴
 BRANCH_NAME="${BRANCH_NAME##*/}" # / 부분을 기준으로 앞 부분을 제거
@@ -18,4 +17,5 @@ BRANCH_IN_COMMIT=$(grep -c "\[$JIRA_ISSUE_KEY\]" "$COMMIT_MSG_FILE")
 if [ -n "$JIRA_ISSUE_KEY" ] && [ "$BRANCH_IN_COMMIT" -eq 0 ]; then
   sed -i.bak -e "1s/^/[$JIRA_ISSUE_KEY] /" "$COMMIT_MSG_FILE"
 fi
+
 
