@@ -56,12 +56,12 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
     if (!initialData) return formValues; // 폼 등록
 
     // 수정 시 patch 요청 구조
-    //삭제된 상세 이미지
+    // 삭제된 상세 이미지
     const subImageIdsToRemove = initialData.subImages
       .filter(initImg => !formValues.subImages.some(fvImg => fvImg.imageUrl === initImg.imageUrl))
       .map(img => img.id!); // 초기 데이터에 있는 이미지 중 제거된 것
 
-    //추가된 상세 이미지
+    // 추가된 상세 이미지
     const subImageUrlsToAdd = formValues.subImages
       .filter(fvImg => !initialData.subImages.some(initImg => initImg.imageUrl === fvImg.imageUrl))
       .map(img => img.imageUrl);
