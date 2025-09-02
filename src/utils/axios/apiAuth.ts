@@ -23,12 +23,12 @@ const processQueue = (error: AxiosError | null, token: string | null = null) => 
 };
 
 // API 클라이언트 인스턴스 생성
-const authApi: AxiosInstance = axios.create({
+const apiAuth: AxiosInstance = axios.create({
   baseURL: `${REQUEST_URL}`,
 });
 
 // 요청 인터셉터: 모든 axios 요청 헤더에 액세스 토큰 추가
-authApi.interceptors.request.use(
+apiAuth.interceptors.request.use(
   config => {
     const accessToken = localStorage.getItem('access_token');
     if (accessToken) {
@@ -44,7 +44,7 @@ authApi.interceptors.request.use(
 );
 
 // 응답 인터셉터
-authApi.interceptors.response.use(
+apiAuth.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean }; // 실패한 원본 요청 + retry
@@ -60,7 +60,7 @@ authApi.interceptors.response.use(
             if (originalRequest.headers) {
               originalRequest.headers.Authorization = `Bearer ${token}`;
             }
-            return authApi(originalRequest);
+            return apiAuth(originalRequest);
           })
           .catch(err => {
             return Promise.reject(err);
@@ -97,7 +97,7 @@ authApi.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         }
 
-        return authApi(originalRequest);
+        return apiAuth(originalRequest);
       } catch (refreshError) {
         // 재발급 실패 시, 대기 요청들 실패 처리 후 로그인 페이지로 리다이렉트
         processQueue(refreshError as AxiosError, null);
@@ -114,4 +114,4 @@ authApi.interceptors.response.use(
   },
 );
 
-export default authApi;
+export default apiAuth;
