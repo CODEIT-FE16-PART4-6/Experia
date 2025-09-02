@@ -31,7 +31,6 @@ const LoginPage = () => {
 
   // 로그인 요청
   const onSubmit: SubmitHandler<LoginRequest> = async data => {
-    console.log('전송 데이터:', data);
     setLoading(true);
     setError(null);
 
@@ -57,17 +56,10 @@ const LoginPage = () => {
       // 성공적으로 로그인 처리
       localStorage.setItem('access_token', responseData.accessToken);
       localStorage.setItem('refresh_token', responseData.refreshToken);
-      localStorage.setItem('user', JSON.stringify(responseData.user));
-
-      console.log('저장 후 확인:', {
-        accessTokenStored: localStorage.getItem('access_token'),
-        refreshTokenStored: localStorage.getItem('refresh_token'),
-      });
 
       // 전역 상태에 유저 정보 저장
       if (response.ok && responseData.user) {
         setUser(responseData.user);
-        console.log('User state updated:', responseData.user);
       }
 
       router.push('/');
