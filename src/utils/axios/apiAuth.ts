@@ -31,6 +31,7 @@ const apiAuth: AxiosInstance = axios.create({
 apiAuth.interceptors.request.use(
   config => {
     const accessToken = localStorage.getItem('access_token');
+    console.log(accessToken);
     if (accessToken) {
       if (config.headers) {
         config.headers.Authorization = `Bearer ${accessToken}`;
@@ -82,7 +83,7 @@ apiAuth.interceptors.response.use(
         }
 
         // 리프레쉬 토큰 있을 경우, 토큰 재발급
-        const res = await axios.post('/auth/tokens');
+        const res = await apiAuth.post('/auth/tokens');
         const newAccessToken = res.data.accessToken;
         const newRefreshToken = res.data.refreshToken;
 
