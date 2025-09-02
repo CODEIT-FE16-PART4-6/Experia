@@ -1,4 +1,3 @@
-import Star from '@/assets/imgs/activityPage/ic_Star.svg';
 import Image from 'next/image';
 import { ReviewType } from './postContentTypes';
 import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
@@ -48,7 +47,12 @@ const PostReview = ({ reviewData }: ReviewData) => {
               </p>
               <div className='flex gap-[6px]'>
                 <div className='flex flex-col justify-center'>
-                  <Star />
+                  <Image
+                    src='/icons/ActivityPageImgs/ic_Star.svg'
+                    alt='별점 이미지'
+                    width={16}
+                    height={16}
+                  />
                 </div>
                 {reviewData.totalCount}개 후기
               </div>
