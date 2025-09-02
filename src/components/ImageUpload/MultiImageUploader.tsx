@@ -5,14 +5,19 @@ import { ChangeEvent } from 'react';
 import ImageUploadButton from './ImageUploadButton';
 import useImageUpload from '@/hooks/useImageUpload';
 
-interface MultiImageUploaderProps {
-  value: string[] | null;
-  maxCount?: number;
-  error?: string;
-  onChange?: (urls: string[]) => void;
+interface SubImage {
+  id?: number; // 새로 업로드한 이미지는 id가 없을 수 있음
+  imageUrl: string;
 }
 
-const MultiImageUploader = ({ value, maxCount = 4, error, onChange }: MultiImageUploaderProps) => {
+interface MultiImageUploaderProps {
+  images: SubImage[] | null;
+  maxCount?: number;
+  error?: string;
+  onChange?: (urls: SubImage[]) => void;
+}
+
+const MultiImageUploader = ({ images, maxCount = 4, error, onChange }: MultiImageUploaderProps) => {
   const { handleChangeImage, fileRef, isUploading } = useImageUpload();
 
   const handleImageUpload = () => {
@@ -23,12 +28,12 @@ const MultiImageUploader = ({ value, maxCount = 4, error, onChange }: MultiImage
     try {
       const url = await handleChangeImage(e);
       if (url) {
-        const newValue = [...(value ?? []), url]; // null이면 빈 배열로 시작
-        if (newValue.length > maxCount) {
+        const newImages = [...(images ?? []), { imageUrl: url }]; // null이면 빈 배열로 시작
+        if (newImages.length > maxCount) {
           alert(`상세 이미지는 ${maxCount}개까지 등록할 수 있습니다.`);
           return;
         }
-        onChange?.(newValue);
+        onChange?.(newImages);
       }
     } catch (err) {
       console.error(err);
@@ -36,8 +41,8 @@ const MultiImageUploader = ({ value, maxCount = 4, error, onChange }: MultiImage
   };
 
   const handleRemove = (imgIdx: number) => {
-    const newValue = value?.filter((_, i) => i !== imgIdx) ?? [];
-    onChange?.(newValue);
+    const newImages = images?.filter((_, i) => i !== imgIdx) ?? [];
+    onChange?.(newImages);
   };
 
   return (
@@ -50,13 +55,13 @@ const MultiImageUploader = ({ value, maxCount = 4, error, onChange }: MultiImage
         />
         <input type='file' className='hidden' ref={fileRef} onChange={handleImageUrl} />
 
-        {(value ?? []).map((url, i) => (
+        {(images ?? []).map((img, i) => (
           <figure
             key={i}
             className='border-primary bg-primary-10 relative flex aspect-square w-[140px] items-center justify-center rounded-2xl border-2'
           >
             <Image
-              src={url}
+              src={img.imageUrl}
               alt={`상세 이미지 ${i + 1}`}
               width={140}
               height={140}
