@@ -1,12 +1,6 @@
-import SectionTitle from '@/components/ui/Section/SectionTitle';
-import MyInfoForm from '@/app/(global)/mypage/components/MyInfoForm';
+import MyInfoClient from './components/MyInfoClient';
 
 const page = () => {
-  return (
-    <div>
-      <SectionTitle title='내 정보' />
-      <MyInfoForm />
-    </div>
-  );
+  return <MyInfoClient />;
 };
 export default page;

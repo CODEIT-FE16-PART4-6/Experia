@@ -31,12 +31,14 @@ const apiAuth: AxiosInstance = axios.create({
 apiAuth.interceptors.request.use(
   config => {
     const accessToken = localStorage.getItem('access_token');
-    console.log(accessToken);
-    if (accessToken) {
+
+    if (accessToken && !config.url?.includes('/auth/tokens')) {
+      // 토큰 재발급 요청에는 액세스 토큰 제외
       if (config.headers) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
     }
+
     return config;
   },
   (error: AxiosError) => {
@@ -83,7 +85,9 @@ apiAuth.interceptors.response.use(
         }
 
         // 리프레쉬 토큰 있을 경우, 토큰 재발급
-        const res = await apiAuth.post('/auth/tokens');
+        const res = await axios.post(`${REQUEST_URL}/auth/tokens`, null, {
+          headers: { Authorization: `Bearer ${refreshToken}` },
+        });
         const newAccessToken = res.data.accessToken;
         const newRefreshToken = res.data.refreshToken;
 
