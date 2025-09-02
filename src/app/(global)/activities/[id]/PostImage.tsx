@@ -63,13 +63,19 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
   return (
     <>
       <div className='relative block h-[310px] md:hidden'>
-        <div className='relative h-full'>
-          <Image
-            src={mobileImages[currentIndex].url!}
-            alt='소개 이미지'
-            fill
-            className='object-cover'
-          />
+        <div className='relative h-full overflow-hidden'>
+          <div
+            className='relative flex h-full transition-transform duration-500 ease-in-out'
+            style={{
+              transform: `translateX(-${currentIndex * 100}%)`,
+            }}
+          >
+            {mobileImages.map((image, idx) => (
+              <div key={idx} className='relative h-full w-full flex-shrink-0'>
+                <Image src={image.url!} alt='소개 이미지' fill className='object-cover' />
+              </div>
+            ))}
+          </div>
           {/* 이미지가 두개 이상일때 이미지 넘기는 버튼 렌더링*/}
           {mobileImages.length > 1 && (
             <div className='group'>
@@ -118,7 +124,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
               {({ ref, open }) => (
                 <ImageRef
                   ref={ref}
-                  onClick={() => open()}
+                  onClick={e => open(e)}
                   src={bannerImageUrl}
                   alt='대표 이미지'
                   fill
@@ -139,7 +145,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
                 {({ ref, open }) => (
                   <ImageRef
                     ref={ref}
-                    onClick={() => open()}
+                    onClick={e => open(e)}
                     src={subimg.imageUrl!}
                     alt={`서브 이미지${subimg.id}`}
                     fill
