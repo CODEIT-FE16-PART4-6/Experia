@@ -3,6 +3,8 @@
 //img
 import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
 import PostReview from './PostReview';
+//comp
+import PostMap from './PostMap';
 //types
 import { ReviewType } from './postContentTypes';
 
@@ -19,6 +21,7 @@ interface ContentProps {
   description: string;
   address: string;
 }
+
 const PostContent = ({ description, address, reviewData }: ContentProps & ReviewData) => {
   return (
     <>
@@ -30,8 +33,8 @@ const PostContent = ({ description, address, reviewData }: ContentProps & Review
       <hr className='mx-6 mb-4 border-gray-400 md:mx-[0px] md:my-10 lg:mx-[0px] lg:my-10'></hr>
       <div className='mt-[15px] mr-[24px] mb-[40px] ml-[24px] lg:mr-[0px] lg:ml-[0px]'>
         <div className='flex flex-col gap-[3px]'>
-          <div className='mb-2 h-[450px] rounded-[20px] bg-[#b3b3b3] md:h-[276px] lg:h-[450px] lg:w-[790px]'>
-            mapLocation
+          <div className='mb-2 h-[450px] overflow-hidden rounded-[20px] bg-[#b3b3b3] md:h-[276px] lg:h-[450px] lg:w-[790px]'>
+            <PostMap />
           </div>
           <div className='flex gap-[5px]'>
             <div className='ml-[5px] flex flex-col justify-center gap-[3px]'>
