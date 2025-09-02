@@ -59,7 +59,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
   };
 
   const englishTag = tagName.get(tag) || 'default';
-  console.log(englishTag);
+  //console.log(englishTag);
   return (
     <>
       <div className='relative block h-[310px] md:hidden'>
