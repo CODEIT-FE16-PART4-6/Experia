@@ -4,9 +4,11 @@
 
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import getGeoCoordinate from '@/utils/getGeoCoordinate';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
+//icon(leaflet production)
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -21,17 +23,29 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const PostMap = () => {
+const PostMap = ({ address }: { address: string }) => {
   const [mounted, setMounted] = useState(false);
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     setMounted(true);
+
+    const fetchCoords = async () => {
+      try {
+        const result = await getGeoCoordinate(address);
+        setCoords(result);
+      } catch (err) {
+        console.error('주소 좌표 변환 실패:', err);
+      }
+    };
+    fetchCoords();
   }, []);
 
   if (!mounted) return null;
-  const position = [51.505, -0.09]; // 좌표
+  if (!coords) return <>불러오는중 ...</>;
+  const position: [number, number] = [coords?.lat, coords?.lng]; // 좌표
   return (
-    <MapContainer center={position} zoom={13} className='over-hidden h-full w-full'>
+    <MapContainer center={position} zoom={16} className='over-hidden h-full w-full'>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
