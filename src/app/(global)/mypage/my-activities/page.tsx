@@ -1,54 +1,47 @@
-import Image from 'next/image';
+'use client';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { LinkButton } from '@/components/ui/LinkButton';
-import { fetchServerData } from '@/utils/api-server';
-import { Activities } from '@/types/schema/activitiesSchema';
+import ActivityCard from '../components/ActivityCard';
+import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
+import { useQuery } from '@tanstack/react-query';
 
-const fetchMyActivities = async ({ page, size }: { page: number; size: number }) => {
-  const data = await fetchServerData<Activities>({
-    path: '/my-activities',
-    query: { method: 'cursor', page, size },
-    renderType: 'ssr',
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY',
+const fetchMyActivities = async () => {
+  const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/my-activities?size=20', {
+    method: 'GET',
+    headers: {
+      //임시 토큰값
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjI4MzI1NSwiZXhwIjoxNzU3NDkyODU1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.7f4EC3wcK_Zzpys7mDlyXshKz5MX-2mdlZ12gOrVoJA', //Bearer 뒤에 토큰 붙여서 전송
+      'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
+    },
   });
-
-  return data;
+  const data = await response.json();
+  const validatedData = Activities.parse(data);
+  return validatedData.activities;
 };
 
-const MyActivitiesPage = async () => {
-  const initialData = await fetchMyActivities({ page: 1, size: 3 });
+const MyActivitiesPage = () => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['activityList'],
+    queryFn: fetchMyActivities,
+  });
+
+  if (isLoading) return <div>로딩중...</div>;
+  if (error) return <div>오류 발생: {error.message}</div>;
+
+  const activities = data || [];
 
   return (
     <div>
       <SectionTitle
         title='내 체험 관리'
-        action={<LinkButton href='/mypage/my-activities/add-activity'>체험 등록하기</LinkButton>}
+        action={
+          <LinkButton href='/mypage/my-activities/add-new-activity'>체험 등록하기</LinkButton>
+        }
       />
-
-      <ul>
-        {initialData.activities.map(data => (
-          <li key={data.id}>
-            <figure>
-              <Image
-                src={data.bannerImageUrl}
-                alt={data.title}
-                width={204}
-                height={204}
-                className='aspect-square object-cover'
-              />
-            </figure>
-            <span>
-              {data.rating} ({data.reviewCount})
-            </span>
-            <h4 className='font-bold'>{data.title}</h4>
-            <h3>₩{data.price} / 인</h3>
-            <LinkButton href={`/mypage/my-activities/edit-activity/${data.id}`}>
-              수정하기
-            </LinkButton>
-          </li>
-        ))}
-      </ul>
+      {activities.map(activity => (
+        <ActivityCard key={activity.id} type='activity' data={activity as ActivityType} />
+      ))}
     </div>
   );
 };

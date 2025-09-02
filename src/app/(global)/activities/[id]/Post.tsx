@@ -6,7 +6,6 @@ import PostImage from './PostImage';
 import PostContent from './PostContent';
 import ReservateIn from './reservateIn';
 import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
-import { ReviewType } from './PostContentTypes';
 
 type Activity = z.infer<typeof ActivityDetail>;
 type ActivityReviewList = z.infer<typeof ActivityReview>;

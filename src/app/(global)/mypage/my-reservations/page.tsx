@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
 import DropdownOptions from '@/components/DropdownOptions';
 import { RESERVATION_STATUS } from '@/constants';
+import { ReservationType } from '@/types/schema/reservationSchema';
 
 const fetchReservations = async () => {
   const response = await fetch(
@@ -24,7 +25,7 @@ const fetchReservations = async () => {
   return validatedData.reservations; //resevations 배열만 반환
 };
 
-const page = () => {
+const MyReservationsPage = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['reservationList'],
     queryFn: fetchReservations,
@@ -42,11 +43,15 @@ const page = () => {
         action={<DropdownOptions items={RESERVATION_STATUS} placeholderLabel='필터' />}
       />
       <div className='flex flex-col gap-4'>
-        {reservations.map(res => (
-          <ActivityCard key={res.id} reservation={res} />
+        {reservations.map(reservation => (
+          <ActivityCard
+            key={reservation.id}
+            type='reservation'
+            data={reservation as ReservationType}
+          />
         ))}
       </div>
     </div>
   );
 };
-export default page;
+export default MyReservationsPage;
