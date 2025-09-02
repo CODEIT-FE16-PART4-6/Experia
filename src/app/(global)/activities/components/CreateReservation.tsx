@@ -1,11 +1,11 @@
 'use client';
 import DatePicker from 'react-datepicker';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import 'react-datepicker/dist/react-datepicker.css';
 import apiAuth from '@/utils/axios/apiAuth';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
-
+import { ko } from 'date-fns/locale';
 interface Props {
   data: ActivityDetail;
 }
@@ -19,6 +19,14 @@ const CreateReservation = ({ data }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [personCount, setPersonCount] = useState(1);
   const [selectedSchedule, setSelectedScheduleId] = useState<ScheduleIdType>(0);
+
+  // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
+  const highlightDates = useMemo(() => {
+    return data.schedules.map(schedule => {
+      const date = new Date(schedule.date);
+      return date;
+    });
+  }, [data.schedules]);
 
   //날짜 선택 핸들러
   const handleSelectDate = (date: Date | null) => {
@@ -91,6 +99,10 @@ const CreateReservation = ({ data }: Props) => {
           selected={selectedDate}
           onChange={date => handleSelectDate(date)}
           dateFormat={'yyyy-MM-dd'}
+          inline //달력모양 보여주기 기본값:input
+          locale={ko} //한국어로
+          highlightDates={highlightDates} //선택가능한날짜 하이라이트
+          minDate={new Date()} //오늘이전선택불가
         />
       </div>
       {selectedDate && (
