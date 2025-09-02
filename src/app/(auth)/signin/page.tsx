@@ -8,6 +8,8 @@ import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import Link from 'next/link';
 import { LoginRequestSchema, LoginRequest } from '@/types/schema/userSchema';
+import axios from 'axios';
+import apiAuth from '@/utils/axios/apiAuth';
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useUserStore } from '@/stores/userStore';
@@ -36,78 +38,45 @@ const LoginPage = () => {
 
     // 로그인 데이터 전송
     try {
-      const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      //
-      const responseData = await response.json();
-
-      // HTTP 상태 코드 체크
-      if (!response.ok) {
-        if (response.status === 400) {
-          throw new Error('이메일 혹은 비밀번호가 일치하지 않습니다.');
-        } else {
-          throw new Error('로그인 실패: 서버 응답 오류입니다.');
-        }
-      }
+      const response = await apiAuth.post('/auth/login', data);
+      const responseData = response.data;
 
       // 성공적으로 로그인 처리
       localStorage.setItem('access_token', responseData.accessToken);
       localStorage.setItem('refresh_token', responseData.refreshToken);
       localStorage.setItem('user', JSON.stringify(responseData.user));
 
-      console.log('저장 후 확인:', {
-        accessTokenStored: localStorage.getItem('access_token'),
-        refreshTokenStored: localStorage.getItem('refresh_token'),
-      });
-
       // 전역 상태에 유저 정보 저장
-      if (response.ok && responseData.user) {
-        setUser(responseData.user);
-        console.log('User state updated:', responseData.user);
-      }
+      setUser(responseData.user);
 
       router.push('/');
-    } catch (err: unknown) {
-      console.error('로그인 중 오류 발생', err);
+    } catch (err) {
+      let errorMessage = `로그인 중 오류 발생: ${err}`;
 
-      if (err instanceof Error) {
-        setError(err.message); // 실제 Error 메시지 표시
+      if (axios.isAxiosError(err)) {
+        if (err.response) {
+          const statusCode = err.response.status;
+
+          if (statusCode === 400) {
+            errorMessage = '이메일 혹은 비밀번호가 일치하지 않습니다.';
+          } else if (statusCode === 500) {
+            errorMessage = '로그인 실패: 서버 응답 오류입니다.';
+          } else {
+            // 400 또는 500이 아닌 다른 에러 코드
+            errorMessage =
+              err.response.data?.message || `로그인 실패: ${statusCode} 에러가 발생했습니다.`;
+          }
+        } else if (err.request) {
+          // 요청은 보내졌으나 응답을 받지 못한 경우 (네트워크 오류)
+          errorMessage = '로그인 실패: 네트워크 연결을 확인해주세요.';
+        }
       } else {
-        setError('알 수 없는 오류가 발생했습니다.');
+        // Axios 에러가 아닌 다른 종류의 에러 처리 (new Error(...))
+        errorMessage = `로그인 중 오류 발생: ${err instanceof Error ? err.message : String(err)}`;
       }
 
+      setError(errorMessage);
       setLoading(false); // 로딩 상태 해제
-    }
-  };
-
-  const refreshAccessToken = async (): Promise<boolean> => {
-    const refreshToken = localStorage.getItem('refresh_token');
-    if (!refreshToken) return false;
-    try {
-      const response = await fetch('/* 토큰 갱신 API 엔드포인트 */', {
-        // 실제 엔드포인트로 대체
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refreshToken }),
-      });
-      if (!response.ok) {
-        throw new Error('요청 실패');
-      }
-      const data: { accessToken: string } = await response.json();
-      localStorage.setItem('access_token', data.accessToken);
-      return true;
-    } catch (error) {
-      console.error('토큰 갱신 실패:', error); // 오류 로깅 추가
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      localStorage.removeItem('user');
-      return false;
     }
   };
 

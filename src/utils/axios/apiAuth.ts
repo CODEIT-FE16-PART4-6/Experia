@@ -49,9 +49,9 @@ apiAuth.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean }; // 실패한 원본 요청 + retry
 
-    // 401 에러 시 토큰 재발급
+    // 401 에러 시 액세스 토큰 재발급
     if (error.response?.status === 401 && !originalRequest._retry) {
-      // 이미 토큰 재발급 중이면 재발급이 완료될 때까지 대기 (경쟁 조건(race condition) 처리)
+      // 이미 토큰 재발급 중이면 재발급 완료까지 대기 (경쟁 조건(race condition) 처리)
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -70,18 +70,18 @@ apiAuth.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      // 액세스 토큰 재발급
+      // 토큰 재발급
       try {
         const refreshToken = localStorage.getItem('refresh_token');
 
-        // 리프레쉬 토큰 없을 경우, 로그인 요구
+        // 리프레쉬 토큰 없을 경우, 로그인 페이지로 리다이렉트
         if (!refreshToken) {
           localStorage.clear();
           window.location.href = ROUTES.LOGIN;
-          return Promise.reject(new Error('리프레쉬 토큰이 없습니다. 로그인이 필요합니다.'));
+          return Promise.reject(new Error('로그인이 필요합니다.'));
         }
 
-        // 액세스 토큰 재발급
+        // 리프레쉬 토큰 있을 경우, 토큰 재발급
         const res = await axios.post('/auth/tokens');
         const newAccessToken = res.data.accessToken;
         const newRefreshToken = res.data.refreshToken;
