@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install && cp ./.husky/prepare-commit-msg .husky/_/prepare-commit-msg"
+    "prepare": "husky"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
