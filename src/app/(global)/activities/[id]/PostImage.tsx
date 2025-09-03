@@ -105,7 +105,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
           )}
         </div>
       </div>
-
+      {/*테블릿, PC 화면 렌더링 */}
       <Gallery options={{ fitRatio: 0.5 } as any}>
         <div
           className={clsx(
@@ -114,7 +114,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
             'overflow-hidden md:mr-6 md:ml-6 md:grid-cols-4 md:grid-rows-2 md:gap-1 md:rounded-[10px]',
           )}
         >
-          <div className='aspect-ratio full relative h-full bg-[#b3b3b3] md:col-span-2 md:row-span-2'>
+          <div className='group relative h-full w-full bg-[#b3b3b3] md:col-span-2 md:row-span-2'>
             <Item
               original={mobileImages[0].url ?? undefined}
               thumbnail={mobileImages[0].url ?? undefined}
@@ -133,9 +133,10 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
                 />
               )}
             </Item>
+            <div className='pointer-events-none absolute inset-0 bg-black opacity-0 transition-opacity duration-300 group-hover:opacity-40'></div>
           </div>
           {subImages.map((subimg: SubImage, idx: number) => (
-            <div key={subimg.id} className='full relative bg-[#b3b3b3]'>
+            <div key={subimg.id} className='full group relative cursor-pointer bg-[#b3b3b3]'>
               <Item
                 original={mobileImages[idx + 1].url ?? undefined}
                 thumbnail={mobileImages[idx + 1].url ?? undefined}
@@ -154,6 +155,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
                   />
                 )}
               </Item>
+              <div className='pointer-events-none absolute inset-0 bg-black opacity-0 transition-opacity duration-300 group-hover:opacity-40'></div>
             </div>
           ))}
           {emptySlots > 0 &&
