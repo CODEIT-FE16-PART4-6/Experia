@@ -1,8 +1,7 @@
 'use client';
 
-import KebabButton from '@/assets/imgs/activityPage/ic_Kebab.svg';
-import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
-import Star from '@/assets/imgs/activityPage/ic_Star.svg';
+import Image from 'next/image';
+
 interface PostType {
   tag: string;
   title: string;
@@ -21,13 +20,23 @@ const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
         <div className='flex gap-3 text-[14px] text-gray-900'>
           <div className='flex gap-1'>
             <div className='flex flex-col justify-center'>
-              <Star />
+              <Image
+                src='/icons/ActivityPageImgs/ic_Star.svg'
+                alt='별점 이미지'
+                width={16}
+                height={16}
+              />
             </div>
             {rating}({reviewCount})
           </div>
           <div className='flex gap-[3px]'>
             <div className='flex flex-col justify-center gap-[3px]'>
-              <MarkInMap />
+              <Image
+                src='/icons/ActivityPageImgs/ic_MarkInMap.svg'
+                alt='맵마크 이미지'
+                width={12}
+                height={16}
+              />
             </div>
             <p className='text-nomad-black'>{address}</p>
           </div>
@@ -35,7 +44,12 @@ const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
       </div>
       <div className='flex flex-col justify-center'>
         <button>
-          <KebabButton />
+          <Image
+            src='/icons/ActivityPageImgs/ic_Kebab.svg'
+            alt='케밥 버튼'
+            width={40}
+            height={40}
+          />
         </button>
       </div>
     </div>
