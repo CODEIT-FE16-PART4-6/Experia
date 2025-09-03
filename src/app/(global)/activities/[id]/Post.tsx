@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 //downComponent
-import PostHeader from './PostHeader';
-import PostImage from './PostImage';
-import PostContent from './PostContent';
+import PostHeader from './layout/PostHeader';
+import PostImage from './layout/PostImage';
+import PostContent from './layout/PostContent';
 import ReservateIn from './reservateIn';
 import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
 
