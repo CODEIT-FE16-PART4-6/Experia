@@ -1,14 +1,18 @@
 'use client';
 
 import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import { useRouter } from 'next/navigation';
 import { REQUEST_URL } from '../api-public';
 import { ROUTES } from '@/constants';
 
-let isRefreshing = false;
+let isRefreshing = false; // 토큰 재발급 진행중 여부
+
 let failedQueue: Array<{
   resolve: (value: unknown) => void;
   reject: (reason?: any) => void;
 }> = [];
+
+const router = useRouter();
 
 // 요청 대기열 (race condition 방지)
 const processQueue = (error: AxiosError | null, token: string | null = null) => {
@@ -80,7 +84,7 @@ apiAuth.interceptors.response.use(
         // 리프레쉬 토큰 없을 경우, 로그인 페이지로 리다이렉트
         if (!refreshToken) {
           localStorage.clear();
-          window.location.href = ROUTES.LOGIN;
+          router.replace(ROUTES.LOGIN);
           return Promise.reject(new Error('로그인이 필요합니다.'));
         }
 
@@ -107,7 +111,7 @@ apiAuth.interceptors.response.use(
         // 재발급 실패 시, 대기 요청들 실패 처리 후 로그인 페이지로 리다이렉트
         processQueue(refreshError as AxiosError, null);
         localStorage.clear();
-        window.location.href = ROUTES.LOGIN;
+        router.replace(ROUTES.LOGIN);
 
         return Promise.reject(refreshError);
       } finally {
