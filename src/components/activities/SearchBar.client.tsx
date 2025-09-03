@@ -17,6 +17,13 @@ const SearchBarClient = ({ onSearch }: SearchBarProps) => {
     onSearch(trimmed);
   }
 
+  // 검색어가 빈 문자열이 될 때 부모 컴포넌트의 onSearch를 호출!
+  useEffect(() => {
+    if (query === '') {
+      onSearch('')
+    }
+  }, [query, onSearch]);
+
   return (
     <section className="py-10 px-4 md:py-14 bg-gray-100">
       <div className="flex flex-col gap-4 md:gap-8 max-w-3xl mx-auto items-center">
@@ -53,4 +60,4 @@ const SearchBarClient = ({ onSearch }: SearchBarProps) => {
   )
 }
 
-export default SearchBarClient;
+export default SearchBarClient
