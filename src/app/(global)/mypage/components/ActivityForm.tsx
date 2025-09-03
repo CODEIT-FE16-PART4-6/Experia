@@ -16,24 +16,28 @@ import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 import { REQUEST_URL } from '@/utils/api-public';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
-const STORAGE_KEY = 'add-activity-form';
+interface ActivityFormProps {
+  initialData?: ActivityFormValues;
+}
+
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjUwOCwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQ4Mjk4OSwiZXhwIjoxNzU2NDg0Nzg5LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.HZWRO4v2b3vUNQi3SYid_QgIUCWOwW4dArOHtxFr2pE'; // sd@email.com(pw:12345678) temp access token
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';
 
-const AddActivityForm = () => {
+const ActivityForm = ({ initialData }: ActivityFormProps) => {
   const router = useRouter();
+
   const methods = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivityFormValueSchema),
-    defaultValues: {
+    defaultValues: initialData ?? {
       title: '',
       category: '',
       description: '',
       address: '',
       price: 0,
       bannerImageUrl: '',
-      subImageUrls: [],
+      subImages: [],
+      schedules: [],
     },
   });
 
@@ -41,52 +45,111 @@ const AddActivityForm = () => {
     handleSubmit,
     register,
     formState: { errors },
-    watch,
-    reset,
   } = methods;
 
-  const values = watch();
+  const isEdit = Boolean(initialData);
 
-  // 입력값이 바뀔 때마다 sessionStorage에 저장
-  useEffect(() => {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(values));
-  }, [values]);
+  const preparePatchPayload = (
+    formValues: ActivityFormValues,
+    initialData: ActivityFormValues | undefined,
+  ) => {
+    if (!initialData) return formValues; // 폼 등록
 
-  // 페이지 새로고침 시 기존 값 복구
-  useEffect(() => {
-    const saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        reset(JSON.parse(saved));
-      } catch (e) {
-        console.error('세션 저장 복구 실패:', e);
-      }
-    }
-  }, [reset]);
+    // 수정 시 patch 요청 구조
+    // 삭제된 상세 이미지
+    const subImageIdsToRemove = initialData.subImages
+      .filter(initImg => !formValues.subImages.some(fvImg => fvImg.imageUrl === initImg.imageUrl))
+      .map(img => img.id!); // 초기 데이터에 있는 이미지 중 제거된 것
+
+    // 추가된 상세 이미지
+    const subImageUrlsToAdd = formValues.subImages
+      .filter(fvImg => !initialData.subImages.some(initImg => initImg.imageUrl === fvImg.imageUrl))
+      .map(img => img.imageUrl);
+
+    // 삭제된 예약 시간대
+    const scheduleIdsToRemove = initialData.schedules
+      .filter(
+        initSched =>
+          !formValues.schedules.some(
+            fvSched =>
+              fvSched.date === initSched.date &&
+              fvSched.startTime === initSched.startTime &&
+              fvSched.endTime === initSched.endTime,
+          ),
+      )
+      .map(s => s.id!);
+
+    // 추가된 예약 시간대
+    const schedulesToAdd = formValues.schedules.filter(
+      fvSched =>
+        !initialData.schedules.some(
+          initSched =>
+            initSched.date === fvSched.date &&
+            initSched.startTime === fvSched.startTime &&
+            initSched.endTime === fvSched.endTime,
+        ),
+    );
+
+    return {
+      title: formValues.title,
+      category: formValues.category,
+      description: formValues.description,
+      price: formValues.price,
+      address: formValues.address,
+      bannerImageUrl: formValues.bannerImageUrl,
+      subImageIdsToRemove,
+      subImageUrlsToAdd,
+      scheduleIdsToRemove,
+      schedulesToAdd,
+    };
+  };
 
   const onSubmit: SubmitHandler<ActivityFormValues> = async data => {
     try {
-      const res = await fetch(`${REQUEST_URL}/activities`, {
-        method: 'POST',
+      const url = isEdit
+        ? `${REQUEST_URL}/my-activities/${initialData?.id}`
+        : `${REQUEST_URL}/activities`;
+
+      const method = isEdit ? 'PATCH' : 'POST';
+
+      const payload = isEdit
+        ? preparePatchPayload(data, initialData)
+        : {
+            title: data.title,
+            category: data.category,
+            description: data.description,
+            address: data.address,
+            price: data.price,
+            schedules: data.schedules,
+            bannerImageUrl: data.bannerImageUrl,
+            subImageUrls: (data.subImages ?? []).map(img => img.imageUrl),
+          };
+
+      console.log(payload);
+
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
         const error = await res.json();
+        const errorDefaultMsg = `체험 ${isEdit ? '수정' : '등록'}에 실패했습니다.`;
+
         console.error('서버 에러:', error);
-        alert(error.message || '체험 등록에 실패했습니다.');
+        alert(error.message || errorDefaultMsg);
         return;
       }
 
       const result = await res.json();
-      console.log('등록 성공:', result);
-      alert('체험이 등록되었습니다!');
+      const alertMsg = `체험이 ${isEdit ? '수정' : '등록'}되었습니다.`;
+      alert(alertMsg);
 
-      // 등록 성공 후 상세 페이지로 이동
+      // 등록/수정 후 상세 페이지로 이동
       router.push(`/activities/${result.id}`);
     } catch (err) {
       console.error('네트워크 에러:', err);
@@ -98,10 +161,10 @@ const AddActivityForm = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pb-[180px]'>
         <SectionTitle
-          title='내 체험 등록'
+          title={isEdit ? '내 체험 수정' : '내 체험 등록'}
           action={
             <Button variant='POSITIVE' size='md' type='submit'>
-              등록하기
+              {isEdit ? '수정하기' : '등록하기'}
             </Button>
           }
         />
@@ -181,11 +244,11 @@ const AddActivityForm = () => {
         <div className='flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='subImg'>상세 이미지</FormLabel>
           <Controller
-            name='subImageUrls'
+            name='subImages'
             control={methods.control}
             render={({ field, fieldState }) => (
               <MultiImageUploader
-                value={field.value ?? []} // field.value undefined면 빈 배열로 초기화
+                images={field.value}
                 onChange={field.onChange}
                 error={fieldState.error?.message}
                 maxCount={4}
@@ -198,4 +261,4 @@ const AddActivityForm = () => {
   );
 };
 
-export default AddActivityForm;
+export default ActivityForm;
