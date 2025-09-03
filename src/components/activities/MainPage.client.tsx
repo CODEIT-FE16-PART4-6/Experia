@@ -8,7 +8,7 @@ import { fetchServerData } from '@/utils/api-server';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
