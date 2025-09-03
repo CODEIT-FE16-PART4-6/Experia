@@ -1,13 +1,13 @@
 //주소를 입력하면 위치를 반환해주는 geocoding API 이라고 하는 것을 활용
 const getGeoCoordinate = async (address: string) => {
   console.log(address);
-
+  const addressSample = '해운대해변로 264, 해운대구, 부산';
   //주소의 순서가 중요함. 막 넣으면 안되는것 같고 , 도로명주소, 지역구(상세 구역), 도시 (+우편번호도 있을수 있음), 국가
   const res = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent('5 Avenue Anatole France, Paris, Île-de-France 75007, France')}`,
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addressSample)}`,
   );
   const data = await res.json();
-  console.log('@@@@@@@@@@@@@@@@@@@@@@');
+  console.log('좌표값');
   console.log(data);
   if (!res.ok) {
     throw new Error(`Geocoding API 요청 실패: ${res.status}`);
