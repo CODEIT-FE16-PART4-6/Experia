@@ -11,7 +11,6 @@ export default function TestPageLayout({ children }: { children: React.ReactNode
     <html lang='ko'>
       <body>
         {children}
-        <div id='overlay-root'></div>
         <ModalProvider />
       </body>
     </html>
