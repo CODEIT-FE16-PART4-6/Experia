@@ -28,30 +28,62 @@ const CreateReservation = ({ data }: Props) => {
     });
   }, [data.schedules]);
 
-  //날짜 선택 핸들러
-  const handleSelectDate = (date: Date | null) => {
-    setSelectedDate(date);
-    setSelectedScheduleId(0); //날짜 변경시 시간대 스케줄도 초기화
-  };
-
+  //DateType(string)을 Date 객체로 변환하는 함수
   const convertToDate = (dateString: DateType): Date | null => {
     const date = new Date(dateString);
     return isNaN(date.getTime()) ? null : date;
   };
 
   // 선택된 날짜의 schedules 필터링
-  const selectedDateSchedules = data.schedules.filter(schedule => {
-    // schedule.date(string)를 Date 객체로 변환
-    const scheduleDate = convertToDate(schedule.date);
-    // 유효한 Date 객체인지 확인하고, selectedDate와 비교
-    return (
-      scheduleDate &&
-      selectedDate &&
-      scheduleDate.getFullYear() === selectedDate.getFullYear() &&
-      scheduleDate.getMonth() === selectedDate.getMonth() &&
-      scheduleDate.getDate() === selectedDate.getDate()
+  const selectedDateSchedules = useMemo(() => {
+    if (!selectedDate) return [];
+
+    const currentDate = new Date();
+    const today = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate(),
     );
-  });
+
+    return data.schedules.filter(schedule => {
+      const scheduleDate = convertToDate(schedule.date);
+
+      if (!scheduleDate) return false;
+
+      const scheduleDateTime = new Date(
+        scheduleDate.getFullYear(),
+        scheduleDate.getMonth(),
+        scheduleDate.getDate(),
+      );
+
+      //오늘 이전 날짜 제외
+      if (scheduleDateTime < today) return false;
+
+      //오늘 날짜인 경우, 현재 시간 이전의 스케줄 제외
+      if (scheduleDateTime.getTime() === today.getTime()) {
+        const [hours, minutes] = schedule.startTime.split(':').map(Number);
+        const scheduleTime = new Date(
+          scheduleDate.getFullYear(),
+          scheduleDate.getMonth(),
+          scheduleDate.getDate(),
+          hours,
+          minutes,
+        );
+
+        if (scheduleTime <= currentDate) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [data.schedules, selectedDate]);
+
+  //날짜 선택 핸들러
+  const handleSelectDate = (date: Date | null) => {
+    setSelectedDate(date);
+    setSelectedScheduleId(0); //날짜 변경시 시간대 스케줄도 초기화
+  };
 
   //스케줄 선택 핸들러(schedules.Id 저장)
   const handleSelectSchedule = (scheduleId: ScheduleIdType) => {
