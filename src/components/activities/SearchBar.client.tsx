@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import InputField from "@/components/InputField"
 import Image from "next/image"
 
@@ -7,14 +7,14 @@ interface SearchBarProps {
   onSearch: (query: string) => void
 }
 
-const SearchBar = ({ onSearch = () => { } }: SearchBarProps) => {
+const SearchBarClient = ({ onSearch }: SearchBarProps) => {
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('검색 제출:', query)
-    onSearch(query)
-    setQuery('') // 제출 후 입력 초기화
+    e.preventDefault();
+    const trimmed = query.trim();
+    // 검색어가 빈 문자열이거나 공백만 있는 경우 전체 목록을 보여줌
+    onSearch(trimmed);
   }
 
   return (
@@ -29,6 +29,7 @@ const SearchBar = ({ onSearch = () => { } }: SearchBarProps) => {
             <InputField
               type="text"
               name="query"
+              value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder="내가 원하는 체험은..."
               className="w-full rounded-full bg-white shadow py-5 pr-20 border border-transparent focus:border focus:border-nomad-black focus:outline-none focus:ring-0"
@@ -52,4 +53,4 @@ const SearchBar = ({ onSearch = () => { } }: SearchBarProps) => {
   )
 }
 
-export default SearchBar
+export default SearchBarClient;
