@@ -2,16 +2,19 @@ import { REQUEST_URL } from '../api-public';
 import { FetchOptions } from '@/types/fetchOptions';
 
 /**
+ * 'GET' 요청 전용 fetch
  * @param path: 엔드포인트 (e.g. '/activities')
  * @param query?: 쿼리 파라미터 (e.g. '?method=offset&page=1', 사용 시 {method: 'offset'} 과 같은 객체 형태로 전달)
- * @param renderType?: 렌더링 방식 선택 ('ssg' | 'isr' | 'ssr')
+ * @param renderType?: 렌더링 방식 선택 ('ssg' | 'isr' | 'ssr') / 기본값 'ssr'
  * @param revalidate?: 재요청 주기 (초 단위)
+ * @param token?: 권한 요청 시 header에 담을 인증 토큰
  */
 export const fetchServerData = async <T>({
   path,
   query,
-  renderType,
+  renderType = 'ssr',
   revalidate,
+  token,
 }: FetchOptions): Promise<T> => {
   const url = new URL(`${REQUEST_URL}${path}`);
 
@@ -25,9 +28,15 @@ export const fetchServerData = async <T>({
 
   const options: RequestInit = {};
 
+  // 렌더링 타입 설정
   if (renderType === 'ssr' || renderType === 'csr') options.cache = 'no-store';
   if (renderType === 'ssg') options.cache = 'force-cache';
   if (renderType === 'isr') options.next = { revalidate };
+
+  // 토큰 설정
+  if (token) {
+    options.headers = { Authorization: `Bearer ${token}` };
+  }
 
   const res = await fetch(url.toString(), options);
 
