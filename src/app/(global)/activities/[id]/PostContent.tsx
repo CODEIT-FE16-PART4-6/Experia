@@ -34,7 +34,7 @@ const PostContent = ({ description, address, reviewData }: ContentProps & Review
       <div className='mt-[15px] mr-[24px] mb-[40px] ml-[24px] lg:mr-[0px] lg:ml-[0px]'>
         <div className='flex flex-col gap-[3px]'>
           <div
-            className='mb-2 h-[450px] overflow-hidden rounded-[20px] bg-[#b3b3b3] md:h-[276px] lg:h-[450px] lg:w-[790px]'
+            className='relative mb-2 h-[450px] overflow-hidden rounded-[20px] bg-[#b3b3b3] md:h-[276px] lg:h-[450px] lg:w-[790px]'
             style={{ boxShadow: '2.5px 2.5px 5px rgba(0, 0, 0, 0.2)' }}
           >
             <PostMap address={address} />

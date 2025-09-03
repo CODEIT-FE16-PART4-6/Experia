@@ -4,7 +4,7 @@ const getGeoCoordinate = async (address: string) => {
 
   //주소의 순서가 중요함. 막 넣으면 안되는것 같고 , 도로명주소, 지역구(상세 구역), 도시 (+우편번호도 있을수 있음), 국가
   const res = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent('올림픽로 300, 송파구, 서울, 대한민국')}`,
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent('5 Avenue Anatole France, Paris, Île-de-France 75007, France')}`,
   );
   const data = await res.json();
   console.log('@@@@@@@@@@@@@@@@@@@@@@');
