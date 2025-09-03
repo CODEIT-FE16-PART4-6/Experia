@@ -8,6 +8,7 @@ import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import Link from 'next/link';
 import { LoginRequestSchema, LoginRequest } from '@/types/schema/userSchema';
+import { REQUEST_URL } from '@/utils/api-public';
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useUserStore } from '@/stores/userStore';
@@ -30,19 +31,17 @@ const LoginPage = () => {
 
   // 로그인 요청
   const onSubmit: SubmitHandler<LoginRequest> = async data => {
-    console.log('전송 데이터:', data);
     setLoading(true);
     setError(null);
 
     // 로그인 데이터 전송
     try {
-      const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/auth/login', {
+      const response = await fetch(`${REQUEST_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
 
-      //
       const responseData = await response.json();
 
       // HTTP 상태 코드 체크
@@ -57,17 +56,10 @@ const LoginPage = () => {
       // 성공적으로 로그인 처리
       localStorage.setItem('access_token', responseData.accessToken);
       localStorage.setItem('refresh_token', responseData.refreshToken);
-      localStorage.setItem('user', JSON.stringify(responseData.user));
-
-      console.log('저장 후 확인:', {
-        accessTokenStored: localStorage.getItem('access_token'),
-        refreshTokenStored: localStorage.getItem('refresh_token'),
-      });
 
       // 전역 상태에 유저 정보 저장
       if (response.ok && responseData.user) {
         setUser(responseData.user);
-        console.log('User state updated:', responseData.user);
       }
 
       router.push('/');
@@ -81,33 +73,6 @@ const LoginPage = () => {
       }
 
       setLoading(false); // 로딩 상태 해제
-    }
-  };
-
-  const refreshAccessToken = async (): Promise<boolean> => {
-    const refreshToken = localStorage.getItem('refresh_token');
-    if (!refreshToken) return false;
-    try {
-      const response = await fetch('/* 토큰 갱신 API 엔드포인트 */', {
-        // 실제 엔드포인트로 대체
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refreshToken }),
-      });
-      if (!response.ok) {
-        throw new Error('요청 실패');
-      }
-      const data: { accessToken: string } = await response.json();
-      localStorage.setItem('access_token', data.accessToken);
-      return true;
-    } catch (error) {
-      console.error('토큰 갱신 실패:', error); // 오류 로깅 추가
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      localStorage.removeItem('user');
-      return false;
     }
   };
 

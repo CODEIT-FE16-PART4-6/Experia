@@ -48,10 +48,10 @@ export const PATHS = {
   MAIN: '/',
   ACTIVITY_DETAIL: (id: number) => `/activities/${id}`,
   MYPAGE: '/mypage',
-  MY_ACTIVITIES: `/mypage/my-activities`,
+  MY_ACTIVITIES: '/mypage/my-activities',
   MY_RESERVATIONS: '/mypage/my-reservations',
   RESERVATIONS: '/mypage/reservations',
-  LOGIN: '/login',
+  LOGIN: '/signin',
   SIGNUP: '/signup',
 };
 
