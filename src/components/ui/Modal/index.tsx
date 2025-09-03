@@ -1,3 +1,4 @@
+import { ReactNode, Fragment } from 'react';
 import {
   Dialog,
   DialogPanel,
@@ -5,10 +6,10 @@ import {
   TransitionChild,
   DialogBackdrop,
 } from '@headlessui/react';
-import { Fragment } from 'react';
+import Image from 'next/image';
 
 interface ModalProps {
-  modal: { id: string; content: React.ReactNode };
+  modal: { id: string; content: ReactNode };
   open: boolean;
   onClose: () => void;
 }
@@ -43,13 +44,15 @@ const Modal = ({ modal, open, onClose }: ModalProps) => {
           leaveFrom='opacity-100 scale-100'
           leaveTo='opacity-0 scale-95'
         >
-          <DialogPanel className='relative max-w-lg space-y-4 rounded-lg bg-white p-12 shadow-lg'>
+          <DialogPanel className='relative flex h-screen w-screen flex-col space-y-4 rounded-none bg-white px-4 py-8 shadow-lg md:h-auto md:max-w-[480px] md:rounded-3xl md:px-6 md:pt-6 md:pb-10'>
             {modal.content}
+
+            {/* 모달 닫기 버튼 */}
             <button
               onClick={onClose}
-              className='absolute top-2 right-2 rounded bg-red-500 px-2 py-1 text-white'
+              className='absolute top-6 right-2 rounded p-1 hover:bg-gray-300 md:top-4 md:right-4'
             >
-              닫기
+              <Image src='/icons/ic_Close.svg' alt='닫기' width={36} height={36} />
             </button>
           </DialogPanel>
         </TransitionChild>
