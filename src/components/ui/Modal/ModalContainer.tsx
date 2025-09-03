@@ -15,7 +15,7 @@ const ModalContainer = () => {
   return (
     <ModalPortal>
       {modals.map((modal, i) => (
-        <Modal key={i} modal={modal} open={modals.length > 0} onClose={closeModal} />
+        <Modal key={i} modal={modal} open={!modal.closing} onClose={closeModal} />
       ))}
     </ModalPortal>
   );
