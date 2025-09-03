@@ -32,7 +32,7 @@ const CreateReservation = ({ data }: Props) => {
   const convertToDate = (dateString: DateType): Date | null => {
     const date = new Date(dateString);
     return isNaN(date.getTime()) ? null : date;
-  };
+  }; //TODO [P6-124] 테스트 코드 작성
 
   // 선택된 날짜의 schedules 필터링
   const selectedDateSchedules = useMemo(() => {
@@ -58,7 +58,7 @@ const CreateReservation = ({ data }: Props) => {
 
       //오늘 이전 날짜 제외
       if (scheduleDateTime < today) return false;
-
+      //TODO [P6-123] 오늘날짜인데 시간대가 모두 지났을 경우 처리
       //오늘 날짜인 경우, 현재 시간 이전의 스케줄 제외
       if (scheduleDateTime.getTime() === today.getTime()) {
         const [hours, minutes] = schedule.startTime.split(':').map(Number);
@@ -96,10 +96,7 @@ const CreateReservation = ({ data }: Props) => {
   };
 
   const handleDecrease = () => {
-    setPersonCount(personCount - 1);
-    if (personCount <= 1) {
-      setPersonCount(1); //1명 이하로는 감소 불가
-    }
+    setPersonCount(prev => Math.max(prev - 1, 1));
   };
 
   //예약하기 함수
@@ -132,7 +129,7 @@ const CreateReservation = ({ data }: Props) => {
           onChange={date => handleSelectDate(date)}
           dateFormat={'yyyy-MM-dd'}
           inline //달력모양 보여주기 기본값:input
-          locale={ko} //한국어로
+          locale={ko} //기본은 영어예용. 한국어로
           highlightDates={highlightDates} //선택가능한날짜 하이라이트
           minDate={new Date()} //오늘이전선택불가
         />
