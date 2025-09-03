@@ -17,6 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
+      <link rel='icon' href='/favicon.ico' sizes='any' />
+      <link rel='icon' href='/favicon-big.ico' type='image/png' sizes='400x400' />
       <body className={pretendard.className}>
         <Providers>
           <Header />

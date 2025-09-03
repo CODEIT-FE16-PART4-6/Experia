@@ -1,7 +1,8 @@
 //hooks
 
 //img
-import MarkInMap from '@/assets/imgs/activityPage/ic_MarkInMap.svg';
+import Image from 'next/image';
+//comp
 import PostReview from './PostReview';
 //comp
 import PostMap from './PostMap';
@@ -41,7 +42,12 @@ const PostContent = ({ description, address, reviewData }: ContentProps & Review
           </div>
           <div className='flex gap-[5px]'>
             <div className='ml-[5px] flex flex-col justify-center gap-[3px]'>
-              <MarkInMap />
+              <Image
+                src='/icons/ActivityPageImgs/ic_MarkInMap.svg'
+                alt='맵 마크 이미지'
+                width={12}
+                height={16}
+              />
             </div>
             <p className='text-nomad-black text-[14px]'>{address}</p>
           </div>
