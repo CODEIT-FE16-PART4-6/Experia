@@ -1,8 +1,14 @@
 'use client';
-
+//img
 import Image from 'next/image';
+//comp
 import { DropdownMeatball } from '@/components/DropdownMeatball';
+import useModalStore from '@/stores/modalStore';
+
+//util
 import { useRouter } from 'next/navigation';
+import DeleteModal from '@/components/activities/Modals/DeleteModal';
+
 interface PostType {
   id: number;
   tag: string;
@@ -14,8 +20,10 @@ interface PostType {
 
 const PostHeader = ({ id, tag, title, rating, reviewCount, address }: PostType) => {
   const router = useRouter();
-
-  const handleDelete = () => {};
+  const openModal = useModalStore(state => state.openModal);
+  const handleDelete = () => {
+    openModal(<DeleteModal title={title} />);
+  };
 
   const handleEdit = () => {
     router.push(`/mypage/my-activities/edit-activity/${id}`);

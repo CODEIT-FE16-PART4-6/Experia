@@ -12,7 +12,7 @@ export interface DropdownMeatballProps {
  */
 export const DropdownMeatball = ({ onEdit, onDelete }: DropdownMeatballProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null); //미트볼 바깥쪽 클릭시 사라지게 하려면 필요함
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
