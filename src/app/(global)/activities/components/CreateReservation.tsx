@@ -27,6 +27,8 @@ const CreateReservation = ({ data }: Props) => {
       return date;
     });
   }, [data.schedules]);
+  //TODO . React DevTools로 컴포넌트 렌더링 시간을 측정하고, useMemo 사용 전후를 비교하기
+  //const highlightDates = data.schedules.map(schedule => new Date(schedule.date))
 
   //DateType(string)을 Date 객체로 변환하는 함수
   const convertToDate = (dateString: DateType): Date | null => {
@@ -101,7 +103,7 @@ const CreateReservation = ({ data }: Props) => {
 
   //예약하기 함수
   const handleReservation = async () => {
-    if (!selectedSchedule && !selectedDate) {
+    if (!selectedSchedule || !selectedDate) {
       alert('날짜와 시간을 선택해주세요');
       return;
     }
