@@ -53,13 +53,12 @@ const ReviewCreateModal = ({ data }: { data: ReservationType }) => {
           return;
         }
 
-        console.error('알 수 없는 에러 발생:', error);
+        console.error('서버 에러:', error);
         alert(error.message || errorDefaultMsg);
         return;
       }
 
       const result = await res.json();
-      console.log(result);
 
       const alertMsg = '리뷰가 등록되었습니다.';
       alert(alertMsg);
@@ -74,50 +73,58 @@ const ReviewCreateModal = ({ data }: { data: ReservationType }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6'>
-      <div className='mb-4'>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='flex flex-col gap-6 overflow-auto overflow-x-hidden'
+    >
+      <div className='form-header'>
         <DialogTitle className='text-2xl font-bold'>후기 작성</DialogTitle>
-        <p className='text-md mt-1 text-gray-500'>리뷰 수정 기능이 추가될 예정입니다.😅</p>
+        <p className='text-md mt-1 text-gray-500'>등록하신 리뷰는 수정할 수 없습니다.</p>
       </div>
 
-      <div className='flex gap-6'>
-        <figure className='h-[100px] w-[100px] shrink-0 overflow-hidden rounded-xl md:h-[126px] md:w-[126px]'>
-          <Image
-            src={activity.bannerImageUrl}
-            alt={activity.title}
-            width={126}
-            height={126}
-            className='h-full w-full object-cover'
-          />
-        </figure>
+      <div className='form-content'>
+        <div className='flex items-center gap-4 md:gap-6'>
+          <figure className='h-[100px] w-[100px] shrink-0 overflow-hidden rounded-xl md:h-[126px] md:w-[126px]'>
+            <Image
+              src={activity.bannerImageUrl}
+              alt={activity.title}
+              width={126}
+              height={126}
+              className='h-full w-full object-cover'
+            />
+          </figure>
 
-        <div className='flex flex-col gap-3'>
-          <h5 className='w-[90%] truncate text-xl font-bold'>{activity.title}</h5>
-          <span className='text-lg'>
-            {data.date} · {data.startTime} - {data.endTime} · {data.headCount}명
-          </span>
-          <h3 className='text-3xl font-bold'>₩{data.totalPrice}</h3>
+          <div className='flex w-full flex-col gap-1 md:gap-3'>
+            <h5 className='w-[90%] truncate text-base font-bold md:text-xl'>{activity.title}</h5>
+            <div className='text-md flex flex-wrap md:text-lg'>
+              {data.date} · {data.startTime} - {data.endTime} · {data.headCount}명
+            </div>
+            <h3 className='text-xl font-bold md:text-3xl'>₩{data.totalPrice}</h3>
+          </div>
         </div>
-      </div>
 
-      <div className='flex justify-center'>
-        <Controller
-          name='rating'
-          control={control}
-          render={({ field }) => <StarRating onChange={rate => field.onChange(rate ?? 1)} />}
+        <div className='flex flex-col items-center justify-center'>
+          <Controller
+            name='rating'
+            control={control}
+            render={({ field }) => <StarRating onChange={rate => field.onChange(rate ?? 1)} />}
+          />
+          {errors.rating && <p className='mt-2 text-sm text-red-600'>{errors.rating.message}</p>}
+        </div>
+
+        <TextAreaField
+          placeholder='후기를 작성해주세요'
+          {...register('content')}
+          error={errors?.content?.message}
+          className='h-full'
         />
-        {errors.rating && <p className='mt-1 text-sm text-red-600'>{errors.rating.message}</p>}
       </div>
 
-      <TextAreaField
-        placeholder='후기를 작성해주세요'
-        {...register('content')}
-        error={errors?.content?.message}
-      />
-
-      <Button size='md' variant='POSITIVE' type='submit' className='w-full'>
-        작성하기
-      </Button>
+      <div className='form-footer'>
+        <Button size='md' variant='POSITIVE' type='submit' className='w-full'>
+          작성하기
+        </Button>
+      </div>
     </form>
   );
 };

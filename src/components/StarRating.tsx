@@ -30,7 +30,7 @@ export const StarRating = ({ value = 0, onChange }: StarRatingProps) => {
   };
 
   return (
-    <>
+    <div className='flex'>
       {STARS.map(star => (
         <button
           key={star}
@@ -45,6 +45,6 @@ export const StarRating = ({ value = 0, onChange }: StarRatingProps) => {
           </div>
         </button>
       ))}
-    </>
+    </div>
   );
 };

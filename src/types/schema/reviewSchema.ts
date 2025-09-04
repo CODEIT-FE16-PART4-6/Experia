@@ -7,7 +7,7 @@ export const ReviewPostReqSchema = z.object({
     .nonnegative()
     .min(1, { message: '별점은 1점 이상이어야 합니다.' })
     .max(5, { message: '별점은 5점 이하여야 합니다.' }),
-  content: z.string({ message: '내용은 문자열로 입력해주세요' }),
+  content: z.string().min(1, { message: '후기를 입력해주세요.' }),
 });
 
 export type ReviewPostReq = z.infer<typeof ReviewPostReqSchema>;
