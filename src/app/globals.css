@@ -87,4 +87,17 @@
   .nav-list {
     @apply hover:text-primary px-3 py-2 transition-all hover:font-bold;
   }
+
+  /* form */
+  .form-header {
+    @apply mb-4;
+  }
+
+  .form-content {
+    @apply flex grow flex-col gap-6;
+  }
+
+  .form-footer {
+    @apply sticky bottom-0;
+  }
 }
