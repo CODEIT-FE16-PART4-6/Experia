@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { REQUEST_URL } from '@/utils/api-public';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import NotificationItem from './NotificationItem';
-import { Notification } from '@/types/schema/notificationSchema';
+import { Notifications, Notification } from '@/types/schema/notificationSchema';
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1Njk3NjE2OCwiZXhwIjoxNzU4MTg1NzY4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.lePtE130uzXS1OoDUpDFSizdbe0g2inepQgioD2FhsY';
@@ -26,7 +26,7 @@ const fetchMyNotifications = async () => {
 };
 
 const NotificationPopover = () => {
-  const { data, isError, isPending } = useQuery({
+  const { data, isError, isPending } = useQuery<Notifications>({
     queryKey: ['notification'],
     queryFn: fetchMyNotifications,
   });
@@ -51,7 +51,7 @@ const NotificationPopover = () => {
           {({ close }) => (
             <div className='bg-green-light w-full overflow-hidden rounded-lg px-5 py-6 shadow-lg'>
               <div className='mb-4 flex items-center justify-between'>
-                <h2 className='text-lg font-bold text-black'>알림 6개</h2>
+                <h2 className='text-lg font-bold text-black'>{`알림 ${data?.totalCount || 0}개`}</h2>
                 <button
                   type='button'
                   onClick={() => close()}
@@ -62,16 +62,16 @@ const NotificationPopover = () => {
               </div>
 
               {isPending && <LoadingSpinner />}
+              {isError && <p>알림 내역을 불러오지 못했습니다.</p>}
+              {data && data.notifications.length === 0 && <p>알림 내역이 없습니다.</p>}
 
-              {!isPending && isError && <p>알림 내역을 불러오지 못했습니다.</p>}
-
-              {data.notifications.length === 0 && <p>알림 내역이 없습니다.</p>}
-
-              <ol className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'>
-                {data.notifications.map((noti: Notification) => (
-                  <NotificationItem key={noti.id} item={noti} />
-                ))}
-              </ol>
+              {data && data.notifications.length > 0 && (
+                <ol className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'>
+                  {data.notifications.map((noti: Notification) => (
+                    <NotificationItem key={noti.id} item={noti} />
+                  ))}
+                </ol>
+              )}
             </div>
           )}
         </PopoverPanel>
