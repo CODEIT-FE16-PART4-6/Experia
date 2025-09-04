@@ -30,6 +30,7 @@ const ActivityPost = ({ postData, reviewData }: ActivityProps) => {
         reviewCount={ActivityContent.reviewCount}
         address={ActivityContent.address}
         id={ActivityContent.id}
+        userId={ActivityContent.userId}
       />
       <PostImage
         bannerImageUrl={postData.bannerImageUrl}

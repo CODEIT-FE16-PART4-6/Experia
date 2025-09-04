@@ -54,7 +54,7 @@ export const DropdownMeatball = ({ onEdit, onDelete }: DropdownMeatballProps) =>
             수정하기
           </div>
           <div
-            className='group-hover:gray-100 flex h-[50px] w-full flex-col justify-center px-2 py-2 text-center hover:bg-gray-200'
+            className='group-hover:gray-100 flex h-[50px] w-full cursor-pointer flex-col justify-center px-2 py-2 text-center hover:bg-gray-200'
             onClick={() => {
               onDelete();
               setIsOpen(false);

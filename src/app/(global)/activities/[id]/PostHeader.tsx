@@ -4,10 +4,11 @@ import Image from 'next/image';
 //comp
 import { DropdownMeatball } from '@/components/DropdownMeatball';
 import useModalStore from '@/stores/modalStore';
-
-//util
-import { useRouter } from 'next/navigation';
 import DeleteModal from '@/components/activities/Modals/DeleteModal';
+
+//hooks
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PostType {
   id: number;
@@ -16,19 +17,38 @@ interface PostType {
   rating: number;
   reviewCount: number;
   address: string;
+  userId: number;
 }
 
-const PostHeader = ({ id, tag, title, rating, reviewCount, address }: PostType) => {
+const PostHeader = ({ userId, id, tag, title, rating, reviewCount, address }: PostType) => {
   const router = useRouter();
   const openModal = useModalStore(state => state.openModal);
   const closeModal = useModalStore(state => state.closeModal);
+  const [isMyPost, setIsMyPost] = useState(false);
+
+  useEffect(() => {
+    const authStoreData = localStorage.getItem('auth-store');
+    if (authStoreData) {
+      try {
+        const authStoreDataObj = JSON.parse(authStoreData);
+        console.log(authStoreDataObj.state.user.id);
+        console.log(userId);
+        if (authStoreDataObj.state.user.id === userId) {
+          setIsMyPost(true);
+        }
+      } catch (error) {
+        console.log('로컬 데이터(auth-store) 파싱도중 에러 발생');
+      }
+    }
+  }, []); // 로컬 스토리지 => 클라이언트 사이드
+
   const handleDelete = () => {
     openModal(<DeleteModal title={title} onClose={closeModal} />);
-  };
+  }; // 삭제하기 버튼 클릭시
 
   const handleEdit = () => {
     router.push(`/mypage/my-activities/edit-activity/${id}`);
-  };
+  }; // 수정하기 버튼 클릭시
 
   return (
     <div className='flex flex-row justify-between p-4 md:p-6 lg:mx-auto lg:w-[1200px]'>
@@ -63,7 +83,7 @@ const PostHeader = ({ id, tag, title, rating, reviewCount, address }: PostType) 
         </div>
       </div>
       <div className='flex flex-col justify-center'>
-        <DropdownMeatball onEdit={handleEdit} onDelete={handleDelete} />
+        {isMyPost ? <DropdownMeatball onEdit={handleEdit} onDelete={handleDelete} /> : ''}
       </div>
     </div>
   );
