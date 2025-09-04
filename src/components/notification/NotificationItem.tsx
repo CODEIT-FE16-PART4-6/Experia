@@ -5,6 +5,7 @@ import formatRelativeTime from '@/utils/formatter/formatRelativeTime';
 
 interface Props {
   item: Notification;
+  onDelete: (id: number) => void;
 }
 
 const splitContent = (content: string) => {
@@ -13,7 +14,7 @@ const splitContent = (content: string) => {
   return [contentArr[1], contentArr[2], contentArr[3]]; // [앞문장, status, 뒷문장]
 };
 
-const NotificationItem = ({ item }: Props) => {
+const NotificationItem = ({ item, onDelete }: Props) => {
   const splitted = splitContent(item.content) || '';
 
   return (
@@ -24,6 +25,7 @@ const NotificationItem = ({ item }: Props) => {
           'bg-red-primary': splitted[1] === '거절',
         })}
       ></span>
+
       <p className='text-md text-gray-900'>
         {splitted[0]}
         <b
@@ -36,8 +38,10 @@ const NotificationItem = ({ item }: Props) => {
         </b>
         {splitted[2]}
       </p>
+
       <span className='mt-1 text-xs text-gray-400'>{formatRelativeTime(item.updatedAt)}</span>
-      <button type='button' className='absolute top-3 right-3'>
+
+      <button type='button' className='absolute top-3 right-3' onClick={() => onDelete(item.id)}>
         <Image src='/icons/ic_Close.svg' alt='알림 삭제' width={20} height={20} />
       </button>
     </li>

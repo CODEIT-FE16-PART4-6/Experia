@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { Popover, PopoverPanel, PopoverButton, Transition } from '@headlessui/react';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { REQUEST_URL } from '@/utils/api-public';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import NotificationItem from './NotificationItem';
@@ -26,10 +26,39 @@ const fetchMyNotifications = async () => {
 };
 
 const NotificationPopover = () => {
+  const queryClient = useQueryClient();
+
+  // get notifications
   const { data, isError, isPending } = useQuery<Notifications>({
     queryKey: ['notification'],
     queryFn: fetchMyNotifications,
   });
+
+  // delete notification
+  const deleteNotification = useMutation({
+    mutationFn: async (notiId: number) => {
+      const res = await fetch(`${REQUEST_URL}/my-notifications/${notiId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error('알림 삭제에 실패했습니다.');
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notification'] });
+    },
+    onError: err => {
+      alert(err.message);
+    },
+  });
+
+  const handleDelete = (notiId: number) => {
+    deleteNotification.mutate(notiId);
+  };
 
   return (
     <Popover className='flex'>
@@ -68,7 +97,7 @@ const NotificationPopover = () => {
               {data && data.notifications.length > 0 && (
                 <ol className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'>
                   {data.notifications.map((noti: Notification) => (
-                    <NotificationItem key={noti.id} item={noti} />
+                    <NotificationItem key={noti.id} item={noti} onDelete={handleDelete} />
                   ))}
                 </ol>
               )}
