@@ -46,7 +46,7 @@ const ActivityPost = ({ postData, reviewData }: ActivityProps) => {
           />
         </div>
         <div>
-          <ReservateIn data={data} />
+          <ReservateIn data={postData} />
         </div>
       </div>
     </main>

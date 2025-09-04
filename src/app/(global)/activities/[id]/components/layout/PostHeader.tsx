@@ -31,8 +31,8 @@ const PostHeader = ({ userId, id, tag, title, rating, reviewCount, address }: Po
     if (authStoreData) {
       try {
         const authStoreDataObj = JSON.parse(authStoreData);
-        console.log(authStoreDataObj.state.user.id);
-        console.log(userId);
+        console.log('로컬스토리지 my id : ', authStoreDataObj.state.user.id);
+        console.log('api 의 페이지 user ID', userId);
         if (authStoreDataObj.state.user.id === userId) {
           setIsMyPost(true);
         }
