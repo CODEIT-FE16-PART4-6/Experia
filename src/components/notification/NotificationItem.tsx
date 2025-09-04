@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import clsx from 'clsx';
 import { Notification } from '@/types/schema/notificationSchema';
+import formatRelativeTime from '@/utils/formatter/formatRelativeTime';
 
 interface Props {
   item: Notification;
@@ -35,7 +36,7 @@ const NotificationItem = ({ item }: Props) => {
         </b>
         {splitted[2]}
       </p>
-      <span className='mt-1 text-xs text-gray-400'>1분 전</span>
+      <span className='mt-1 text-xs text-gray-400'>{formatRelativeTime(item.updatedAt)}</span>
       <button type='button' className='absolute top-3 right-3'>
         <Image src='/icons/ic_Close.svg' alt='알림 삭제' width={20} height={20} />
       </button>
