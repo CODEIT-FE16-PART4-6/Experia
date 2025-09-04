@@ -21,8 +21,9 @@ interface PostType {
 const PostHeader = ({ id, tag, title, rating, reviewCount, address }: PostType) => {
   const router = useRouter();
   const openModal = useModalStore(state => state.openModal);
+  const closeModal = useModalStore(state => state.closeModal);
   const handleDelete = () => {
-    openModal(<DeleteModal title={title} />);
+    openModal(<DeleteModal title={title} onClose={closeModal} />);
   };
 
   const handleEdit = () => {
