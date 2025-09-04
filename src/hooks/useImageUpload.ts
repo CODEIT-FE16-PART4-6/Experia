@@ -3,7 +3,7 @@ import { REQUEST_URL } from '@/utils/api-public';
 
 const MAX_SIZE = 1024 * 1024 * 5; // 5MB
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjUwOCwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQ3ODc4MSwiZXhwIjoxNzU2NDgwNTgxLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.Pe90LlKRABNLs5WkdqdBzqizmDVAKdPbd-o0S0IbKtc';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjczMDU0MywiZXhwIjoxNzU3OTQwMTQzLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.w-c24X9Jxf-2tWdpsIZ0SyE-RslOB6HqCpkkr6KXIzw';
 
 const useImageUpload = () => {
   const [isUploading, setIsUploading] = useState(false);

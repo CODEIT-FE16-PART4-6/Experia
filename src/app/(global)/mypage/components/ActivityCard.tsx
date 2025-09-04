@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { ReservationType } from '@/types/schema/reservationSchema';
 import { ActivityType } from '@/types/schema/activitiesSchema';
 import StarIcon from '@/assets/icons/ic_StarSmall.svg';
@@ -56,7 +57,10 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
     const activity = data as ActivityType;
 
     return (
-      <div className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-2xl md:h-[156px] lg:h-[204px]'>
+      <Link
+        href={`/mypage/my-activities/edit-activity/${data.id}`}
+        className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-2xl md:h-[156px] lg:h-[204px]'
+      >
         <div className='relative h-[128px] w-[128px] md:h-[156px] md:w-[156px] lg:h-[204px] lg:w-[204px]'>
           <figure>
             <Image
@@ -74,7 +78,7 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
           <div>{activity.title}</div>
           <div>₩ {activity.price}/인</div>
         </div>
-      </div>
+      </Link>
     );
   }
 };
