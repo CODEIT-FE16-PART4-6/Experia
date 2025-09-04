@@ -5,9 +5,9 @@ import Link from 'next/link';
 import useScrollY from '@/hooks/useScrollY';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import Avatar from '@/components/ui/Avatar';
 import { useUserStore } from '@/stores/userStore';
+import NotificationPopover from '@/components/notification/NotificationPopover';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,27 +35,23 @@ const Header = () => {
         <Link href='/'>
           <Image src='/images/logo.svg' alt='Experia 로고' width={134} height={42} />
         </Link>
-        <nav className='flex gap-3 font-medium text-black'>
+        <nav className='relative flex gap-3 font-medium text-black'>
           {user ? (
-            <>
-              <ul className='flex items-center divide-x divide-gray-300'>
-                <li className='flex pr-3 md:pr-5'>
-                  <button>
-                    <AlarmIcon className='hover:text-primary text-gray-700 transition-colors' />
-                  </button>
-                </li>
-                <li className='pl-3 md:pl-5'>
-                  <button
-                    type='button'
-                    className='hover:text-primary flex items-center gap-2.5 transition-colors'
-                    onClick={handleProfileClick}
-                  >
-                    <Avatar imgSrc={user.profileImageUrl ?? null} size='md' />
-                    {user.nickname}
-                  </button>
-                </li>
-              </ul>
-            </>
+            <ul className='flex items-center divide-x divide-gray-300'>
+              <li className='flex pr-3 md:pr-5'>
+                <NotificationPopover />
+              </li>
+              <li className='pl-3 md:pl-5'>
+                <button
+                  type='button'
+                  className='hover:text-primary flex items-center gap-2.5 transition-colors'
+                  onClick={handleProfileClick}
+                >
+                  <Avatar imgSrc={user.profileImageUrl ?? null} size='md' />
+                  {user.nickname}
+                </button>
+              </li>
+            </ul>
           ) : (
             <>
               <Link href='/signin' className='nav-list'>
