@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ReviewType } from './postContentTypes';
+import { ReviewType } from '../postContentTypes';
 import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
 
 interface ReviewContentType {

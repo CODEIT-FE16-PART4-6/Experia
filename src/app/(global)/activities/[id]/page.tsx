@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import Post from './Post';
+import Post from './components/Post';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -23,7 +23,7 @@ async function fetchActivities(id: string) {
     throw new Error('Fetch 실패');
   }
   const data = await res.json();
-  console.log('받아온 데이터:', data);
+  //console.log('받아온 데이터:', data);
   return data;
 }
 
@@ -36,7 +36,7 @@ async function fetchReviews(id: string) {
     throw new Error('Fetch 실패');
   }
   const data = await res.json();
-  console.log('받아온 데이터:', data);
+  //console.log('받아온 데이터:', data);
   return data;
 }
 
