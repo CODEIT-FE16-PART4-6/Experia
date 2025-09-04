@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 
 export interface DropdownMeatballProps {
@@ -12,13 +12,26 @@ export interface DropdownMeatballProps {
  */
 export const DropdownMeatball = ({ onEdit, onDelete }: DropdownMeatballProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); //메모리 누수 방지
+    };
+  }, []); //미트볼 바깥쪽 클릭시 사라지게
 
   const toggleDropdown = () => {
     setIsOpen(prev => !prev);
   };
 
   return (
-    <div className='relative inline-block text-left'>
+    <div className='relative inline-block text-left' ref={ref}>
       {/* 미트볼 아이콘 버튼 */}
       <div
         onClick={toggleDropdown}

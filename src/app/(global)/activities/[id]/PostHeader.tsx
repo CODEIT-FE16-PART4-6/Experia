@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import { DropdownMeatball } from '@/components/DropdownMeatball';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 interface PostType {
+  id: number;
   tag: string;
   title: string;
   rating: number;
@@ -11,10 +12,15 @@ interface PostType {
   address: string;
 }
 
-const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
-  const handleClick = () => {};
+const PostHeader = ({ id, tag, title, rating, reviewCount, address }: PostType) => {
+  const router = useRouter();
+
   const handleDelete = () => {};
-  const handleEdit = () => {};
+
+  const handleEdit = () => {
+    router.push(`/mypage/my-activities/edit-activity/${id}`);
+  };
+
   return (
     <div className='flex flex-row justify-between p-4 md:p-6 lg:mx-auto lg:w-[1200px]'>
       <div className='flex flex-col'>
@@ -48,7 +54,7 @@ const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
         </div>
       </div>
       <div className='flex flex-col justify-center'>
-        <DropdownMeatball onEdit={handleEdit()} onDelete={handleDelete()} />
+        <DropdownMeatball onEdit={handleEdit} onDelete={handleDelete} />
       </div>
     </div>
   );
