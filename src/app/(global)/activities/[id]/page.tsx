@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import Post from './component/Post';
+import Post from './components/Post';
 
 interface PageProps {
   params: Promise<{ id: string }>;
