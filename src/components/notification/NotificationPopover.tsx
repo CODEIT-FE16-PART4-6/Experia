@@ -1,12 +1,38 @@
-// 'use client';
+'use client';
 
-import Image from 'next/image';
 import { Fragment } from 'react';
 import { Popover, PopoverPanel, PopoverButton, Transition } from '@headlessui/react';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
+import { useQuery } from '@tanstack/react-query';
+import { REQUEST_URL } from '@/utils/api-public';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import NotificationItem from './NotificationItem';
+import { Notification } from '@/types/schema/notificationSchema';
+
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1Njk3NjE2OCwiZXhwIjoxNzU4MTg1NzY4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.lePtE130uzXS1OoDUpDFSizdbe0g2inepQgioD2FhsY';
+
+const fetchMyNotifications = async () => {
+  const res = await fetch(`${REQUEST_URL}/my-notifications`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = (await res.json()) || [];
+  return data;
+};
 
 const NotificationPopover = () => {
+  const { data, isError, isPending } = useQuery({
+    queryKey: ['notification'],
+    queryFn: fetchMyNotifications,
+  });
+
+  console.log(data);
+
   return (
     <Popover className='flex'>
       <PopoverButton>
@@ -37,32 +63,16 @@ const NotificationPopover = () => {
                 </button>
               </div>
 
-              <ol className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'>
-                {/* 승인 알림 */}
-                <li className='noti-list'>
-                  <span className='bg-red-primary mb-2 inline-block h-1.5 w-1.5 rounded-full'></span>
-                  <p className='text-md text-gray-900'>
-                    함께하면 즐거운 스트릿 댄스(2023-01-14 15:00~18:00) 예약이{' '}
-                    <b className='text-blue-primary font-normal'>승인</b>되었어요.
-                  </p>
-                  <span className='mt-1 text-xs text-gray-400'>1분 전</span>
-                  <button type='button' className='absolute top-2.5 right-3'>
-                    <Image src='/icons/ic_Close.svg' alt='알림 삭제' width={24} height={24} />
-                  </button>
-                </li>
+              {isPending && <LoadingSpinner />}
 
-                {/* 거절 알림 */}
-                <li className='noti-list'>
-                  <span className='bg-blue-primary mb-2 inline-block h-1.5 w-1.5 rounded-full'></span>
-                  <p className='text-md text-gray-900'>
-                    오페라 하우스 투어(2023-02-20 10:00~12:00) 예약이{' '}
-                    <b className='text-red-primary font-normal'>거절</b>되었어요.
-                  </p>
-                  <span className='mt-1 text-xs text-gray-400'>12시간 전</span>
-                  <button type='button' className='absolute top-2.5 right-3'>
-                    <Image src='/icons/ic_Close.svg' alt='알림 삭제' width={24} height={24} />
-                  </button>
-                </li>
+              {!isPending && isError && <p>알림 내역을 불러오지 못했습니다.</p>}
+
+              {data.notifications.length === 0 && <p>알림 내역이 없습니다.</p>}
+
+              <ol className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'>
+                {data.notifications.map((noti: Notification) => (
+                  <NotificationItem key={noti.id} item={noti} />
+                ))}
               </ol>
             </div>
           )}
