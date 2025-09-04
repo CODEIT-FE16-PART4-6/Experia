@@ -162,7 +162,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
             Array.from({ length: emptySlots }).map((_, index) => (
               <div
                 key={`placeholder-${index}`}
-                className='flex items-center justify-center bg-[#dddddd] text-gray-500'
+                className='flex items-center justify-center bg-gray-300 text-gray-500'
               >
                 <Image
                   src={`/images/ActivityPageImgs/${englishTag}.png`}

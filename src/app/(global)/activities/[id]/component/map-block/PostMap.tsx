@@ -34,7 +34,7 @@ const PostMap = ({ address }: { address: string }) => {
 
   const {
     data: coords,
-    isLoading,
+    isPending,
     error,
   } = useQuery({
     queryKey: ['geocode', address], // 주소별로 캐싱
@@ -59,7 +59,7 @@ const PostMap = ({ address }: { address: string }) => {
   }, []);
 
   if (!mounted) return null;
-  if (isLoading) {
+  if (isPending) {
     return (
       <>
         <div className='absolute top-1/2 left-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-4 border-gray-200 border-t-transparent'></div>
