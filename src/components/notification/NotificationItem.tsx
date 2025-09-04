@@ -7,7 +7,7 @@ interface Props {
 }
 
 const splitContent = (content: string) => {
-  const contentArr = content.match(/(.*예약이 )(승인|거절|취소|완료)(되었습니다\.)$/);
+  const contentArr = content.match(/(.*예약이 )(승인|거절)(되었습니다\.)$/);
   if (!contentArr) return;
   return [contentArr[1], contentArr[2], contentArr[3]]; // [앞문장, status, 뒷문장]
 };

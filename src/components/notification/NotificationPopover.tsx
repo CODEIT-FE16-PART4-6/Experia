@@ -31,8 +31,6 @@ const NotificationPopover = () => {
     queryFn: fetchMyNotifications,
   });
 
-  console.log(data);
-
   return (
     <Popover className='flex'>
       <PopoverButton>
