@@ -10,7 +10,7 @@ interface Props {
   data: ActivityDetail;
 }
 
-const CreateReservation = ({ data }: Props) => {
+const Reservation = ({ data }: Props) => {
   // ActivityDetail 타입에서 date 타입 추출
   type DateType = ActivityDetail['schedules'][number]['date'];
   // ActivityDetail 타입에서 scheduleId 타입 추출
@@ -27,7 +27,7 @@ const CreateReservation = ({ data }: Props) => {
       return date;
     });
   }, [data.schedules]);
-  //TODO . React DevTools로 컴포넌트 렌더링 시간을 측정하고, useMemo 사용 전후를 비교하기
+  //TODO [P6-127] . React DevTools로 컴포넌트 렌더링 시간을 측정하고, useMemo 사용 전후를 비교하기
   //const highlightDates = data.schedules.map(schedule => new Date(schedule.date))
 
   //DateType(string)을 Date 객체로 변환하는 함수
@@ -157,4 +157,4 @@ const CreateReservation = ({ data }: Props) => {
   );
 };
 
-export default CreateReservation;
+export default Reservation;
