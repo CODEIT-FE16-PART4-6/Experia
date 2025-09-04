@@ -19,6 +19,7 @@ const NotificationItem = ({ item, onDelete }: Props) => {
 
   return (
     <li className='noti-list'>
+      {/* // TODO [P6-137]: 새 알림 마크 - 알림 확인 시 제거 */}
       <span
         className={clsx('mb-2 inline-block h-1.5 w-1.5 rounded-full', {
           'bg-blue-primary': splitted[1] === '승인',
