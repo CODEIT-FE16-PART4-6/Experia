@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-
+import { DropdownMeatball } from '@/components/DropdownMeatball';
+import React, { useState } from 'react';
 interface PostType {
   tag: string;
   title: string;
@@ -9,7 +10,11 @@ interface PostType {
   reviewCount: number;
   address: string;
 }
+
 const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
+  const handleClick = () => {};
+  const handleDelete = () => {};
+  const handleEdit = () => {};
   return (
     <div className='flex flex-row justify-between p-4 md:p-6 lg:mx-auto lg:w-[1200px]'>
       <div className='flex flex-col'>
@@ -43,14 +48,7 @@ const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
         </div>
       </div>
       <div className='flex flex-col justify-center'>
-        <button>
-          <Image
-            src='/icons/ActivityPageImgs/ic_Kebab.svg'
-            alt='케밥 버튼'
-            width={40}
-            height={40}
-          />
-        </button>
+        <DropdownMeatball onEdit={handleEdit()} onDelete={handleDelete()} />
       </div>
     </div>
   );
