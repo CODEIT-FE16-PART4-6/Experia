@@ -43,8 +43,13 @@ const NotificationItem = ({ item, onDelete }: Props) => {
 
       <span className='mt-1 text-xs text-gray-400'>{formatRelativeTime(item.updatedAt)}</span>
 
-      <button type='button' className='absolute top-3 right-3' onClick={() => onDelete(item.id)}>
-        <Image src='/icons/ic_Close.svg' alt='알림 삭제' width={20} height={20} />
+      <button
+        type='button'
+        aria-label='알림 삭제'
+        className='absolute top-3 right-3'
+        onClick={() => onDelete(item.id)}
+      >
+        <Image src='/icons/ic_Close.svg' alt='' width={20} height={20} />
       </button>
     </li>
   );

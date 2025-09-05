@@ -95,7 +95,10 @@ const NotificationPopover = () => {
               {data && data.notifications.length === 0 && <p>알림 내역이 없습니다.</p>}
 
               {data && data.notifications.length > 0 && (
-                <ol className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'>
+                <ol
+                  aria-live='polite'
+                  className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'
+                >
                   {data.notifications.map((noti: Notification) => (
                     <NotificationItem key={noti.id} item={noti} onDelete={handleDelete} />
                   ))}
