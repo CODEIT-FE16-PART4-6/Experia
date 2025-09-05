@@ -125,6 +125,12 @@ const Reservation = ({ data }: Props) => {
   };
   return (
     <section>
+      <div className='mb-2 text-[32px] font-bold'>
+        ₩ {data.price.toLocaleString('ko-KR')}
+        <span className='text-[20px] font-normal text-gray-800'> / 인</span>
+      </div>
+      <hr />
+      <span>날짜</span>
       <div>
         <DatePicker
           selected={selectedDate}
@@ -138,13 +144,22 @@ const Reservation = ({ data }: Props) => {
       </div>
       {selectedDate && (
         <div>
-          {selectedDateSchedules.map(schedule => (
-            <button key={schedule.id} onClick={() => handleSelectSchedule(schedule.id)}>
-              {schedule.startTime}~{schedule.endTime}
-            </button> //날짜 선택시 나오는 선택가능한 시간대들
-          ))}
+          {selectedDateSchedules ? (
+            <>
+              <span>예약 가능한 시간</span>
+              {selectedDateSchedules.map(schedule => (
+                <button key={schedule.id} onClick={() => handleSelectSchedule(schedule.id)}>
+                  {schedule.startTime}~{schedule.endTime}
+                </button> //날짜 선택시 나오는 선택가능한 시간대들
+              ))}
+            </>
+          ) : (
+            <span>예약 가능한 시간이 없습니다.</span>
+          )}
         </div>
       )}
+      <hr />
+      <span>참여 인원 수</span>
       <div>
         <button onClick={handleDecrease}>-</button>
         <span>{personCount}명</span>
@@ -153,6 +168,11 @@ const Reservation = ({ data }: Props) => {
       <button disabled={!selectedSchedule} onClick={handleReservation}>
         예약하기
       </button>
+      <hr />
+      <div className='flex justify-between'>
+        <span>참여 인원 수</span>
+        <div> ₩ {(data.price * personCount).toLocaleString('ko-KR')}</div>
+      </div>
     </section>
   );
 };

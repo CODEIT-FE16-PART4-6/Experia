@@ -8,7 +8,7 @@ interface Props {
 const ReservateIn = ({ data }: Props) => {
   return (
     <>
-      <div className='hidden h-[423px] w-[251px] rounded-[10px] bg-[#b3b3b3] px-6 pt-6 pb-[18px] md:block lg:h-[746px] lg:w-[340px]'>
+      <div className='hidden h-[423px] w-[251px] rounded-[10px] border-[2px] border-solid border-gray-200 bg-white px-6 pt-6 pb-[18px] md:block lg:h-[746px] lg:w-[340px]'>
         <Reservation data={data} />
       </div>
     </>
