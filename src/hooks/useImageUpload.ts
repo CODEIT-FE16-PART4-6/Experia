@@ -71,6 +71,13 @@ const useImageUpload = (endpoint: string) => {
       return;
     }
 
+    // 파일 타입(MIME Type) 검증 (svg 업로드 에러 방지)
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('jpg, jpeg, png 파일만 업로드 가능합니다.');
+      return;
+    }
+
     setPreviewImage(file);
     setIsUploading(() => true);
 
