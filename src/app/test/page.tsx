@@ -1,8 +1,6 @@
 'use client';
 // import { DropdownSelect, Activity } from '@/components/DropdownSelect';
 import { DropdownMeatball } from '@/components/DropdownMeatball';
-import AddReviewModal from '@/components/reviews/AddReviewModal';
-import useModalStore from '@/stores/modalStore';
 import Button from '@/components/Button';
 
 // {/* UI 컴포넌트 테스트 페이지 */}
@@ -22,8 +20,6 @@ const TestPage = () => {
     // setSelectedActivityId(activity || null); // activity가 없으면 null을 설정
     // setSelectedActivity(activity || null);
   };
-
-  const openModal = useModalStore(state => state.openModal);
 
   //미트볼 관련 함수
   const handleEdit = () => {
@@ -45,18 +41,6 @@ const TestPage = () => {
       /> */}
       <h3>DropdownMeatball 컴포넌트</h3>
       <DropdownMeatball onEdit={handleEdit} onDelete={handleDelete} />
-
-      {/* 모달 */}
-      <section className='mt-10'>
-        <Button
-          type='button'
-          size='md'
-          className='w-auto'
-          onClick={() => openModal(<AddReviewModal />)}
-        >
-          모달 열기
-        </Button>
-      </section>
     </div>
   );
 };
