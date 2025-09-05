@@ -89,21 +89,21 @@
     @apply hover:text-primary px-3 py-2 transition-all hover:font-bold;
   }
 
-
   /* notification */
   .noti-list {
     @apply relative rounded-md bg-white px-3 py-4 break-keep;
 
-  /* form */
-  .form-header {
-    @apply mb-4;
-  }
+    /* form */
+    .form-header {
+      @apply mb-4;
+    }
 
-  .form-content {
-    @apply flex grow flex-col gap-6;
-  }
+    .form-content {
+      @apply flex grow flex-col gap-6;
+    }
 
-  .form-footer {
-    @apply sticky bottom-0;
+    .form-footer {
+      @apply sticky bottom-0;
+    }
   }
 }
