@@ -10,6 +10,7 @@ import SnbList from './Snb/SnbList';
 import { Input } from '@headlessui/react';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useCallback, useState } from 'react';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 const SNB_LIST = [
   {
@@ -37,14 +38,13 @@ const defaultProfileImage = require('@/assets/imgs/defaultProfile/default.png');
 
 const Snb = () => {
   const [profileImageUrl, setProfileImageUrl] = useState(defaultProfileImage);
-  const { uploadImage, handleChangeImage, fileRef, isUploading } = useImageUpload('users/me/image');
+  const { handleChangeImage, fileRef, isUploading } = useImageUpload('users/me/image');
 
   const handleImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const imageUrl = await handleChangeImage(e);
-      if (imageUrl) {
-        setProfileImageUrl(imageUrl);
-        console.log('이미지 업로드 성공', imageUrl);
+      const res = await handleChangeImage(e);
+      if (res) {
+        setProfileImageUrl(res.profileImageUrl);
       }
     },
     [handleChangeImage],
@@ -59,15 +59,19 @@ const Snb = () => {
     <nav>
       <div className='mb-6 flex items-center justify-center'>
         <div className='relative'>
-          <div className='overflow-hidden rounded-full'>
-            <Image
-              src={profileImageUrl}
-              alt='프로필사진'
-              width={160}
-              height={160}
-              className='rounded-full border-2 border-red-500'
-            />
-          </div>
+          <figure className='flex h-[160px] w-[160px] items-center justify-center overflow-hidden rounded-full'>
+            {isUploading ? (
+              <LoadingSpinner />
+            ) : (
+              <Image
+                src={profileImageUrl}
+                alt='프로필사진'
+                width={160}
+                height={160}
+                className='aspect-square object-cover'
+              />
+            )}
+          </figure>
           <button onClick={handleButtonClick} className='absolute right-[15px] bottom-[10px]'>
             <Image src='/icons/ic_edit.svg' alt='유저 사진 수정 버튼' width={44} height={44} />
           </button>

@@ -1,6 +1,11 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import { REQUEST_URL } from '@/utils/api-public';
 
+interface UploadedImage {
+  profileImageUrl?: string;
+  activityImageUrl?: string;
+}
+
 const MAX_SIZE = 1024 * 1024 * 5; // 5MB
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjczMDU0MywiZXhwIjoxNzU3OTQwMTQzLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.w-c24X9Jxf-2tWdpsIZ0SyE-RslOB6HqCpkkr6KXIzw';
@@ -11,7 +16,7 @@ const useImageUpload = (endpoint: string) => {
   const [previewImage, setPreviewImage] = useState<File | null>(null);
 
   // 이미지 업로드 함수
-  const fetchImage = async (file: File): Promise<string | undefined> => {
+  const fetchImage = async (file: File): Promise<UploadedImage | undefined> => {
     try {
       const URL = `${REQUEST_URL}/${endpoint}`;
 
@@ -36,8 +41,7 @@ const useImageUpload = (endpoint: string) => {
       });
 
       if (!res.ok) {
-        console.log('이미지 업로드 요청 에러!');
-        return;
+        throw new Error('이미지 업로드에 실패했습니다.');
       }
 
       const data = await res.json();
@@ -54,7 +58,7 @@ const useImageUpload = (endpoint: string) => {
   // input file onChange
   const handleChangeImage = (
     e: ChangeEvent<HTMLInputElement>,
-  ): Promise<string | undefined> | undefined => {
+  ): Promise<UploadedImage | undefined> | undefined => {
     if (!e.target.files) return; // 파일 객체 없을 때
     if (!e.target.files.length) return; // 이미지 업로드 취소시
 
