@@ -1,28 +1,44 @@
 'use client'
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import InputField from "@/components/InputField"
 import Image from "next/image"
+import debounce from "@/utils/debounce"
 
 interface SearchBarProps {
   onSearch: (query: string) => void
+  initialQuery?: string | null;
 }
 
-const SearchBarClient = ({ onSearch }: SearchBarProps) => {
-  const [query, setQuery] = useState('');
+const SearchBarClient = ({ onSearch, initialQuery }: SearchBarProps) => {
+  const [query, setQuery] = useState(initialQuery ?? '');
+  const debouncedOnSearchRef = useRef(debounce(onSearch, 500));
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = query.trim();
-    // 검색어가 빈 문자열이거나 공백만 있는 경우 전체 목록을 보여줌
-    onSearch(trimmed);
+  // 초기 검색어 반영
+  useEffect(() => {
+    setQuery(initialQuery ?? '');
+  }, [initialQuery]);
+
+  // query 변경 시 디바운스 검색 호출
+  useEffect(() => {
+    debouncedOnSearchRef.current(query);
+
+    // 컴포넌트 언마운트 시 디바운스 취소
+    return () => {
+      debouncedOnSearchRef.current.cancel();
+    };
+  }, [query]);
+
+  const handleSearch = () => {
+    onSearch(query.trim());
   }
 
-  // 검색어가 빈 문자열이 될 때 부모 컴포넌트의 onSearch를 호출!
-  useEffect(() => {
-    if (query === '') {
-      onSearch('')
+  // 엔터키
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch();
     }
-  }, [query, onSearch]);
+  }
 
   return (
     <section className="py-10 px-4 md:py-14 bg-gray-100">
@@ -31,19 +47,21 @@ const SearchBarClient = ({ onSearch }: SearchBarProps) => {
           세상의 모든 체험, Experia
         </h1>
 
-        <form onSubmit={handleSubmit} className="w-full">
+        <form onSubmit={e => e.preventDefault()} className="w-full">
           <div className="relative w-full">
             <InputField
               type="text"
               name="query"
               value={query}
               onChange={e => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="내가 원하는 체험은..."
               className="w-full rounded-full bg-white shadow py-5 pr-20 border border-transparent focus:border focus:border-nomad-black focus:outline-none focus:ring-0"
             />
             <button
-              type="submit"
+              type="button"
               aria-label="검색"
+              onClick={handleSearch}
               className="absolute right-2 top-1/2 -translate-y-1/2"
             >
               <Image
@@ -59,5 +77,5 @@ const SearchBarClient = ({ onSearch }: SearchBarProps) => {
     </section>
   )
 }
-
-export default SearchBarClient
+// React.memo로 감싸서 불필요한 리렌더링 방지
+export default React.memo(SearchBarClient);
