@@ -5,6 +5,8 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/signin',
   NOT_FOUND: '*',
+  MY_PAGE: '/mypage',
+  SIGN_UP: '/signup',
 };
 
 export const BREAKPOINTS = {
