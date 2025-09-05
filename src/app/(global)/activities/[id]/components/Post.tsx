@@ -11,14 +11,14 @@ type Activity = z.infer<typeof ActivityDetail>;
 type ActivityReviewList = z.infer<typeof ActivityReview>;
 
 interface ActivityProps {
-  data: Activity;
+  postData: Activity;
   reviewData: ActivityReviewList;
 }
 
-const ActivityPost = ({ data, reviewData }: ActivityProps) => {
+const ActivityPost = ({ postData, reviewData }: ActivityProps) => {
   const ActivityContent = {
-    ...data,
-    tag: data.category,
+    ...postData,
+    tag: postData.category,
   };
 
   return (
@@ -29,10 +29,12 @@ const ActivityPost = ({ data, reviewData }: ActivityProps) => {
         rating={ActivityContent.rating}
         reviewCount={ActivityContent.reviewCount}
         address={ActivityContent.address}
+        id={ActivityContent.id}
+        userId={ActivityContent.userId}
       />
       <PostImage
-        bannerImageUrl={data.bannerImageUrl}
-        subImages={data?.subImages || []}
+        bannerImageUrl={postData.bannerImageUrl}
+        subImages={postData?.subImages || []}
         tag={ActivityContent.tag}
       />
       <div className='md:mt-8 md:flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1152px] lg:gap-6'>
@@ -44,7 +46,7 @@ const ActivityPost = ({ data, reviewData }: ActivityProps) => {
           />
         </div>
         <div>
-          <ReservateIn data={data} />
+          <ReservateIn data={postData} />
         </div>
       </div>
     </main>

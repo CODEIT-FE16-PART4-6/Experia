@@ -1,15 +1,55 @@
 'use client';
-
+//img
 import Image from 'next/image';
+//comp
+import { DropdownMeatball } from '@/components/DropdownMeatball';
+import useModalStore from '@/stores/modalStore';
+import DeleteModal from '@/components/activities/Modals/DeleteModal';
+
+//hooks
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PostType {
+  id: number;
   tag: string;
   title: string;
   rating: number;
   reviewCount: number;
   address: string;
+  userId: number;
 }
-const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
+
+const PostHeader = ({ userId, id, tag, title, rating, reviewCount, address }: PostType) => {
+  const router = useRouter();
+  const openModal = useModalStore(state => state.openModal);
+  const closeModal = useModalStore(state => state.closeModal);
+  const [isMyPost, setIsMyPost] = useState(false);
+
+  useEffect(() => {
+    const authStoreData = localStorage.getItem('auth-store');
+    if (authStoreData) {
+      try {
+        const authStoreDataObj = JSON.parse(authStoreData);
+        console.log('로컬스토리지 my id : ', authStoreDataObj.state.user.id);
+        console.log('api 의 페이지 user ID', userId);
+        if (authStoreDataObj.state.user.id === userId) {
+          setIsMyPost(true);
+        }
+      } catch (error) {
+        console.log('로컬 데이터(auth-store) 파싱도중 에러 발생');
+      }
+    }
+  }, []); // 로컬 스토리지 => 클라이언트 사이드
+
+  const handleDelete = () => {
+    openModal(<DeleteModal title={title} onClose={closeModal} />);
+  }; // 삭제하기 버튼 클릭시
+
+  const handleEdit = () => {
+    router.push(`/mypage/my-activities/edit-activity/${id}`);
+  }; // 수정하기 버튼 클릭시
+
   return (
     <div className='flex flex-row justify-between p-4 md:p-6 lg:mx-auto lg:w-[1200px]'>
       <div className='flex flex-col'>
@@ -43,14 +83,7 @@ const PostHeader = ({ tag, title, rating, reviewCount, address }: PostType) => {
         </div>
       </div>
       <div className='flex flex-col justify-center'>
-        <button>
-          <Image
-            src='/icons/ActivityPageImgs/ic_Kebab.svg'
-            alt='케밥 버튼'
-            width={40}
-            height={40}
-          />
-        </button>
+        {isMyPost ? <DropdownMeatball onEdit={handleEdit} onDelete={handleDelete} /> : ''}
       </div>
     </div>
   );

@@ -65,5 +65,5 @@ export default async function Page({ params }: PageProps) {
 
   const reviewData = await initialGetReviews(id);
   console.log(reviewData);
-  return <Post data={Postdata} reviewData={reviewData} />;
+  return <Post postData={Postdata} reviewData={reviewData} />;
 }
