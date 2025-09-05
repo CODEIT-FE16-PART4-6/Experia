@@ -9,6 +9,7 @@ import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import Avatar from '@/components/ui/Avatar';
 import { useUserStore } from '@/stores/userStore';
 import { ROUTES } from '@/constants';
+import useLogout from '@/hooks/useLogout';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,7 +21,7 @@ const Header = () => {
     setDropdownOpen(prev => !prev);
   };
 
-  const handleLogout = useUserStore.getState().clearUser();
+  const logout = useLogout();
 
   useEffect(() => {
     scrollY > 100 ? setIsScrolled(true) : setIsScrolled(false);
@@ -67,7 +68,7 @@ const Header = () => {
                       </Link>
                       <div
                         className='group-hover:gray-100 flex h-[50px] w-full cursor-pointer flex-col justify-center px-2 py-2 text-center hover:bg-gray-200'
-                        onClick={() => handleLogout}
+                        onClick={() => logout}
                       >
                         로그아웃
                       </div>
