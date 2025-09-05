@@ -8,10 +8,10 @@ import { fetchServerData } from '@/utils/api-server';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback, Suspense } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-
+import ActivityListSkeleton from '../ui/Skeleton/ActivityListSkeleton';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return ITEM_PAGESIZE.lg;
@@ -22,7 +22,7 @@ const getPageSize = (width: number) => {
 const MainPageClient = ({ initialData }: { initialData: Activities }) => {
   const innerWidth = useWindowWidth();
   const [pageSize, setPageSize] = useState(ITEM_DEFAULT_PAGESIZE);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string | null>(null)
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   console.log('이니셜 데이터:', initialData)
@@ -30,33 +30,37 @@ const MainPageClient = ({ initialData }: { initialData: Activities }) => {
     if (innerWidth) setPageSize(getPageSize(innerWidth));
   }, [innerWidth,]);
 
+  // 검색어 변경 시 호출
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query.trim())
+  }, [])
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
     useSuspenseInfiniteQuery<
       Activities,
       Error,
       InfiniteData<Activities, unknown>,
-      [string, string, number],
+      [string, number, string | null],
       number | null
     >({
-      queryKey: ['activities', searchQuery, pageSize],
-      queryFn: ({ pageParam = null }) => {
-        const queryParams: { [key: string]: string | number } = {
-          method: 'cursor',
-          size: pageSize,
-        };
-        if (pageParam !== null) { queryParams.cursorId = pageParam; }
-        if (searchQuery) { queryParams.keyword = searchQuery; }
-
+      queryKey: ['activities', pageSize, searchQuery || null],
+      queryFn: ({ pageParam = null, queryKey }) => {
+        const [, , keyword] = queryKey
         return fetchServerData<Activities>({
           path: '/activities',
-          query: queryParams,
-        });
+          query: {
+            method: 'cursor',
+            cursorId: pageParam ?? undefined,
+            size: pageSize,
+            keyword: keyword || undefined,
+          },
+        })
       },
       initialPageParam: null,
-      getNextPageParam: lastPage => {
-        return lastPage.activities.length > 0 ? lastPage.cursorId : undefined;
-      },
-    });
+      initialData: searchQuery ? undefined : { pages: [initialData], pageParams: [null] },
+      getNextPageParam: lastPage =>
+        lastPage.activities.length > 0 ? lastPage.cursorId : undefined,
+    })
 
   useIntersectionObserver({
     target: loadMoreRef,
@@ -64,46 +68,45 @@ const MainPageClient = ({ initialData }: { initialData: Activities }) => {
     enabled: hasNextPage,
   });
 
+  // 모든 페이지의 활동 목록을 하나의 배열로 병합
+  const totalCount = data.pages.flatMap(page => page.activities).length;
   const isFetchingMore = hasNextPage && isFetchingNextPage;
-  const allActivities = data?.pages.flatMap(page => page.activities) ?? [];
-
-  const handleSearch = (query: string) => {
-    // 검색어 상태를 업데이트하여 TanStack Query가 새로운 검색 결과를 자동으로 불러오게 합니다.
-    setSearchQuery(query);
-  };
 
   return (
     <>
-      <SearchBarClient onSearch={handleSearch} />
+      <SearchBarClient onSearch={handleSearch} initialQuery={searchQuery} />
+
       <section className="mx-auto max-w-[1200px] mt-[34px] px-4">
         {searchQuery ? (
           <div className='mb-4'>
             <p className='text-black text-2xl md:text-3xl pb-2'>
               <strong className='text-nomad-black font-bold'>{searchQuery}</strong>으로 검색한 결과입니다.
             </p>
-            <p className='text-black text-base'>총 {allActivities.length}개의 결과</p>
+            <p className='text-black text-base'>총 {totalCount}개의 결과</p>
           </div>
         ) : (
-          <SectionTitle title="🌏 모든 체험" />
+          <SectionTitle title='🌏 모든 체험' />
         )}
 
-        <ActivityList data={data} />
-        <div ref={loadMoreRef} className='min-h-10'>
-          {isError && (
-            <p className='pb-16 text-center'>
-              목록 불러오기에 실패했습니다.
-              <button className='ml-2 underline underline-offset-4' onClick={() => fetchNextPage()}>
-                다시 시도
-              </button>
-            </p>
-          )}
-          {!allActivities.length && !isFetchingMore && searchQuery && (
-            <p className="text-center py-50 md:py-45 text-gray-600 text-xl md:text-2xl">
-              검색 결과가 없습니다.
-            </p>
-          )}
-          {isFetchingMore && <LoadingSpinner />}
-        </div>
+        <Suspense fallback={<ActivityListSkeleton />}>
+          <ActivityList data={data} />
+          <div ref={loadMoreRef} className='min-h-10'>
+            {searchQuery && totalCount === 0 && (
+              <p className="text-center text-gray-600 text-xl md:text-2xl py-55 ">
+                검색 결과가 없습니다.
+              </p>
+            )}
+            {isError && (
+              <p className='pb-16 text-center'>
+                목록 불러오기에 실패했습니다.
+                <button className='ml-2 underline underline-offset-4' onClick={() => fetchNextPage()}>
+                  다시 시도
+                </button>
+              </p>
+            )}
+            {isFetchingMore && <LoadingSpinner />}
+          </div>
+        </Suspense>
       </section>
     </>
   );
