@@ -18,6 +18,7 @@ const refreshAccessToken = async () => {
       return Promise.reject('로그인이 필요합니다.');
     }
 
+    // 토큰 재발급 요청
     const response = await fetch(`${REQUEST_URL}/auth/tokens`, {
       method: 'POST',
       headers: {
@@ -42,7 +43,7 @@ const refreshAccessToken = async () => {
   }
 };
 
-// fetch 래퍼 함수 (이 함수로 요청)
+// fetch 래퍼 함수 (외부에서 이 함수 사용)
 export const fetchData = async (endpoint: string, options: RequestInit = {}) => {
   let accessToken = localStorage.getItem('access_token');
   const headers = new Headers(options.headers);
