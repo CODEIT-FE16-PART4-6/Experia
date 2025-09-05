@@ -3,6 +3,10 @@ import Link from 'next/link';
 import { ReservationType } from '@/types/schema/reservationSchema';
 import { ActivityType } from '@/types/schema/activitiesSchema';
 import StarIcon from '@/assets/icons/ic_StarSmall.svg';
+import Button from '@/components/Button';
+import ReviewCreateModal from '@/components/review/ReviewCreateModal';
+import useModalStore from '@/stores/modalStore';
+
 interface ActivityCardProps {
   data: ReservationType | ActivityType;
   type: 'reservation' | 'activity';
@@ -20,36 +24,58 @@ const RESERVATION_STATUS = {
  * @description my-activities, my-reservations 페이지에서 사용
  */
 const ActivityCard = ({ data, type }: ActivityCardProps) => {
+  const openModal = useModalStore(state => state.openModal);
+
   if (type === 'reservation') {
     const reservation = data as ReservationType;
 
     return (
-      <div className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-2xl md:h-[156px] lg:h-[204px]'>
-        <div className='relative h-[128px] w-[128px] md:h-[156px] md:w-[156px] lg:h-[204px] lg:w-[204px]'>
-          <figure>
-            <Image
-              src={reservation.activity.bannerImageUrl}
-              alt='액티비티 배너 사진'
-              fill
-              className='object-cover'
-            />
-          </figure>
-        </div>
-        <div className=''>
-          <div>{RESERVATION_STATUS[reservation.status]}</div>
-          <div>{reservation.activity.title}</div>
+      <div className='flex h-auto w-full flex-wrap overflow-hidden rounded-2xl shadow-lg sm:h-[156px] sm:flex-nowrap lg:h-[204px]'>
+        <figure className='relative aspect-square h-auto w-full shrink-0 sm:h-[156px] sm:w-[156px] lg:h-[204px] lg:w-[204px]'>
+          <Image
+            src={reservation.activity.bannerImageUrl}
+            alt='액티비티 배너 사진'
+            fill
+            className='object-cover'
+          />
+        </figure>
 
-          <div className='flex gap-2'>
-            <div>{reservation.date}</div>
-            <span>·</span>
-            <div>
-              {reservation.startTime} - {reservation.endTime}
-            </div>
-            <span>·</span>
-            <div>{reservation.headCount}명</div>
+        <div className='w-full p-3 lg:p-5'>
+          <div className='flex flex-col lg:gap-2'>
+            <span className='text-md font-bold lg:text-base'>
+              {RESERVATION_STATUS[reservation.status]}
+            </span>
+            <h5 className='text-md w-[95%] truncate font-bold md:text-lg lg:text-xl'>
+              {reservation.activity.title}
+            </h5>
+            <span className='md:text-md text-xs text-gray-800 lg:text-lg'>
+              {reservation.date} · {reservation.startTime} - {reservation.endTime} ·
+              {reservation.headCount}명
+            </span>
           </div>
 
-          <div>₩ {reservation.totalPrice}</div>
+          <div className='mt-2 flex items-center justify-between md:mt-3.5'>
+            <h4 className='text-base font-medium md:text-xl lg:text-2xl'>
+              ₩{reservation.totalPrice}
+            </h4>
+
+            {reservation.status === 'pending' && (
+              <Button size='sm' className='w-auto sm:px-2 sm:py-1 md:px-6 md:py-2 lg:px-[42px]'>
+                예약 취소
+              </Button>
+            )}
+
+            {reservation.status === 'completed' && (
+              <Button
+                size='sm'
+                variant='POSITIVE'
+                className='w-auto sm:px-2 sm:py-1 md:px-6 md:py-2 lg:px-[42px]'
+                onClick={() => openModal(<ReviewCreateModal data={reservation} />)}
+              >
+                후기 작성
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -59,7 +85,7 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
     return (
       <Link
         href={`/mypage/my-activities/edit-activity/${data.id}`}
-        className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-2xl md:h-[156px] lg:h-[204px]'
+        className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-lg md:h-[156px] lg:h-[204px]'
       >
         <div className='relative h-[128px] w-[128px] md:h-[156px] md:w-[156px] lg:h-[204px] lg:w-[204px]'>
           <figure>
