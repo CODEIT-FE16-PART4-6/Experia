@@ -44,7 +44,7 @@ const refreshAccessToken = async () => {
 };
 
 // fetch 래퍼 함수 (외부에서 이 함수 사용)
-export const fetchData = async (endpoint: string, options: RequestInit = {}) => {
+const fetchClientData = async (endpoint: string, options: RequestInit = {}) => {
   let accessToken = localStorage.getItem('access_token');
   const headers = new Headers(options.headers);
 
@@ -115,3 +115,5 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   });
   failedQueue = [];
 };
+
+export default fetchClientData;
