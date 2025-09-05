@@ -79,12 +79,25 @@
   }
 
   input {
-    @apply w-full rounded-md border bg-white p-3.5 text-base outline-none transition-colors duration-300;
+    @apply w-full rounded-md border bg-white p-3.5 text-base transition-colors duration-300 outline-none;
   }
 }
 
 @layer components {
   .nav-list {
     @apply hover:text-primary px-3 py-2 transition-all hover:font-bold;
+  }
+
+  /* form */
+  .form-header {
+    @apply mb-4;
+  }
+
+  .form-content {
+    @apply flex grow flex-col gap-6;
+  }
+
+  .form-footer {
+    @apply sticky bottom-0;
   }
 }
