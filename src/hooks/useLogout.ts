@@ -8,8 +8,6 @@ const useLogout = () => {
   const clearUser = useUserStore(state => state.clearUser);
   const router = useRouter();
   const logout = () => {
-    console.log('로그아웃클릭');
-
     clearUser();
 
     localStorage.removeItem('access_token');
