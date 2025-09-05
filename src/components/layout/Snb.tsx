@@ -7,6 +7,9 @@ import MyActivityIcon from '@/assets/icons/ic_mypage3.svg';
 import ReservationIcon from '@/assets/icons/ic_mypage4.svg';
 import { PATHS } from '@/constants';
 import SnbList from './Snb/SnbList';
+import { Input } from '@headlessui/react';
+import useImageUpload from '@/hooks/useImageUpload';
+import { useCallback, useState } from 'react';
 
 const SNB_LIST = [
   {
@@ -30,16 +33,51 @@ const SNB_LIST = [
     icon: ReservationIcon,
   },
 ];
+const defaultProfileImage = require('@/assets/imgs/defaultProfile/default.png');
 
 const Snb = () => {
+  const [profileImageUrl, setProfileImageUrl] = useState(defaultProfileImage);
+  const { uploadImage, handleChangeImage, fileRef, isUploading } = useImageUpload('users/me/image');
+
+  const handleImageUpload = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const imageUrl = await handleChangeImage(e);
+      if (imageUrl) {
+        setProfileImageUrl(imageUrl);
+        console.log('이미지 업로드 성공', imageUrl);
+      }
+    },
+    [handleChangeImage],
+  );
+
+  const handleButtonClick = () => {
+    console.log('버튼 클릭');
+    fileRef.current?.click();
+  };
+
   return (
     <nav>
       <div className='mb-6 flex items-center justify-center'>
         <div className='relative'>
-          <Image src='/images/img_user_mock.png' alt='유저 목이미지' width={160} height={160} />
-          <button className='absolute right-[15px] bottom-[10px]'>
+          <div className='overflow-hidden rounded-full'>
+            <Image
+              src={profileImageUrl}
+              alt='프로필사진'
+              width={160}
+              height={160}
+              className='rounded-full border-2 border-red-500'
+            />
+          </div>
+          <button onClick={handleButtonClick} className='absolute right-[15px] bottom-[10px]'>
             <Image src='/icons/ic_edit.svg' alt='유저 사진 수정 버튼' width={44} height={44} />
           </button>
+          <Input
+            type='file'
+            className='hidden'
+            accept='image/*'
+            ref={fileRef}
+            onChange={handleImageUpload}
+          />
         </div>
       </div>
 
