@@ -68,7 +68,7 @@ const Header = () => {
                       </Link>
                       <div
                         className='group-hover:gray-100 flex h-[50px] w-full cursor-pointer flex-col justify-center px-2 py-2 text-center hover:bg-gray-200'
-                        onClick={() => logout}
+                        onClick={() => logout()}
                       >
                         로그아웃
                       </div>
