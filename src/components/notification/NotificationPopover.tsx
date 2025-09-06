@@ -26,14 +26,11 @@ const NotificationPopover = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  // 알림 마지막 확인 시각을 state에 보관 (초기값은 localStorage에서 불러오기)
+  // 알림 마지막 확인 시각
   const [lastReadNotiAt, setLastReadNotiAt] = useState<string | null>(() => {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem('lastReadNotiAt');
   });
-
-  // 새 알림 여부
-  const [hasNewNotifications, setHasNewNotifications] = useState(false);
 
   // get notifications
   const { data, isError, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -50,22 +47,29 @@ const NotificationPopover = () => {
       getNextPageParam: lastPage => lastPage.cursorId,
     });
 
-  // data 또는 lastReadNotiAt이 바뀔 때마다 새 알림 여부 체크
   useEffect(() => {
     if (!data) return;
     const all = data.pages.flatMap(p => p.notifications);
+
     const hasNew = lastReadNotiAt
       ? all.some(n => new Date(n.createdAt) > new Date(lastReadNotiAt))
       : all.length > 0;
-    setHasNewNotifications(hasNew);
   }, [data, lastReadNotiAt]);
 
-  // 팝오버 열 때 읽음 처리: state와 localStorage를 함께 갱신
+  useEffect(() => {
+    if (popoverOpen) {
+      const timer = setTimeout(() => {
+        const now = new Date().toISOString();
+
+        setLastReadNotiAt(now);
+        localStorage.setItem('lastReadNotiAt', now);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [popoverOpen, queryClient]);
+
   const handlePopoverOpen = () => {
-    const now = new Date().toISOString();
-    setLastReadNotiAt(now);
-    localStorage.setItem('lastReadNotiAt', now);
-    setHasNewNotifications(false); // UI 반영
     setPopoverOpen(true);
   };
 
@@ -76,7 +80,12 @@ const NotificationPopover = () => {
         method: 'DELETE',
       });
 
+      if (res && res.status === 204) {
+        return;
+      }
+
       if (!res.ok) {
+        console.log(res);
         throw new Error('알림 삭제에 실패했습니다.');
       }
     },
@@ -97,6 +106,16 @@ const NotificationPopover = () => {
   // 알림 전체 합치기
   const notifications = data?.pages.flatMap(page => page.notifications) ?? [];
   const totalCount = data?.pages[0]?.totalCount ?? 0;
+
+  const hasNewNotifications =
+    lastReadNotiAt === null ||
+    notifications.some(n => new Date(n.createdAt) > new Date(lastReadNotiAt));
+
+  const handlePopoverClose = () => {
+    const now = new Date().toISOString();
+    setLastReadNotiAt(now);
+    localStorage.setItem('lastReadNotiAt', now);
+  };
 
   useIntersectionObserver({
     target: loadMoreRef,
@@ -141,7 +160,10 @@ const NotificationPopover = () => {
                 <h2 className='text-lg font-bold text-black'>{`알림 ${totalCount || 0}개`}</h2>
                 <button
                   type='button'
-                  onClick={() => close()}
+                  onClick={() => {
+                    handlePopoverClose();
+                    close();
+                  }}
                   className='rounded-md p-2 text-sm text-gray-500 transition-colors hover:bg-[#C5CECB]'
                 >
                   <NotiCloseIcon />
@@ -158,16 +180,15 @@ const NotificationPopover = () => {
                   className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'
                 >
                   {notifications.map((noti: Notification) => {
-                    const isUnread =
-                      !popoverOpen &&
-                      (lastReadNotiAt === null ||
-                        new Date(noti.createdAt) > new Date(lastReadNotiAt));
+                    const isRead =
+                      lastReadNotiAt === null ||
+                      new Date(noti.createdAt) <= new Date(lastReadNotiAt);
 
                     return (
                       <NotificationItem
                         key={noti.id}
                         item={noti}
-                        isUnread={isUnread} // ✅ 추가
+                        isRead={isRead}
                         onDelete={handleDelete}
                       />
                     );

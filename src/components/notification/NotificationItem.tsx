@@ -2,11 +2,10 @@ import Image from 'next/image';
 import clsx from 'clsx';
 import { Notification } from '@/types/schema/notificationSchema';
 import formatRelativeTime from '@/utils/formatter/formatRelativeTime';
-import { useEffect } from 'react';
 
 interface Props {
   item: Notification;
-  isUnread?: boolean;
+  isRead?: boolean;
   onDelete: (id: number) => void;
 }
 
@@ -17,18 +16,17 @@ const splitContent = (content: string) => {
   return [prefix, status, suffix]; // [앞문장, status, 뒷문장]
 };
 
-const NotificationItem = ({ item, isUnread, onDelete }: Props) => {
+const NotificationItem = ({ item, isRead, onDelete }: Props) => {
   const splitted = splitContent(item.content) || '';
 
   return (
     <li className='noti-list'>
-      {/* 🔵 알림 상태 표시: 읽지 않은 알림만 보여주기 */}
       <span
-        className={clsx('mb-2 h-1.5 w-1.5 rounded-full', {
+        className={clsx('status-dot mb-2 h-1.5 w-1.5 rounded-full', {
           'bg-blue-primary': splitted[1] === '승인',
           'bg-red-primary': splitted[1] === '거절',
-          hidden: !isUnread, // ✅ 읽음이면 숨김
-          'inline-block': isUnread, // ✅ 안읽음이면 보임
+          hidden: isRead,
+          'inline-block': !isRead,
         })}
       ></span>
 
