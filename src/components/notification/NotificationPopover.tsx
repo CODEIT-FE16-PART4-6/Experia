@@ -24,6 +24,7 @@ const NotificationPopover = () => {
   const queryClient = useQueryClient();
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   // 알림 마지막 확인 시각을 state에 보관 (초기값은 localStorage에서 불러오기)
   const [lastReadNotiAt, setLastReadNotiAt] = useState<string | null>(() => {
@@ -65,6 +66,7 @@ const NotificationPopover = () => {
     setLastReadNotiAt(now);
     localStorage.setItem('lastReadNotiAt', now);
     setHasNewNotifications(false); // UI 반영
+    setPopoverOpen(true);
   };
 
   // delete notification
@@ -155,9 +157,21 @@ const NotificationPopover = () => {
                   aria-live='polite'
                   className='flex max-h-[400px] flex-col gap-2 overflow-y-auto'
                 >
-                  {notifications.map((noti: Notification) => (
-                    <NotificationItem key={noti.id} item={noti} onDelete={handleDelete} />
-                  ))}
+                  {notifications.map((noti: Notification) => {
+                    const isUnread =
+                      !popoverOpen &&
+                      (lastReadNotiAt === null ||
+                        new Date(noti.createdAt) > new Date(lastReadNotiAt));
+
+                    return (
+                      <NotificationItem
+                        key={noti.id}
+                        item={noti}
+                        isUnread={isUnread} // ✅ 추가
+                        onDelete={handleDelete}
+                      />
+                    );
+                  })}
                 </ol>
               )}
 
@@ -177,7 +191,7 @@ const NotificationPopover = () => {
                 {isFetchingMore && <LoadingSpinner />}
 
                 {!hasNextPage && notifications.length > 0 && (
-                  <p className='mt-2 text-center text-gray-500'>모든 알림을 불러왔습니다.</p>
+                  <p className='text-md text-primary py-2 text-center'>모든 알림을 불러왔습니다.</p>
                 )}
               </div>
             </div>
