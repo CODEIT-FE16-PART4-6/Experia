@@ -11,7 +11,6 @@ import { ROUTES } from '@/constants';
 import useLogout from '@/hooks/useLogout';
 import NotificationPopover from '@/components/notification/NotificationPopover';
 
-
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollY = useScrollY();
@@ -43,41 +42,6 @@ const Header = () => {
         </Link>
         <nav className='relative flex gap-3 font-medium text-black'>
           {user ? (
-            <>
-              <ul className='flex items-center divide-x divide-gray-300'>
-                <li className='flex pr-3 md:pr-5'>
-                  <button>
-                    <AlarmIcon className='hover:text-primary text-gray-700 transition-colors' />
-                  </button>
-                </li>
-                <li className='pl-3 md:pl-5'>
-                  <button
-                    type='button'
-                    className='hover:text-primary flex items-center gap-2.5 transition-colors'
-                    onClick={handleProfileClick}
-                  >
-                    <Avatar imgSrc={user.profileImageUrl ?? null} size='md' />
-                    {user.nickname}
-                  </button>
-                  {DropdownOpen && (
-                    <div className='group absolute top-10 right-2 z-50 mt-2 w-40 overflow-hidden rounded-md border border-gray-300 bg-white shadow-2xl'>
-                      <Link
-                        href={ROUTES.MY_PAGE}
-                        className='flex h-[50px] w-full cursor-pointer flex-col justify-center border-b border-gray-300 px-2 py-2 text-center hover:bg-gray-200'
-                      >
-                        마이페이지
-                      </Link>
-                      <div
-                        className='group-hover:gray-100 flex h-[50px] w-full cursor-pointer flex-col justify-center px-2 py-2 text-center hover:bg-gray-200'
-                        onClick={() => logout()}
-                      >
-                        로그아웃
-                      </div>
-                    </div>
-                  )}
-                </li>
-              </ul>
-            </>
             <ul className='flex items-center divide-x divide-gray-300'>
               <li className='flex pr-3 md:pr-5'>
                 <NotificationPopover />
@@ -91,6 +55,22 @@ const Header = () => {
                   <Avatar imgSrc={user.profileImageUrl ?? null} size='md' />
                   {user.nickname}
                 </button>
+                {DropdownOpen && (
+                  <div className='group absolute top-10 right-2 z-50 mt-2 w-40 overflow-hidden rounded-md border border-gray-300 bg-white shadow-2xl'>
+                    <Link
+                      href={ROUTES.MY_PAGE}
+                      className='flex h-[50px] w-full cursor-pointer flex-col justify-center border-b border-gray-300 px-2 py-2 text-center hover:bg-gray-200'
+                    >
+                      마이페이지
+                    </Link>
+                    <div
+                      className='group-hover:gray-100 flex h-[50px] w-full cursor-pointer flex-col justify-center px-2 py-2 text-center hover:bg-gray-200'
+                      onClick={() => logout()}
+                    >
+                      로그아웃
+                    </div>
+                  </div>
+                )}
               </li>
             </ul>
           ) : (
