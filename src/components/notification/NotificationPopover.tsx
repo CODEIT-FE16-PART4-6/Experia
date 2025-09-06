@@ -10,10 +10,12 @@ import NotificationItem from './NotificationItem';
 import { Notifications, Notification } from '@/types/schema/notificationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import { NOTIFICATIONS_PER_PAGE } from '@/constants';
 
 const fetchMyNotifications = async (pageParam: number | null = null) => {
   const cursorQuery = pageParam !== null ? `&cursorId=${pageParam}` : '';
-  const data = (await fetchClientData(`/my-notifications?size=1${cursorQuery}`)) || [];
+  const data =
+    (await fetchClientData(`/my-notifications?size=${NOTIFICATIONS_PER_PAGE}${cursorQuery}`)) || [];
   return data;
 };
 
