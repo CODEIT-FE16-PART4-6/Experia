@@ -8,6 +8,7 @@ export interface UserState {
   user: User | null;
   setUser: (user: User | null) => void;
   updateUser: (updates: Partial<User>) => void;
+  updateProfileImage: (profileImageUrl: string) => void;
   clearUser: () => void;
 }
 
@@ -24,6 +25,12 @@ export const useUserStore = create<UserState>()(
       updateUser: updates =>
         set(state => ({
           user: state.user ? { ...state.user, ...updates } : null,
+        })),
+
+      // 액션: 프로필 이미지 업데이트
+      updateProfileImage: profileImageUrl =>
+        set(state => ({
+          user: state.user ? { ...state.user, profileImageUrl } : null,
         })),
 
       // 액션: 로그아웃
