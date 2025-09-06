@@ -1,10 +1,15 @@
 'use client';
 
+// import '@/app/globals.css';
 import { MyActivitiesDto } from '@/utils/api-public/api';
-import { FindAllMyActivities } from '@/utils/api-public/api-my-activities.api';
+import {
+  FindAllMyActivities,
+  FindAllMyActivitiesData,
+} from '@/utils/api-public/api-my-activities.api';
 import { useEffect, useState } from 'react';
 import CalenderBoard from './calenderBoard/CalenderBoard';
 import CalenderArrow from './calenderSelect/calenderArrow/CalenderArrow';
+import SelectMyActivity from './selectMyActivity/SelectMyActivity';
 
 const today: Date = new Date();
 
@@ -14,15 +19,41 @@ const CalenderPage = () => {
     month: today.getMonth(),
   });
 
+  console.log('CalenderPage start');
+
   const [activities, activitiesSet] = useState<MyActivitiesDto[]>([]);
+  const [activitiesList, activitiesListSet] = useState<{ id: number; activityName: string }[]>([]);
+  const [activityId, activityIdSet] = useState<number>(0);
+
+  useEffect(() => {
+    (async () => {
+      console.log('CalenderPage activitiesList  start');
+      const { body } = await FindAllMyActivitiesData(1000);
+      console.log('CalenderPage activitiesList : ', body);
+      if (body.totalCount > 0) {
+        activitiesListSet(
+          body.activities.map(ele => {
+            const listEle = {
+              id: ele.id,
+              activityName: ele.title,
+            };
+            console.log('activitiesListSet listEle : ', listEle);
+            return listEle;
+          }),
+        );
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
         const apiMonth = date.month + 1;
-        const { body } = await FindAllMyActivities(5699, date.year, apiMonth);
-        if (!cancelled && Array.isArray(body)) activitiesSet(body as MyActivitiesDto[]);
+        if (activityId > 0) {
+          const { body } = await FindAllMyActivities(activityId, date.year, apiMonth);
+          if (!cancelled && Array.isArray(body)) activitiesSet(body as MyActivitiesDto[]);
+        }
       } catch (e) {
         console.error(e);
         if (!cancelled) activitiesSet([]);
@@ -31,7 +62,7 @@ const CalenderPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [date.year, date.month]);
+  }, [date.year, date.month, activityId]);
 
   console.log('CalenderPage date : ', date);
 
@@ -57,11 +88,17 @@ const CalenderPage = () => {
     dateSet({ year, month });
   };
 
+  const handleSetActivityId = (id: number) => {
+    if (id != activityId) {
+      activityIdSet(id);
+    }
+  };
+
   console.log('나의 체험에 예약한 리스트 : ', activities);
 
   return (
-    <div className='mx-[17px] mb-4 sm:mx-[23px] lg:mx-[352px]'>
-      <h1>Calender Page</h1>
+    <div className='mx-[17px] mb-4 sm:mx-[23px]'>
+      <SelectMyActivity list={activitiesList} onChange={handleSetActivityId} />
       <CalenderArrow year={date.year} month={date.month} onClick={handelSetMonth} />
       <CalenderBoard year={date.year} month={date.month} activities={activities} />
     </div>

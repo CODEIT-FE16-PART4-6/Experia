@@ -67,7 +67,7 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
     let exist: boolean = false;
     for (let j = 0; j < activities.length; j++) {
       const oneDay: number = Number(activities[j].date.split('-')[2]);
-      console.log('oneDay : ', activities[j]);
+      // console.log('oneDay : ', activities[j]);
       if (i == oneDay) {
         arr.push(
           <CalenderOnePartComponent

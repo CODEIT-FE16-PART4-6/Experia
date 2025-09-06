@@ -1,15 +1,15 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
-import useScrollY from '@/hooks/useScrollY';
-import { useEffect, useState } from 'react';
-import clsx from 'clsx';
-import Avatar from '@/components/ui/Avatar';
-import { useUserStore } from '@/stores/userStore';
 import { ROUTES } from '@/constants';
 import useLogout from '@/hooks/useLogout';
-import NotificationPopover from '@/components/notification/NotificationPopover';
+import useScrollY from '@/hooks/useScrollY';
+import { useUserStore } from '@/stores/userStore';
+import clsx from 'clsx';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import NotificationPopover from '../notification/NotificationPopover';
+import Avatar from '../ui/Avatar';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
