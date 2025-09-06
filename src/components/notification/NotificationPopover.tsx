@@ -1,6 +1,7 @@
 'use client';
 
-import { Fragment, useRef } from 'react';
+import { Fragment, useRef, useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { Popover, PopoverPanel, PopoverButton, Transition } from '@headlessui/react';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
@@ -24,6 +25,15 @@ const NotificationPopover = () => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // 알림 마지막 확인 시각을 state에 보관 (초기값은 localStorage에서 불러오기)
+  const [lastReadNotiAt, setLastReadNotiAt] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('lastReadNotiAt');
+  });
+
+  // 새 알림 여부
+  const [hasNewNotifications, setHasNewNotifications] = useState(false);
+
   // get notifications
   const { data, isError, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<
@@ -39,6 +49,24 @@ const NotificationPopover = () => {
       getNextPageParam: lastPage => lastPage.cursorId,
     });
 
+  // data 또는 lastReadNotiAt이 바뀔 때마다 새 알림 여부 체크
+  useEffect(() => {
+    if (!data) return;
+    const all = data.pages.flatMap(p => p.notifications);
+    const hasNew = lastReadNotiAt
+      ? all.some(n => new Date(n.createdAt) > new Date(lastReadNotiAt))
+      : all.length > 0;
+    setHasNewNotifications(hasNew);
+  }, [data, lastReadNotiAt]);
+
+  // 팝오버 열 때 읽음 처리: state와 localStorage를 함께 갱신
+  const handlePopoverOpen = () => {
+    const now = new Date().toISOString();
+    setLastReadNotiAt(now);
+    localStorage.setItem('lastReadNotiAt', now);
+    setHasNewNotifications(false); // UI 반영
+  };
+
   // delete notification
   const deleteNotification = useMutation({
     mutationFn: async (notiId: number) => {
@@ -51,7 +79,7 @@ const NotificationPopover = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notification'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
     onError: err => {
       alert(err.message);
@@ -77,8 +105,18 @@ const NotificationPopover = () => {
 
   return (
     <Popover className='flex'>
-      <PopoverButton>
-        <AlarmIcon className='hover:text-primary text-gray-700 transition-colors' />
+      <PopoverButton onClick={handlePopoverOpen} aria-label='알림 확인하기' className='relative'>
+        <AlarmIcon
+          className={clsx('hover:text-primary text-gray-700 transition-colors', {
+            'text-primary hover:text-primary-dark': hasNewNotifications,
+          })}
+        />
+        <span
+          className={clsx(
+            'absolute top-0 right-0 h-[10px] w-[10px] rounded-full border-2 border-white bg-red-500',
+            hasNewNotifications ? 'block' : 'hidden',
+          )}
+        ></span>
       </PopoverButton>
 
       <Transition
@@ -135,7 +173,12 @@ const NotificationPopover = () => {
                     </button>
                   </p>
                 )}
+
                 {isFetchingMore && <LoadingSpinner />}
+
+                {!hasNextPage && notifications.length > 0 && (
+                  <p className='mt-2 text-center text-gray-500'>모든 알림을 불러왔습니다.</p>
+                )}
               </div>
             </div>
           )}
