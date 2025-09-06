@@ -1,9 +1,7 @@
 import { fetchServerData } from '@/utils/api-server';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { ITEM_DEFAULT_PAGESIZE } from '@/constants';
-import MainPageClient from '@/components/activities/MainPage.client';
-import { Suspense } from 'react';
-import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
+import SearchContainer from '@/components/activities/SearchContainer';
 
 const fetchActivities = async ({ page, size }: { page: number; size: number }) => {
   const data = await fetchServerData<Activities>({
@@ -21,9 +19,7 @@ const MainPage = async () => {
 
   return (
     <main>
-      <Suspense fallback={<ActivityListSkeleton />}>
-        <MainPageClient initialData={initialData} />
-      </Suspense>
+      <SearchContainer initialData={initialData} />
     </main>
   );
 };
