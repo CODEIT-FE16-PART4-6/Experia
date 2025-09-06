@@ -6,6 +6,9 @@ import StarIcon from '@/assets/icons/ic_StarSmall.svg';
 import Button from '@/components/Button';
 import ReviewCreateModal from '@/components/review/ReviewCreateModal';
 import useModalStore from '@/stores/modalStore';
+import { DropdownMeatball } from '@/components/DropdownMeatball';
+import DeleteModal from '@/components/activities/Modals/DeleteModal';
+import { useRouter } from 'next/navigation';
 
 interface ActivityCardProps {
   data: ReservationType | ActivityType;
@@ -24,6 +27,8 @@ const RESERVATION_STATUS = {
  * @description my-activities, my-reservations 페이지에서 사용
  */
 const ActivityCard = ({ data, type }: ActivityCardProps) => {
+  const router = useRouter();
+  const closeModal = useModalStore(state => state.closeModal);
   const openModal = useModalStore(state => state.openModal);
 
   if (type === 'reservation') {
@@ -82,29 +87,48 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
   } else if (type === 'activity') {
     const activity = data as ActivityType;
 
+    const handleDelete = () => {
+      openModal(<DeleteModal title={activity.title} onClose={closeModal} />);
+    }; // 삭제하기 버튼 클릭시
+
+    const handleEdit = () => {
+      router.push(`/mypage/my-activities/edit-activity/${data.id}`);
+    }; // 수정하기 버튼 클릭시
+
     return (
-      <Link
-        href={`/mypage/my-activities/edit-activity/${data.id}`}
-        className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-lg md:h-[156px] lg:h-[204px]'
-      >
-        <div className='relative h-[128px] w-[128px] md:h-[156px] md:w-[156px] lg:h-[204px] lg:w-[204px]'>
-          <figure>
-            <Image
-              src={activity.bannerImageUrl}
-              alt='액티비티 배너 사진'
-              fill
-              className='object-cover'
-            />
-          </figure>
+      <div className='relative'>
+        <Link
+          href={`/mypage/my-activities/edit-activity/${data.id}`}
+          className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-lg md:h-[156px] lg:h-[204px]'
+        >
+          <div className='relative h-[128px] w-[128px] md:h-[156px] md:w-[156px] lg:h-[204px] lg:w-[204px]'>
+            <figure>
+              <Image
+                src={activity.bannerImageUrl}
+                alt='액티비티 배너 사진'
+                fill
+                className='object-cover'
+              />
+            </figure>
+          </div>
+          <div className='flex flex-col justify-between px-6 py-[14px]'>
+            <div>
+              <div className='flex'>
+                <StarIcon />
+                <div>{activity.rating}</div>
+                <div>({activity.reviewCount})</div>
+              </div>
+              <div>{activity.title}</div>
+            </div>
+            <div className='flex justify-between'>
+              <div>₩ {activity.price}/인</div>
+            </div>
+          </div>
+        </Link>
+        <div className='absolute right-[24px] bottom-[14px]'>
+          <DropdownMeatball onEdit={handleEdit} onDelete={handleDelete} />
         </div>
-        <div className=''>
-          <StarIcon />
-          <div>{activity.rating}</div>
-          <div>({activity.reviewCount})</div>
-          <div>{activity.title}</div>
-          <div>₩ {activity.price}/인</div>
-        </div>
-      </Link>
+      </div>
     );
   }
 };
