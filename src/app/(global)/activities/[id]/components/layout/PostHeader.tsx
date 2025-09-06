@@ -43,7 +43,9 @@ const PostHeader = ({ userId, id, tag, title, rating, reviewCount, address }: Po
   }, []); // 로컬 스토리지 => 클라이언트 사이드
 
   const handleDelete = () => {
-    openModal(<DeleteModal title={title} onClose={closeModal} />);
+    openModal(
+      <DeleteModal reDirectPage={'/'} activityId={id} title={title} onClose={closeModal} />,
+    );
   }; // 삭제하기 버튼 클릭시
 
   const handleEdit = () => {
