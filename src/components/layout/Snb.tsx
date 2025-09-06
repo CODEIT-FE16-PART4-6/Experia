@@ -38,7 +38,7 @@ const defaultProfileImage = require('@/assets/imgs/defaultProfile/default.png');
 
 const Snb = () => {
   const [profileImageUrl, setProfileImageUrl] = useState(defaultProfileImage);
-  const { handleChangeImage, fileRef, isUploading } = useImageUpload('users/me/image');
+  const { handleChangeImage, fileRef, isUploading } = useImageUpload('/users/me/image');
 
   const handleImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
