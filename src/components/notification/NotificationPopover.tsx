@@ -5,23 +5,13 @@ import { Popover, PopoverPanel, PopoverButton, Transition } from '@headlessui/re
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { REQUEST_URL } from '@/utils/api-public';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import NotificationItem from './NotificationItem';
 import { Notifications, Notification } from '@/types/schema/notificationSchema';
-
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1Njk3NjE2OCwiZXhwIjoxNzU4MTg1NzY4LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.lePtE130uzXS1OoDUpDFSizdbe0g2inepQgioD2FhsY';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
 const fetchMyNotifications = async () => {
-  const res = await fetch(`${REQUEST_URL}/my-notifications`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = (await res.json()) || [];
+  const data = (await fetchClientData(`/my-notifications`)) || [];
   return data;
 };
 
@@ -37,11 +27,8 @@ const NotificationPopover = () => {
   // delete notification
   const deleteNotification = useMutation({
     mutationFn: async (notiId: number) => {
-      const res = await fetch(`${REQUEST_URL}/my-notifications/${notiId}`, {
+      const res = await fetchClientData(`/my-notifications/${notiId}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
 
       if (!res.ok) {
