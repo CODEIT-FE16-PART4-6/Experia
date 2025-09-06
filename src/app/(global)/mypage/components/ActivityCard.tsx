@@ -83,6 +83,7 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
     const activity = data as ActivityType;
 
     return (
+      //TODO 민준님 드롭다운 작업 영역 액티비티
       <Link
         href={`/mypage/my-activities/edit-activity/${data.id}`}
         className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-lg md:h-[156px] lg:h-[204px]'
