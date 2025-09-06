@@ -6,7 +6,7 @@ import ImageUploadButton from './ImageUploadButton';
 import useImageUpload from '@/hooks/useImageUpload';
 
 interface SubImage {
-  id?: number;
+  id?: number; // 새로 업로드한 이미지는 id가 없을 수 있음
   imageUrl: string;
 }
 
@@ -18,29 +18,17 @@ interface MultiImageUploaderProps {
 }
 
 const MultiImageUploader = ({ images, maxCount = 4, error, onChange }: MultiImageUploaderProps) => {
-  const { handleChangeImage, fileRef, isUploading } = useImageUpload('/activities/image');
+  const { handleChangeImage, fileRef, isUploading } = useImageUpload();
 
   const handleImageUpload = () => {
-    if ((images ?? []).length >= maxCount) {
-      alert(`상세 이미지는 ${maxCount}개까지 등록할 수 있습니다.`);
-      return;
-    }
     fileRef.current?.click();
   };
 
   const handleImageUrl = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
       const url = await handleChangeImage(e);
-      const imageUrl = url?.activityImageUrl;
-
-      if (!imageUrl) {
-        // undefined 또는 빈값일 경우
-        alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-        return;
-      }
-
       if (url) {
-        const newImages = [...(images ?? []), { imageUrl }]; // null이면 빈 배열로 시작
+        const newImages = [...(images ?? []), { imageUrl: url }]; // null이면 빈 배열로 시작
         if (newImages.length > maxCount) {
           alert(`상세 이미지는 ${maxCount}개까지 등록할 수 있습니다.`);
           return;
