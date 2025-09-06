@@ -18,7 +18,7 @@ const useImageUpload = (endpoint: string) => {
   // 이미지 업로드 함수
   const fetchImage = async (file: File): Promise<UploadedImage | undefined> => {
     try {
-      const URL = `${REQUEST_URL}/${endpoint}`;
+      const URL = `${REQUEST_URL}${endpoint}`;
 
       // 한글 파일명 오류 방지 인코딩
       const timestamp = Date.now();
