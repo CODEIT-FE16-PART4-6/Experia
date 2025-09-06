@@ -44,7 +44,17 @@ const PostHeader = ({ userId, id, tag, title, rating, reviewCount, address }: Po
 
   const handleDelete = () => {
     openModal(
-      <DeleteModal reDirectPage={'/'} activityId={id} title={title} onClose={closeModal} />,
+      
+      <DeleteModal
+        reDirectPage={'/'} activityId={id} title={title}
+        activityId={id}
+        onClose={closeModal}
+        onDeleteSuccess={() => {
+          // 삭제 성공 시 홈 페이지로 이동
+          router.replace('/');
+        }}
+      />,
+    ,
     );
   }; // 삭제하기 버튼 클릭시
 

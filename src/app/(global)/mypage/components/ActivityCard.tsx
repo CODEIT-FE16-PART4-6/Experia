@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 interface ActivityCardProps {
   data: ReservationType | ActivityType;
   type: 'reservation' | 'activity';
+  onDeleteSuccess?: () => void;
 }
 const RESERVATION_STATUS = {
   pending: '예약 신청',
@@ -26,7 +27,7 @@ const RESERVATION_STATUS = {
  * @returns 액티비티 1개 정보를 담고 있는 카드
  * @description my-activities, my-reservations 페이지에서 사용
  */
-const ActivityCard = ({ data, type }: ActivityCardProps) => {
+const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
   const router = useRouter();
   const closeModal = useModalStore(state => state.closeModal);
   const openModal = useModalStore(state => state.openModal);
@@ -89,12 +90,19 @@ const ActivityCard = ({ data, type }: ActivityCardProps) => {
 
     const handleDelete = () => {
       openModal(
+        
         <DeleteModal
+         
           reDirectPage={'/mypage/my-activities'}
           activityId={data.id}
           title={activity.title}
+         
+          activityId={activity.id}
           onClose={closeModal}
+          onDeleteSuccess={onDeleteSuccess}
+       
         />,
+      ,
       );
     }; // 삭제하기 버튼 클릭시
 

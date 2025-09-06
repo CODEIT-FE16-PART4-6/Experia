@@ -91,7 +91,23 @@ const fetchClientData = async (endpoint: string, options: RequestInit = {}) => {
       throw new Error(errorData.message || 'API 호출 실패');
     }
 
-    return await response.json();
+    // 응답이 비어있거나 JSON이 아닌 경우 처리
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      return null; // 빈 응답 또는 JSON이 아닌 응답
+    }
+
+    const text = await response.text();
+    if (!text.trim()) {
+      return null; // 빈 응답
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch (parseError) {
+      console.warn('JSON 파싱 실패, 빈 응답으로 처리:', parseError);
+      return null;
+    }
   } catch (error) {
     console.error('API 호출 중 에러 발생:', error);
     throw error;

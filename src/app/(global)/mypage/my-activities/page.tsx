@@ -21,10 +21,14 @@ const fetchMyActivities = async () => {
 };
 
 const MyActivitiesPage = () => {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ['activityList'],
     queryFn: fetchMyActivities,
   });
+
+  const handleDeleteSuccess = () => {
+    refetch(); // 삭제 성공 시 데이터 다시 불러오기
+  };
 
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div>오류 발생: {error.message}</div>;
@@ -40,7 +44,12 @@ const MyActivitiesPage = () => {
         }
       />
       {activities.map(activity => (
-        <ActivityCard key={activity.id} type='activity' data={activity as ActivityType} />
+        <ActivityCard
+          key={activity.id}
+          type='activity'
+          data={activity as ActivityType}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
       ))}
     </div>
   );
