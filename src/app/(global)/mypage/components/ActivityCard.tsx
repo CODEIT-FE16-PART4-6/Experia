@@ -90,19 +90,12 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
 
     const handleDelete = () => {
       openModal(
-        
         <DeleteModal
-         
-          reDirectPage={'/mypage/my-activities'}
           activityId={data.id}
           title={activity.title}
-         
-          activityId={activity.id}
           onClose={closeModal}
           onDeleteSuccess={onDeleteSuccess}
-       
         />,
-      ,
       );
     }; // 삭제하기 버튼 클릭시
 
