@@ -130,12 +130,12 @@ const NotificationPopover = () => {
         leaveFrom='opacity-100 translate-y-0'
         leaveTo='opacity-0 translate-y-1'
       >
-        <PopoverPanel className='absolute right-0 z-[5] mt-14 w-[calc(100vw-40px)] transform overflow-y-auto sm:w-[368px]'>
+        <PopoverPanel className='absolute right-0 z-[5] mt-14 w-[calc(100vw-40px)] transform shadow-lg sm:w-[368px]'>
           {/* close: PopoverButton 클릭 시 Popover 닫기 */}
           {({ close }) => (
             <div
               ref={scrollRef}
-              className='bg-green-light w-full overflow-auto rounded-lg px-5 py-6 shadow-lg'
+              className='bg-green-light w-full overflow-auto rounded-lg px-5 py-6'
             >
               <div className='mb-4 flex items-center justify-between'>
                 <h2 className='text-lg font-bold text-black'>{`알림 ${totalCount || 0}개`}</h2>
