@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import apiAuth from '@/utils/axios/apiAuth';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 import { ko } from 'date-fns/locale';
+import styles from './Reservation.module.css';
 interface Props {
   data: ActivityDetail;
 }
@@ -21,6 +22,7 @@ const Reservation = ({ data }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [personCount, setPersonCount] = useState(1);
   const [selectedSchedule, setSelectedScheduleId] = useState<ScheduleIdType>(0);
+  const [selectedButton, setSelectedButton] = useState(null);
 
   // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
   const highlightDates = useMemo(() => {
@@ -90,8 +92,9 @@ const Reservation = ({ data }: Props) => {
   };
 
   //스케줄 선택 핸들러(schedules.Id 저장)
-  const handleSelectSchedule = (scheduleId: ScheduleIdType) => {
+  const handleSelectSchedule = (scheduleId: ScheduleIdType, index: any) => {
     setSelectedScheduleId(scheduleId);
+    setSelectedButton(index);
   };
 
   //인원수 조정 핸들러
@@ -141,10 +144,12 @@ const Reservation = ({ data }: Props) => {
             selected={selectedDate}
             onChange={date => handleSelectDate(date)}
             dateFormat={'yyyy-MM-dd'}
+            formatWeekDay={nameOfDay => nameOfDay.substr(0, 3)}
             inline //달력모양 보여주기 기본값:input
-            locale={ko} //기본은 영어예용. 한국어로
             highlightDates={highlightDates} //선택가능한날짜 하이라이트
             minDate={new Date()} //오늘이전선택불가
+            wrapperClassName={styles.datepicker}
+            calendarClassName={styles.datepicker}
           />
         </div>
         {selectedDate && (
@@ -154,15 +159,17 @@ const Reservation = ({ data }: Props) => {
                 <p className='text-nomad-black mt-4 mb-[14px] text-[18px] font-bold'>
                   예약 가능한 시간
                 </p>
-                {selectedDateSchedules.map(schedule => (
-                  <button
-                    className='rounded-[7px] border-1 border-solid px-3 py-[10px]'
-                    key={schedule.id}
-                    onClick={() => handleSelectSchedule(schedule.id)}
-                  >
-                    {schedule.startTime}~{schedule.endTime}
-                  </button> //날짜 선택시 나오는 선택가능한 시간대들
-                ))}
+                <div className='flex gap-3'>
+                  {selectedDateSchedules.map((schedule, index) => (
+                    <button
+                      className={`${selectedButton === index ? 'bg-nomad-black text-white' : 'text-nomad-black bg-white'} rounded-[7px] border-1 border-solid px-3 py-[10px]`}
+                      key={schedule.id}
+                      onClick={() => handleSelectSchedule(schedule.id, index)}
+                    >
+                      {schedule.startTime}~{schedule.endTime}
+                    </button> //날짜 선택시 나오는 선택가능한 시간대들
+                  ))}
+                </div>
                 <hr className='mt-3 hidden border-gray-300 lg:block' />
               </>
             ) : (
