@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { Popover, PopoverPanel, PopoverButton, Transition } from '@headlessui/react';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
@@ -24,13 +24,6 @@ const NotificationPopover = () => {
   const queryClient = useQueryClient();
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [popoverOpen, setPopoverOpen] = useState(false);
-
-  // 알림 마지막 확인 시각
-  const [lastReadNotiAt, setLastReadNotiAt] = useState<string | null>(() => {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('lastReadNotiAt');
-  });
 
   // get notifications
   const { data, isError, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -47,31 +40,11 @@ const NotificationPopover = () => {
       getNextPageParam: lastPage => lastPage.cursorId,
     });
 
-  useEffect(() => {
-    if (!data) return;
-    const all = data.pages.flatMap(p => p.notifications);
-
-    const hasNew = lastReadNotiAt
-      ? all.some(n => new Date(n.createdAt) > new Date(lastReadNotiAt))
-      : all.length > 0;
-  }, [data, lastReadNotiAt]);
-
-  useEffect(() => {
-    if (popoverOpen) {
-      const timer = setTimeout(() => {
-        const now = new Date().toISOString();
-
-        setLastReadNotiAt(now);
-        localStorage.setItem('lastReadNotiAt', now);
-      }, 300);
-
-      return () => clearTimeout(timer);
-    }
-  }, [popoverOpen, queryClient]);
-
-  const handlePopoverOpen = () => {
-    setPopoverOpen(true);
-  };
+  // 알림 마지막 확인 시각
+  const [lastReadNotiAt, setLastReadNotiAt] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('lastReadNotiAt');
+  });
 
   // delete notification
   const deleteNotification = useMutation({
@@ -107,10 +80,12 @@ const NotificationPopover = () => {
   const notifications = data?.pages.flatMap(page => page.notifications) ?? [];
   const totalCount = data?.pages[0]?.totalCount ?? 0;
 
+  // 새 알림 여부 (로컬 스토리지의 알림 확인 시간, 새 알림 발행 시간 비교)
   const hasNewNotifications =
     lastReadNotiAt === null ||
     notifications.some(n => new Date(n.createdAt) > new Date(lastReadNotiAt));
 
+  // 알림 팝오버 닫으면 알림 전체 읽음 처리
   const handlePopoverClose = () => {
     const now = new Date().toISOString();
     setLastReadNotiAt(now);
@@ -126,7 +101,7 @@ const NotificationPopover = () => {
 
   return (
     <Popover className='flex'>
-      <PopoverButton onClick={handlePopoverOpen} aria-label='알림 확인하기' className='relative'>
+      <PopoverButton aria-label='알림 확인하기' className='relative'>
         <AlarmIcon
           className={clsx('hover:text-primary text-gray-700 transition-colors', {
             'text-primary hover:text-primary-dark': hasNewNotifications,
