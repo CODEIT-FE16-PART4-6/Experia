@@ -1,5 +1,7 @@
 'use client';
 import DatePicker from 'react-datepicker';
+import Image from 'next/image';
+import Button from '@/components/Button';
 import { useState, useMemo } from 'react';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -125,52 +127,83 @@ const Reservation = ({ data }: Props) => {
   };
   return (
     <section>
-      <div className='mb-2 text-[32px] font-bold'>
+      <div className='mb-2 font-bold md:text-[24px] lg:text-[32px]'>
         ₩ {data.price.toLocaleString('ko-KR')}
-        <span className='text-[20px] font-normal text-gray-800'> / 인</span>
+        <span className='font-normal text-gray-800 md:text-[16px] lg:text-[20px]'> / 인</span>
       </div>
-      <hr />
-      <span>날짜</span>
-      <div>
-        <DatePicker
-          selected={selectedDate}
-          onChange={date => handleSelectDate(date)}
-          dateFormat={'yyyy-MM-dd'}
-          inline //달력모양 보여주기 기본값:input
-          locale={ko} //기본은 영어예용. 한국어로
-          highlightDates={highlightDates} //선택가능한날짜 하이라이트
-          minDate={new Date()} //오늘이전선택불가
-        />
-      </div>
-      {selectedDate && (
-        <div>
-          {selectedDateSchedules ? (
-            <>
-              <span>예약 가능한 시간</span>
-              {selectedDateSchedules.map(schedule => (
-                <button key={schedule.id} onClick={() => handleSelectSchedule(schedule.id)}>
-                  {schedule.startTime}~{schedule.endTime}
-                </button> //날짜 선택시 나오는 선택가능한 시간대들
-              ))}
-            </>
-          ) : (
-            <span>예약 가능한 시간이 없습니다.</span>
-          )}
+      <hr className='border-gray-300 md:mx-[-1.5rem] lg:mx-0' />
+      <p className='text-nomad-black text-[20px] font-bold md:mt-[13px] md:mb-[7px] lg:my-[14px]'>
+        날짜
+      </p>
+      <div className='md:hidden lg:block'>
+        <div className='flex justify-center gap-1'>
+          <DatePicker
+            selected={selectedDate}
+            onChange={date => handleSelectDate(date)}
+            dateFormat={'yyyy-MM-dd'}
+            inline //달력모양 보여주기 기본값:input
+            locale={ko} //기본은 영어예용. 한국어로
+            highlightDates={highlightDates} //선택가능한날짜 하이라이트
+            minDate={new Date()} //오늘이전선택불가
+          />
         </div>
-      )}
-      <hr />
-      <span>참여 인원 수</span>
-      <div>
-        <button onClick={handleDecrease}>-</button>
-        <span>{personCount}명</span>
-        <button onClick={handleIncrease}>+</button>
+        {selectedDate && (
+          <div>
+            {selectedDateSchedules ? (
+              <>
+                <p className='text-nomad-black mt-4 mb-[14px] text-[18px] font-bold'>
+                  예약 가능한 시간
+                </p>
+                {selectedDateSchedules.map(schedule => (
+                  <button
+                    className='rounded-[7px] border-1 border-solid px-3 py-[10px]'
+                    key={schedule.id}
+                    onClick={() => handleSelectSchedule(schedule.id)}
+                  >
+                    {schedule.startTime}~{schedule.endTime}
+                  </button> //날짜 선택시 나오는 선택가능한 시간대들
+                ))}
+                <hr className='mt-3 hidden border-gray-300 lg:block' />
+              </>
+            ) : (
+              <span>예약 가능한 시간이 없습니다.</span>
+            )}
+          </div>
+        )}
       </div>
-      <button disabled={!selectedSchedule} onClick={handleReservation}>
-        예약하기
-      </button>
-      <hr />
-      <div className='flex justify-between'>
-        <span>참여 인원 수</span>
+      <p className='text-nomad-black mt-4 text-[18px] font-bold'>참여 인원 수</p>
+      <div
+        className='mt-2 mb-6 flex h-10 w-[120px] justify-between overflow-hidden rounded-[7px] border-[1px] border-solid border-gray-400'
+        style={{ boxShadow: '1px 2.5px 10px rgba(0, 0, 0, 0.1)' }}
+      >
+        <button className='px-[14px] hover:bg-gray-200' onClick={handleDecrease}>
+          <Image
+            src='/icons/ActivityPageImgs/ic_ReservationMinus.svg'
+            alt='인원추가버튼'
+            width='14'
+            height='14'
+          ></Image>
+        </button>
+        <p className='w-10 py-2 text-center text-gray-900'>{personCount}</p>
+        <button className='px-[14px] hover:bg-gray-200' onClick={handleIncrease}>
+          <Image
+            src='/icons/ActivityPageImgs/ic_ReservationPlus.svg'
+            alt='인원추가버튼'
+            width='14'
+            height='14'
+          ></Image>
+        </button>
+      </div>
+      <Button
+        className='h-14 border-gray-400 hover:border-none disabled:border-gray-100 disabled:text-white'
+        disabled={!selectedSchedule}
+        onClick={handleReservation}
+      >
+        {selectedSchedule ? '예약하기' : '일정을 선택해 주세요'}
+      </Button>
+      <hr className='mt-6 mb-4 border-gray-300 md:mx-[-1.5rem] lg:mx-0' />
+      <div className='text-nomad-black flex justify-between text-[20px] font-bold'>
+        <span>총 합계</span>
         <div> ₩ {(data.price * personCount).toLocaleString('ko-KR')}</div>
       </div>
     </section>
