@@ -39,9 +39,7 @@ const MyActivitiesPage = () => {
     <div>
       <SectionTitle
         title='내 체험 관리'
-        action={
-          <LinkButton href='/mypage/my-activities/add-new-activity'>체험 등록하기</LinkButton>
-        }
+        action={<LinkButton href='/mypage/my-activities/add-activity'>체험 등록하기</LinkButton>}
       />
       {activities.map(activity => (
         <ActivityCard

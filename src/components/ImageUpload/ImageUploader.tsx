@@ -12,7 +12,7 @@ interface ImageUploaderProps {
 }
 
 const ImageUploader = ({ value, error, onChange }: ImageUploaderProps) => {
-  const { handleChangeImage, fileRef, isUploading } = useImageUpload();
+  const { handleChangeImage, fileRef, isUploading } = useImageUpload('/activities/image');
 
   const handleImageUpload = () => {
     fileRef.current?.click();
@@ -22,7 +22,7 @@ const ImageUploader = ({ value, error, onChange }: ImageUploaderProps) => {
     try {
       const url = await handleChangeImage(e);
       if (url) {
-        onChange?.(url);
+        onChange?.(url.activityImageUrl || null);
       }
     } catch (err) {
       console.error(err);
