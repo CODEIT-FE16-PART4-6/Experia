@@ -5,6 +5,7 @@ import PostHeader from './layout/PostHeader';
 import PostImage from './layout/PostImage';
 import PostContent from './layout/PostContent';
 import ReservateIn from './reservation-block/reservateIn';
+import ReservateMobile from './reservation-block/reservateMobileIn';
 import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
 
 type Activity = z.infer<typeof ActivityDetail>;
@@ -49,8 +50,11 @@ const ActivityPost = ({ postData, reviewData }: ActivityProps) => {
           <ReservateIn data={postData} />
         </div>
       </div>
-      <div className='sticky bottom-0 w-full bg-white sm:block md:hidden lg:hidden'>
-        mobile version
+      <div
+        style={{ boxShadow: '0px -3px 10px 0px rgba(0, 0, 0, 0.3)' }}
+        className='sticky bottom-0 h-[83px] w-full bg-white sm:block md:hidden lg:hidden'
+      >
+        <ReservateMobile data={postData} />
       </div>
     </main>
   );

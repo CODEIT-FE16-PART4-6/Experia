@@ -1,5 +1,5 @@
 'use client';
-import DatePicker from 'react-datepicker';
+
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useState, useMemo } from 'react';
@@ -8,7 +8,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import apiAuth from '@/utils/axios/apiAuth';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 // import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
-import styles from './Reservation.module.css';
 import Calander from './Calander';
 
 interface Props {
@@ -37,12 +36,6 @@ const Reservation = ({ data }: Props) => {
   }, [data.schedules]);
   //TODO [P6-127] . React DevTools로 컴포넌트 렌더링 시간을 측정하고, useMemo 사용 전후를 비교하기
   //const highlightDates = data.schedules.map(schedule => new Date(schedule.date))
-
-  //DateType(string)을 Date 객체로 변환하는 함수
-  const convertToDate = (dateString: DateType): Date | null => {
-    const date = new Date(dateString);
-    return isNaN(date.getTime()) ? null : date;
-  }; //TODO [P6-124] 테스트 코드 작성
 
   //인원수 조정 핸들러
   const handleIncrease = () => {
@@ -147,7 +140,7 @@ const Reservation = ({ data }: Props) => {
       <p className='text-nomad-black mt-4 font-bold md:text-[20px] lg:text-[18px]'>참여 인원 수</p>
       <div
         className='mt-2 mb-6 flex h-10 w-[120px] justify-between overflow-hidden rounded-[7px] border-[1px] border-solid border-gray-400'
-        style={{ boxShadow: '1px 2.5px 10px rgba(0, 0, 0, 0.1)' }}
+        style={{ boxShadow: '1px 2.5px 5px rgba(0, 0, 0, 0.1)' }}
       >
         <button className='px-[14px] hover:bg-gray-200' onClick={handleDecrease}>
           <Image
