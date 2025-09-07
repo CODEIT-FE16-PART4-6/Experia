@@ -40,7 +40,9 @@ const MyReservationsPage = () => {
     <div className='min-h-screen'>
       <SectionTitle
         title='예약 내역'
-        action={<DropdownOptions items={RESERVATION_STATUS} placeholderLabel='필터' />}
+        action={
+          <DropdownOptions items={RESERVATION_STATUS} type='filter' placeholderLabel='필터' />
+        }
       />
       <div className='flex flex-col gap-4'>
         {reservations.map(reservation => (
