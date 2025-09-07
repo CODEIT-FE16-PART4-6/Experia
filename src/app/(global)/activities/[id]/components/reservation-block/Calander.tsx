@@ -123,11 +123,14 @@ const Calander = ({
           calendarClassName={styles.datepicker}
         />
       </div>
-      {selectedDate && (
+      <p className='text-nomad-black pt-6 text-[18px] font-bold sm:block md:hidden'>
+        예약 가능한 시간
+      </p>
+      {selectedDate ? (
         <div>
           {selectedDateSchedules ? (
             <>
-              <p className='text-nomad-black mt-4 mb-[14px] text-[18px] font-bold'>
+              <p className='text-nomad-black mt-4 mb-[14px] text-[18px] font-bold sm:hidden md:block'>
                 예약 가능한 시간
               </p>
               <div className='flex gap-3'>
@@ -149,6 +152,8 @@ const Calander = ({
             <span>예약 가능한 시간이 없습니다.</span>
           )}
         </div>
+      ) : (
+        <div className='mt-6 mb-8 flex justify-center text-gray-600'>날짜를 선택해주세요.</div>
       )}
     </>
   );

@@ -32,6 +32,15 @@ const ReservateMobile = ({ data }: Props) => {
     setWhiteBox(true);
   };
 
+  //인원수 조정 핸들러
+  const handleIncrease = () => {
+    setPersonCount(personCount + 1);
+  };
+
+  const handleDecrease = () => {
+    setPersonCount(prev => Math.max(prev - 1, 1));
+  };
+
   const handleReservation = async () => {
     if (!selectedSchedule || !selectedDate) {
       alert('날짜와 시간을 선택해주세요');
@@ -58,10 +67,16 @@ const ReservateMobile = ({ data }: Props) => {
     <div>
       <div className='flex justify-between p-4'>
         <div>
-          <p className='text-[20px] font-bold text-[#112211]'>
-            ₩ {data.price.toLocaleString('ko-KR')} /{' '}
-            <span className='font-normal'>{personCount}명</span>
-          </p>
+          <div className='flex gap-5'>
+            <p className='text-[20px] font-bold text-[#112211]'>
+              ₩ {data.price.toLocaleString('ko-KR')} /
+              <span className='font-normal text-[#1c4d30]'> 총 {personCount}인</span>
+            </p>
+            <div className='flex flex-col justify-center font-semibold text-[#1c4d30]'>
+              {selectedDate ? selectedDate.toLocaleDateString().replaceAll('.', '/') : ''}{' '}
+              {mySchedule ? mySchedule : ''}
+            </div>
+          </div>
           <button className='font-bold text-[#1c4d30] underline' onClick={handleWhiteBox}>
             날짜 선택하기
           </button>
@@ -91,7 +106,6 @@ const ReservateMobile = ({ data }: Props) => {
               />
             </button>
           </div>
-
           <Calander
             data={data}
             selectedDate={selectedDate}
@@ -100,6 +114,37 @@ const ReservateMobile = ({ data }: Props) => {
             setSelectedScheduleId={setSelectedScheduleId}
             setMySchedule={setMySchedule}
           />
+          <p className='font-gray-800 text-[20px]'>예약할 인원을 선택해주세요.</p>
+          <div
+            className='mt-2 mb-6 flex h-10 w-[120px] justify-between overflow-hidden rounded-[7px] border-[1px] border-solid border-gray-400'
+            style={{ boxShadow: '1px 2.5px 5px rgba(0, 0, 0, 0.1)' }}
+          >
+            <button className='px-[14px] hover:bg-gray-200' onClick={handleDecrease}>
+              <Image
+                src='/icons/ActivityPageImgs/ic_ReservationMinus.svg'
+                alt='인원추가버튼'
+                width='14'
+                height='14'
+              ></Image>
+            </button>
+            <p className='w-10 py-2 text-center text-gray-900'>{personCount}</p>
+            <button className='px-[14px] hover:bg-gray-200' onClick={handleIncrease}>
+              <Image
+                src='/icons/ActivityPageImgs/ic_ReservationPlus.svg'
+                alt='인원추가버튼'
+                width='14'
+                height='14'
+              ></Image>
+            </button>
+          </div>
+          <Button
+            onClick={() => {
+              setWhiteBox(false);
+            }}
+            className='mt-30 w-full'
+          >
+            확인
+          </Button>
         </div>
       )}
     </div>
