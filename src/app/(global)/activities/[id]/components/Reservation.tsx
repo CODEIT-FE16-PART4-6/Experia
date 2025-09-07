@@ -7,8 +7,10 @@ import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import 'react-datepicker/dist/react-datepicker.css';
 import apiAuth from '@/utils/axios/apiAuth';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
-import { ko } from 'date-fns/locale';
+// import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
 import styles from './Reservation.module.css';
+import Calander from './Calander';
+
 interface Props {
   data: ActivityDetail;
 }
@@ -19,11 +21,11 @@ const Reservation = ({ data }: Props) => {
   // ActivityDetail 타입에서 scheduleId 타입 추출
   type ScheduleIdType = ActivityDetail['schedules'][number]['id'];
   //선택된 날짜의 schedules 필터링
-  const [selectedDate, setSelectedDate] = useState<Date | null>();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [personCount, setPersonCount] = useState(1);
   const [selectedSchedule, setSelectedScheduleId] = useState<ScheduleIdType>(0);
-  const [selectedButton, setSelectedButton] = useState(null);
-
+  //const [selectedButton, setSelectedButton] = useState(null);
+  const [whiteBox, setWhiteBox] = useState(false);
   // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
   const highlightDates = useMemo(() => {
     return data.schedules.map(schedule => {
@@ -86,16 +88,16 @@ const Reservation = ({ data }: Props) => {
   }, [data.schedules, selectedDate]);
 
   //날짜 선택 핸들러
-  const handleSelectDate = (date: Date | null) => {
-    setSelectedDate(date);
-    setSelectedScheduleId(0); //날짜 변경시 시간대 스케줄도 초기화
-  };
+  // const handleSelectDate = (date: Date | null) => {
+  //   setSelectedDate(date);
+  //   setSelectedScheduleId(0); //날짜 변경시 시간대 스케줄도 초기화
+  // };
 
-  //스케줄 선택 핸들러(schedules.Id 저장)
-  const handleSelectSchedule = (scheduleId: ScheduleIdType, index: any) => {
-    setSelectedScheduleId(scheduleId);
-    setSelectedButton(index);
-  };
+  // //스케줄 선택 핸들러(schedules.Id 저장)
+  // const handleSelectSchedule = (scheduleId: ScheduleIdType, index: any) => {
+  //   setSelectedScheduleId(scheduleId);
+  //   setSelectedButton(index);
+  // };
 
   //인원수 조정 핸들러
   const handleIncrease = () => {
@@ -104,6 +106,10 @@ const Reservation = ({ data }: Props) => {
 
   const handleDecrease = () => {
     setPersonCount(prev => Math.max(prev - 1, 1));
+  };
+
+  const handleWhiteBox = () => {
+    setWhiteBox(true);
   };
 
   //예약하기 함수
@@ -139,46 +145,55 @@ const Reservation = ({ data }: Props) => {
         날짜
       </p>
       <div className='md:hidden lg:block'>
-        <div className='flex justify-center gap-1'>
-          <DatePicker
-            selected={selectedDate}
-            onChange={date => handleSelectDate(date)}
-            dateFormat={'yyyy-MM-dd'}
-            formatWeekDay={nameOfDay => nameOfDay.substr(0, 3)}
-            inline //달력모양 보여주기 기본값:input
-            highlightDates={highlightDates} //선택가능한날짜 하이라이트
-            minDate={new Date()} //오늘이전선택불가
-            wrapperClassName={styles.datepicker}
-            calendarClassName={styles.datepicker}
-          />
-        </div>
-        {selectedDate && (
-          <div>
-            {selectedDateSchedules ? (
-              <>
-                <p className='text-nomad-black mt-4 mb-[14px] text-[18px] font-bold'>
-                  예약 가능한 시간
-                </p>
-                <div className='flex gap-3'>
-                  {selectedDateSchedules.map((schedule, index) => (
-                    <button
-                      className={`${selectedButton === index ? 'bg-nomad-black text-white' : 'text-nomad-black bg-white'} rounded-[7px] border-1 border-solid px-3 py-[10px]`}
-                      key={schedule.id}
-                      onClick={() => handleSelectSchedule(schedule.id, index)}
-                    >
-                      {schedule.startTime}~{schedule.endTime}
-                    </button> //날짜 선택시 나오는 선택가능한 시간대들
-                  ))}
-                </div>
-                <hr className='mt-3 hidden border-gray-300 lg:block' />
-              </>
-            ) : (
-              <span>예약 가능한 시간이 없습니다.</span>
-            )}
-          </div>
-        )}
+        <Calander
+          data={data}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          selectedSchedule={selectedSchedule}
+          setSelectedScheduleId={setSelectedScheduleId}
+        />
       </div>
-      <p className='text-nomad-black mt-4 text-[18px] font-bold'>참여 인원 수</p>
+      <button
+        className='text-nomad-black mb-[27px] font-semibold md:block lg:hidden'
+        onClick={handleWhiteBox}
+      >
+        날짜 선택하기
+      </button>
+      {whiteBox && (
+        <div className='absolute top-0 right-0 mt-4 rounded-[10px] bg-white p-6 pt-7 pr-6 pb-8 pl-6 shadow'>
+          <div className='flex w-[432px] justify-between'>
+            <p className='text-[24px] font-bold'>날짜</p>
+            <button
+              onClick={() => {
+                setWhiteBox(false);
+              }}
+            >
+              <Image
+                src='/icons/ActivityPageImgs/ic_CloseButton.svg'
+                alt='닫기 버튼'
+                width={40}
+                height={40}
+              />
+            </button>
+          </div>
+          <Calander
+            data={data}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            selectedSchedule={selectedSchedule}
+            setSelectedScheduleId={setSelectedScheduleId}
+          />
+          <Button
+            onClick={() => {
+              setWhiteBox(false);
+            }}
+            className='mt-10'
+          >
+            확인
+          </Button>
+        </div>
+      )}
+      <p className='text-nomad-black mt-4 font-bold md:text-[20px] lg:text-[18px]'>참여 인원 수</p>
       <div
         className='mt-2 mb-6 flex h-10 w-[120px] justify-between overflow-hidden rounded-[7px] border-[1px] border-solid border-gray-400'
         style={{ boxShadow: '1px 2.5px 10px rgba(0, 0, 0, 0.1)' }}

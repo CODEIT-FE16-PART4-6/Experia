@@ -1,0 +1,146 @@
+import DatePicker from 'react-datepicker';
+import { useState, useMemo } from 'react';
+
+//style
+import 'react-datepicker/dist/react-datepicker.css';
+import styles from './Reservation.module.css';
+
+//schema
+import { ActivityDetail } from '@/types/schema/activitiesSchema';
+
+type DateType = ActivityDetail['schedules'][number]['date'];
+// ActivityDetail 타입에서 scheduleId 타입 추출
+type ScheduleIdType = ActivityDetail['schedules'][number]['id'];
+//선택된 날짜의 schedules 필터링
+
+interface Props {
+  data: ActivityDetail;
+  selectedDate: Date | null;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  selectedSchedule: ScheduleIdType;
+  setSelectedScheduleId: React.Dispatch<React.SetStateAction<ScheduleIdType>>;
+}
+
+const Calander = ({
+  data,
+  selectedDate,
+  setSelectedDate,
+  selectedSchedule,
+  setSelectedScheduleId,
+}: Props) => {
+  const [selectedButton, setSelectedButton] = useState(null);
+
+  // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
+  const highlightDates = useMemo(() => {
+    return data.schedules.map(schedule => {
+      const date = new Date(schedule.date);
+      return date;
+    });
+  }, [data.schedules]);
+  const convertToDate = (dateString: DateType): Date | null => {
+    const date = new Date(dateString);
+    return isNaN(date.getTime()) ? null : date;
+  }; //TODO [P6-124] 테스트 코드 작성
+
+  // 선택된 날짜의 schedules 필터링
+  const selectedDateSchedules = useMemo(() => {
+    if (!selectedDate) return [];
+
+    const currentDate = new Date();
+    const today = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate(),
+    );
+
+    return data.schedules.filter(schedule => {
+      const scheduleDate = convertToDate(schedule.date);
+
+      if (!scheduleDate) return false;
+
+      const scheduleDateTime = new Date(
+        scheduleDate.getFullYear(),
+        scheduleDate.getMonth(),
+        scheduleDate.getDate(),
+      );
+
+      //오늘 이전 날짜 제외
+      if (scheduleDateTime < today) return false;
+      //TODO [P6-123] 오늘날짜인데 시간대가 모두 지났을 경우 처리
+      //오늘 날짜인 경우, 현재 시간 이전의 스케줄 제외
+      if (scheduleDateTime.getTime() === today.getTime()) {
+        const [hours, minutes] = schedule.startTime.split(':').map(Number);
+        const scheduleTime = new Date(
+          scheduleDate.getFullYear(),
+          scheduleDate.getMonth(),
+          scheduleDate.getDate(),
+          hours,
+          minutes,
+        );
+
+        if (scheduleTime <= currentDate) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [data.schedules, selectedDate]);
+
+  //날짜 선택 핸들러
+  const handleSelectDate = (date: Date | null) => {
+    setSelectedDate(date);
+    setSelectedScheduleId(0); //날짜 변경시 시간대 스케줄도 초기화
+  };
+
+  //스케줄 선택 핸들러(schedules.Id 저장)
+  const handleSelectSchedule = (scheduleId: ScheduleIdType, index: any) => {
+    setSelectedScheduleId(scheduleId);
+    setSelectedButton(index);
+  };
+
+  return (
+    <>
+      <div className='flex justify-center gap-1'>
+        <DatePicker
+          selected={selectedDate}
+          onChange={date => handleSelectDate(date)}
+          dateFormat={'yyyy-MM-dd'}
+          formatWeekDay={nameOfDay => nameOfDay.substr(0, 3)}
+          inline //달력모양 보여주기 기본값:input
+          highlightDates={highlightDates} //선택가능한날짜 하이라이트
+          minDate={new Date()} //오늘이전선택불가
+          wrapperClassName={styles.datepicker}
+          calendarClassName={styles.datepicker}
+        />
+      </div>
+      {selectedDate && (
+        <div>
+          {selectedDateSchedules ? (
+            <>
+              <p className='text-nomad-black mt-4 mb-[14px] text-[18px] font-bold'>
+                예약 가능한 시간
+              </p>
+              <div className='flex gap-3'>
+                {selectedDateSchedules.map((schedule, index) => (
+                  <button
+                    className={`${selectedButton === index ? 'bg-nomad-black text-white' : 'text-nomad-black bg-white hover:bg-[#105844] hover:text-white'} rounded-[7px] border-1 border-solid px-3 py-[10px]`}
+                    key={schedule.id}
+                    onClick={() => handleSelectSchedule(schedule.id, index)}
+                  >
+                    {schedule.startTime}~{schedule.endTime}
+                  </button> //날짜 선택시 나오는 선택가능한 시간대들
+                ))}
+              </div>
+              <hr className='mt-3 hidden border-gray-300 lg:block' />
+            </>
+          ) : (
+            <span>예약 가능한 시간이 없습니다.</span>
+          )}
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Calander;
