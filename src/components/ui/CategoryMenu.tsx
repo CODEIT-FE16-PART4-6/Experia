@@ -21,7 +21,7 @@ const CategoryMenu = ({
   };
 
   return (
-    <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap gap-2 px-4'>
+    <>
       {categories.map(category => (
         <button
           key={category}
@@ -35,7 +35,7 @@ const CategoryMenu = ({
           {category}
         </button>
       ))}
-    </div>
+    </>
   );
 };
 
