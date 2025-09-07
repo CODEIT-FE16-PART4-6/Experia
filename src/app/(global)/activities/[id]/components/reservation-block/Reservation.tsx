@@ -26,6 +26,8 @@ const Reservation = ({ data }: Props) => {
   const [selectedSchedule, setSelectedScheduleId] = useState<ScheduleIdType>(0);
   //const [selectedButton, setSelectedButton] = useState(null);
   const [whiteBox, setWhiteBox] = useState(false);
+  const [mySchedule, setMySchedule] = useState<string | null>(null);
+
   // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
   const highlightDates = useMemo(() => {
     return data.schedules.map(schedule => {
@@ -41,63 +43,6 @@ const Reservation = ({ data }: Props) => {
     const date = new Date(dateString);
     return isNaN(date.getTime()) ? null : date;
   }; //TODO [P6-124] 테스트 코드 작성
-
-  // 선택된 날짜의 schedules 필터링
-  const selectedDateSchedules = useMemo(() => {
-    if (!selectedDate) return [];
-
-    const currentDate = new Date();
-    const today = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      currentDate.getDate(),
-    );
-
-    return data.schedules.filter(schedule => {
-      const scheduleDate = convertToDate(schedule.date);
-
-      if (!scheduleDate) return false;
-
-      const scheduleDateTime = new Date(
-        scheduleDate.getFullYear(),
-        scheduleDate.getMonth(),
-        scheduleDate.getDate(),
-      );
-
-      //오늘 이전 날짜 제외
-      if (scheduleDateTime < today) return false;
-      //TODO [P6-123] 오늘날짜인데 시간대가 모두 지났을 경우 처리
-      //오늘 날짜인 경우, 현재 시간 이전의 스케줄 제외
-      if (scheduleDateTime.getTime() === today.getTime()) {
-        const [hours, minutes] = schedule.startTime.split(':').map(Number);
-        const scheduleTime = new Date(
-          scheduleDate.getFullYear(),
-          scheduleDate.getMonth(),
-          scheduleDate.getDate(),
-          hours,
-          minutes,
-        );
-
-        if (scheduleTime <= currentDate) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-  }, [data.schedules, selectedDate]);
-
-  //날짜 선택 핸들러
-  // const handleSelectDate = (date: Date | null) => {
-  //   setSelectedDate(date);
-  //   setSelectedScheduleId(0); //날짜 변경시 시간대 스케줄도 초기화
-  // };
-
-  // //스케줄 선택 핸들러(schedules.Id 저장)
-  // const handleSelectSchedule = (scheduleId: ScheduleIdType, index: any) => {
-  //   setSelectedScheduleId(scheduleId);
-  //   setSelectedButton(index);
-  // };
 
   //인원수 조정 핸들러
   const handleIncrease = () => {
@@ -144,6 +89,10 @@ const Reservation = ({ data }: Props) => {
       <p className='text-nomad-black text-[20px] font-bold md:mt-[13px] md:mb-[7px] lg:my-[14px]'>
         날짜
       </p>
+      <div className='font-bold md:mb-[10px] md:block lg:hidden'>
+        {selectedDate ? selectedDate.toLocaleDateString().replaceAll('.', '/') : ''}{' '}
+        {mySchedule ? mySchedule : ''}
+      </div>
       <div className='md:hidden lg:block'>
         <Calander
           data={data}
@@ -151,6 +100,7 @@ const Reservation = ({ data }: Props) => {
           setSelectedDate={setSelectedDate}
           selectedSchedule={selectedSchedule}
           setSelectedScheduleId={setSelectedScheduleId}
+          setMySchedule={setMySchedule}
         />
       </div>
       <button
@@ -160,7 +110,7 @@ const Reservation = ({ data }: Props) => {
         날짜 선택하기
       </button>
       {whiteBox && (
-        <div className='absolute top-0 right-0 mt-4 rounded-[10px] bg-white p-6 pt-7 pr-6 pb-8 pl-6 shadow'>
+        <div className='absolute top-0 right-0 rounded-[10px] bg-white p-6 pt-7 pr-6 pb-8 pl-6 shadow'>
           <div className='flex w-[432px] justify-between'>
             <p className='text-[24px] font-bold'>날짜</p>
             <button
@@ -182,6 +132,7 @@ const Reservation = ({ data }: Props) => {
             setSelectedDate={setSelectedDate}
             selectedSchedule={selectedSchedule}
             setSelectedScheduleId={setSelectedScheduleId}
+            setMySchedule={setMySchedule}
           />
           <Button
             onClick={() => {

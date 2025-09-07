@@ -19,6 +19,7 @@ interface Props {
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   selectedSchedule: ScheduleIdType;
   setSelectedScheduleId: React.Dispatch<React.SetStateAction<ScheduleIdType>>;
+  setMySchedule: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const Calander = ({
@@ -27,6 +28,7 @@ const Calander = ({
   setSelectedDate,
   selectedSchedule,
   setSelectedScheduleId,
+  setMySchedule,
 }: Props) => {
   const [selectedButton, setSelectedButton] = useState(null);
 
@@ -94,9 +96,16 @@ const Calander = ({
   };
 
   //스케줄 선택 핸들러(schedules.Id 저장)
-  const handleSelectSchedule = (scheduleId: ScheduleIdType, index: any) => {
+  const handleSelectSchedule = (
+    scheduleId: ScheduleIdType,
+    index: any,
+    scheduleStart: string,
+    scheduleEnd: string,
+  ) => {
     setSelectedScheduleId(scheduleId);
     setSelectedButton(index);
+    const mySchedule = `${scheduleStart}~${scheduleEnd}`;
+    setMySchedule(mySchedule);
   };
 
   return (
@@ -126,7 +135,9 @@ const Calander = ({
                   <button
                     className={`${selectedButton === index ? 'bg-nomad-black text-white' : 'text-nomad-black bg-white hover:bg-[#105844] hover:text-white'} rounded-[7px] border-1 border-solid px-3 py-[10px]`}
                     key={schedule.id}
-                    onClick={() => handleSelectSchedule(schedule.id, index)}
+                    onClick={() =>
+                      handleSelectSchedule(schedule.id, index, schedule.startTime, schedule.endTime)
+                    }
                   >
                     {schedule.startTime}~{schedule.endTime}
                   </button> //날짜 선택시 나오는 선택가능한 시간대들

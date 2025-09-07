@@ -4,7 +4,7 @@ import { z } from 'zod';
 import PostHeader from './layout/PostHeader';
 import PostImage from './layout/PostImage';
 import PostContent from './layout/PostContent';
-import ReservateIn from './reservateIn';
+import ReservateIn from './reservation-block/reservateIn';
 import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
 
 type Activity = z.infer<typeof ActivityDetail>;
@@ -37,7 +37,7 @@ const ActivityPost = ({ postData, reviewData }: ActivityProps) => {
         subImages={postData?.subImages || []}
         tag={ActivityContent.tag}
       />
-      <div className='md:mt-8 md:flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1152px] lg:gap-6'>
+      <div className='pb-[120px] md:mt-8 md:flex md:pr-[24px] lg:mx-auto lg:mt-[85px] lg:w-[1152px] lg:gap-6'>
         <div className='md:w-[100%] lg:w-[786px]'>
           <PostContent
             description={ActivityContent.description}
@@ -48,6 +48,9 @@ const ActivityPost = ({ postData, reviewData }: ActivityProps) => {
         <div>
           <ReservateIn data={postData} />
         </div>
+      </div>
+      <div className='sticky bottom-0 w-full bg-white sm:block md:hidden lg:hidden'>
+        mobile version
       </div>
     </main>
   );

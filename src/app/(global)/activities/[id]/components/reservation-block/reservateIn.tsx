@@ -1,5 +1,5 @@
 'use client';
-import Reservation from '@/app/(global)/activities/[id]/components/Reservation';
+import Reservation from './Reservation';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 
 interface Props {
