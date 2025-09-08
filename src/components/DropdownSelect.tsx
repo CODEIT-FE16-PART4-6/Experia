@@ -10,6 +10,7 @@ import {
 } from '@headlessui/react';
 import clsx from 'clsx';
 import Image from 'next/image';
+import { cn } from '@/utils/cn';
 
 interface DropdownSelectItem {
   id: string | number;
@@ -21,6 +22,7 @@ interface DropdownSelectProps {
   label?: string;
   placeholder?: string;
   selectedItem?: DropdownSelectItem | null;
+  error?: string;
   onChange?: (value: DropdownSelectItem | null) => void;
 }
 
@@ -29,17 +31,24 @@ const DropdownSelect = ({
   label,
   placeholder = '카테고리',
   selectedItem,
+  error,
   onChange,
 }: DropdownSelectProps) => {
   return (
     <div className='w-full'>
       {label && <label className='mb-1 block font-semibold'>{label}</label>}
 
-      <Listbox value={selectedItem} onChange={onChange}>
+      <Listbox as='div' value={selectedItem} onChange={onChange}>
         {({ open }) => (
           <div className='relative'>
             {/* 버튼 */}
-            <ListboxButton className='hover:border-primary flex w-full items-center justify-between rounded-md border border-gray-600 bg-white p-3.5 text-base transition-colors duration-300 outline-none'>
+            <ListboxButton
+              className={cn(
+                'flex w-full items-center justify-between rounded-md border border-gray-600 bg-white p-3.5 text-base transition-colors duration-300 outline-none',
+                open && 'border-primary',
+                error && 'border-red-primary bg-red-100',
+              )}
+            >
               {selectedItem ? selectedItem.value : placeholder}
               <Image
                 src='/icons/ic_ArrowDownLine.svg'
@@ -60,7 +69,7 @@ const DropdownSelect = ({
               leaveFrom='opacity-100 translate-y-0'
               leaveTo='opacity-0 -translate-y-2'
             >
-              <ListboxOptions className='hover:border-primary absolute z-[3] mt-3 flex w-full flex-col gap-2 overflow-auto rounded bg-white p-2 shadow-2xl'>
+              <ListboxOptions className='absolute z-[3] mt-3 flex w-full flex-col gap-2 overflow-auto rounded bg-white p-2 shadow-2xl outline-none'>
                 {items.map(item => (
                   <ListboxOption
                     key={item.id}
@@ -88,6 +97,8 @@ const DropdownSelect = ({
           </div>
         )}
       </Listbox>
+
+      {error && <p className='mt-3 text-red-500'>{error}</p>}
     </div>
   );
 };

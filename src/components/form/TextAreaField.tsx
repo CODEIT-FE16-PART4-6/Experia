@@ -23,13 +23,13 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextareaProps>(
           placeholder={placeholder}
           rows={10}
           className={cn(
-            'data-[focus]:border-primary w-full rounded-sm border border-gray-800 bg-white p-4',
-            error && 'border-red-600',
+            'focus:border-primary w-full rounded-md border border-gray-600 bg-white p-4 transition-colors duration-300 outline-none',
+            error && 'border-red-600 bg-red-100',
             className,
           )}
           {...rest}
         />
-        {error && <p className='mt-1 text-sm text-red-600'>{error}</p>}
+        {error && <p className='mt-2 text-red-500'>{error}</p>}
       </Field>
     );
   },

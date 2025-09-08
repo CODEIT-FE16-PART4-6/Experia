@@ -15,7 +15,7 @@ interface DateTimeValues {
 }
 
 const DateTimeInputGroup = ({ name }: Props) => {
-  const { control, setError, clearErrors, setValue, getValues } = useFormContext<DateTimeValues>();
+  const { control, setError, clearErrors, getValues } = useFormContext<DateTimeValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -23,7 +23,7 @@ const DateTimeInputGroup = ({ name }: Props) => {
 
   const handleAdd = (value: DateTimeValues['schedules'][number]) => {
     if (!value.date || !value.startTime || !value.endTime) {
-      setError('schedules', {
+      setError(name, {
         type: 'manual',
         message: '시간대를 하나 이상 추가해주세요.',
       });
@@ -40,9 +40,9 @@ const DateTimeInputGroup = ({ name }: Props) => {
     });
 
     // 정렬한 시간대를 훅폼 form state에 적용
-    setValue(name, newSchedules);
+    append(newSchedules);
 
-    clearErrors('schedules');
+    clearErrors(name);
   };
 
   return (

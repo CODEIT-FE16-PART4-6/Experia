@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useFormContext } from 'react-hook-form';
 
 interface Props {
   onAdd: (newItem: { date: string; startTime: string; endTime: string }) => void;
@@ -11,19 +12,24 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
   const [date, setDate] = useState<Date | null>(null);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
-  const [error, setError] = useState('');
+  const {
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useFormContext();
+  // const [error, setError] = useState('');
 
   const handleAdd = () => {
     if (!date) {
-      setError('날짜를 입력해주세요.');
+      setError('schedules', { message: '날짜를 입력해주세요.' });
       return;
     }
     if (!startTime) {
-      setError('시작 시간을 입력해주세요.');
+      setError('schedules', { message: '시작 시간을 입력해주세요.' });
       return;
     }
     if (!endTime) {
-      setError('종료 시간을 입력해주세요.');
+      setError('schedules', { message: '종료 시간을 입력해주세요.' });
       return;
     }
 
@@ -39,13 +45,13 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
         schedule.endTime === formattedEndTime,
     );
     if (duplicate) {
-      setError('이미 등록된 시간대입니다.');
+      setError('schedules', { message: '이미 등록된 시간대입니다.' });
       return;
     }
 
     // 유효성 검사: 시작 시간 < 종료 시간
     if (startTime.getTime() >= endTime.getTime()) {
-      setError('종료 시간이 시작 시간과 같거나 더 빠릅니다.');
+      setError('schedules', { message: '종료 시간이 더 빠를 수 없습니다.' });
       return;
     }
 
@@ -62,8 +68,15 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
     setDate(null);
     setStartTime(null);
     setEndTime(null);
-    setError('');
+    // setError('');
+    clearErrors('schedules');
   };
+
+  const errorMsg = errors.schedules?.message;
+  const isGlobalError = typeof errorMsg === 'string' && errorMsg.includes('한 개 이상');
+  const isDateError = typeof errorMsg === 'string' && errorMsg.includes('날짜');
+  const isStartError = typeof errorMsg === 'string' && errorMsg.includes('시작');
+  const isEndError = typeof errorMsg === 'string' && errorMsg.includes('종료');
 
   return (
     <div className='col-span-4 grid grid-cols-[2fr_1fr_1fr_56px] gap-5'>
@@ -72,6 +85,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
         onChange={(v: Date | null) => setDate(v)}
         placeholderText='yyyy-mm-dd'
         enableTabLoop={false}
+        className={`${isGlobalError || isDateError ? 'border-red-primary bg-red-100' : ''}`}
       />
       <DatePicker
         selected={startTime}
@@ -83,6 +97,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
         dateFormat='HH:mm'
         placeholderText='00:00'
         enableTabLoop={false}
+        className={`${isGlobalError || isStartError ? 'border-red-primary bg-red-100' : ''}`}
       />
       <DatePicker
         selected={endTime}
@@ -94,6 +109,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
         dateFormat='HH:mm'
         placeholderText='00:00'
         enableTabLoop={false}
+        className={`${isGlobalError || isEndError ? 'border-red-primary bg-red-100' : ''}`}
       />
 
       <button
@@ -104,7 +120,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
         +
       </button>
 
-      {error && <p className='col-span-4 text-red-500'>{error}</p>}
+      {typeof errorMsg === 'string' && <p className='col-span-4 text-red-500'>{errorMsg}</p>}
     </div>
   );
 };

@@ -102,28 +102,35 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
     };
   };
 
-  const onSubmit: SubmitHandler<ActivityFormValues> = async data => {
+  const onSubmit: SubmitHandler<ActivityFormValues> = async formData => {
+    const schedules = methods.getValues('schedules');
+    if (!schedules || schedules.length === 0) {
+      methods.setError('schedules', {
+        type: 'manual',
+        message: '시간대를 하나 이상 추가해주세요.',
+      });
+      return;
+    }
+
     try {
-      const url = isEdit
-        ? `${REQUEST_URL}/my-activities/${initialData?.id}`
-        : `${REQUEST_URL}/activities`;
+      const url = isEdit ? `/my-activities/${initialData?.id}` : `/activities`;
 
       const method = isEdit ? 'PATCH' : 'POST';
 
       const payload = isEdit
-        ? preparePatchPayload(data, initialData)
+        ? preparePatchPayload(formData, initialData)
         : {
-            title: data.title,
-            category: data.category,
-            description: data.description,
-            address: data.address,
-            price: data.price,
-            schedules: data.schedules,
-            bannerImageUrl: data.bannerImageUrl,
-            subImageUrls: (data.subImages ?? []).map(img => img.imageUrl),
+            title: formData.title,
+            category: formData.category,
+            description: formData.description,
+            address: formData.address,
+            price: formData.price,
+            schedules: formData.schedules,
+            bannerImageUrl: formData.bannerImageUrl,
+            subImageUrls: (formData.subImages ?? []).map(img => img.imageUrl),
           };
 
-      const res = await fetchClientData(url, {
+      const data = await fetchClientData(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -131,21 +138,11 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const error = await res.json();
-        const errorDefaultMsg = `체험 ${isEdit ? '수정' : '등록'}에 실패했습니다.`;
-
-        console.error('서버 에러:', error);
-        alert(error.message || errorDefaultMsg);
-        return;
-      }
-
-      const result = await res.json();
       const alertMsg = `체험이 ${isEdit ? '수정' : '등록'}되었습니다.`;
       alert(alertMsg);
 
       // 등록/수정 후 상세 페이지로 이동
-      router.push(`/activities/${result.id}`);
+      router.push(`/activities/${data.id}`);
     } catch (err) {
       console.error('네트워크 에러:', err);
       alert('서버와의 통신에 실패했습니다.');
@@ -164,29 +161,51 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
           }
         />
 
-        <InputField placeholder='제목' className='w-full' {...register('title')} />
-        {errors && <p className='text-red-500'>{errors?.title?.message}</p>}
+        <div className='mb-4'>
+          <FormLabel inputId='title' className='mb-4'>
+            체험명
+          </FormLabel>
+          <InputField
+            placeholder='체험명'
+            className='w-full'
+            {...register('title')}
+            error={errors?.title?.message}
+          />
+        </div>
 
-        <Controller
-          name='category'
-          control={methods.control}
-          render={({ field }) => (
-            <DropdownSelect
-              items={ACTIVITY_CATEGORIES}
-              selectedItem={
-                ACTIVITY_CATEGORIES.find(category => category.value === field.value) ?? null
-              }
-              onChange={item => field.onChange(item?.value ?? '')}
-              placeholder='카테고리 선택'
-            />
-          )}
-        />
-        {errors && <p className='text-red-500'>{errors?.category?.message}</p>}
+        <div className='mb-4'>
+          <FormLabel inputId='category' className='mb-4'>
+            카테고리
+          </FormLabel>
+          <Controller
+            name='category'
+            control={methods.control}
+            render={({ field, fieldState }) => (
+              <DropdownSelect
+                items={ACTIVITY_CATEGORIES}
+                selectedItem={
+                  ACTIVITY_CATEGORIES.find(category => category.value === field.value) ?? null
+                }
+                placeholder='카테고리 선택'
+                error={fieldState.error?.message}
+                onChange={item => field.onChange(item?.value ?? '')}
+              />
+            )}
+          />
+        </div>
 
-        <TextAreaField placeholder='체험 설명' {...register('description')} />
-        {errors && <p className='text-red-500'>{errors?.description?.message}</p>}
+        <div className='mb-4'>
+          <FormLabel inputId='description' className='mb-4'>
+            체험 설명
+          </FormLabel>
+          <TextAreaField
+            placeholder='체험 설명'
+            {...register('description')}
+            error={errors?.description?.message}
+          />
+        </div>
 
-        <div className='flex flex-col gap-3 md:gap-4'>
+        <div className='mb-4 flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='price'>가격</FormLabel>
           <InputField
             id='price'
@@ -196,28 +215,28 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
             {...register('price', {
               valueAsNumber: true,
             })}
+            error={errors?.price?.message}
           />
-          {errors && <p className='text-red-500'>{errors?.price?.message}</p>}
         </div>
 
-        <div className='flex flex-col gap-3 md:gap-4'>
+        <div className='mb-4 flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='address'>주소</FormLabel>
           <Controller
             name='address'
             control={methods.control}
-            render={({ field }) => <AddressField {...field} />}
+            render={({ field, fieldState }) => (
+              <AddressField {...field} error={fieldState.error?.message} />
+            )}
           />
-          {errors && <p className='text-red-500'>{errors?.address?.message}</p>}
         </div>
 
-        <div className='flex flex-col gap-3 md:gap-4'>
+        <div className='mb-4 flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='date'>예약 가능한 시간대</FormLabel>
           <Controller
             name='schedules'
             control={methods.control}
             render={({ field }) => <DateTimeInputGroup {...field} />}
           />
-          {errors && <p className='text-red-500'>{errors?.schedules?.message}</p>}
         </div>
 
         <div className='flex flex-col gap-3 md:gap-4'>

@@ -79,7 +79,7 @@
   }
 
   input {
-    @apply w-full rounded-md border bg-white p-3.5 text-base transition-colors duration-300 outline-none;
+    @apply focus:border-primary w-full rounded-md border border-gray-600 bg-white p-3.5 text-base transition-colors duration-300 outline-none;
   }
 }
 

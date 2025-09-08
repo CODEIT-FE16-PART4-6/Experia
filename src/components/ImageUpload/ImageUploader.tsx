@@ -41,7 +41,7 @@ const ImageUploader = ({ value, error, onChange }: ImageUploaderProps) => {
       <ImageUploadButton
         onClick={handleImageUpload}
         isUploading={isUploading}
-        className={clsx('mr-2 mb-2', { 'border-red-500': error })}
+        className={clsx('mr-2 mb-2', { 'border-red-500 bg-red-100': error })}
       />
       <input type='file' className='hidden' ref={fileRef} onChange={handleImageUrl} />
 
