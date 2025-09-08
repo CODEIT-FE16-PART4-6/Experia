@@ -14,9 +14,10 @@ import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/acti
 import { zodResolver } from '@hookform/resolvers/zod';
 import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
-import { REQUEST_URL } from '@/utils/api-public';
 import { useRouter } from 'next/navigation';
 import fetchClientData from '@/utils/api-client/fetchClientData';
+import formatPrice from '@/utils/formatter/formatPrice';
+import parsePrice from '@/utils/formatter/parsePrice';
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
@@ -207,15 +208,24 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
 
         <div className='mb-4 flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='price'>가격</FormLabel>
-          <InputField
-            id='price'
-            type='number'
-            placeholder='가격'
-            className='w-full'
-            {...register('price', {
-              valueAsNumber: true,
-            })}
-            error={errors?.price?.message}
+          <Controller
+            name='price'
+            control={methods.control}
+            render={({ field, fieldState }) => (
+              <InputField
+                id='price'
+                type='text'
+                placeholder='가격'
+                className='w-full'
+                value={formatPrice(field.value)}
+                onChange={e => {
+                  const raw = parsePrice(e.target.value);
+                  field.onChange(raw); // form state에는 숫자 저장
+                }}
+                onBlur={field.onBlur}
+                error={fieldState.error?.message}
+              />
+            )}
           />
         </div>
 
