@@ -7,13 +7,7 @@ import Button from '@/components/Button';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 import { useUserStore } from '@/stores/userStore';
 import { SubmitHandler } from 'react-hook-form';
-
-type MyInfoFormValues = {
-  nickname: string;
-  email: string;
-  password?: string;
-  passwordConfirm?: string;
-};
+import { MyInfoFormValues } from '@/types/schema/myInfoFormSchema';
 
 const MyInfoClient = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -33,6 +27,9 @@ const MyInfoClient = () => {
 
       const result = await fetchClientData(`/users/me`, {
         method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(updateData),
       });
 
@@ -46,7 +43,8 @@ const MyInfoClient = () => {
       }
     } catch (err) {
       console.error('정보 수정 실패:', err);
-      alert('정보 수정에 실패했습니다.');
+      const errorMessage = err instanceof Error ? err.message : '정보 수정에 실패했습니다.';
+      alert(errorMessage);
     }
   };
 

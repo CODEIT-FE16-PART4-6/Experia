@@ -9,8 +9,9 @@ import { PATHS } from '@/constants';
 import SnbList from './Snb/SnbList';
 import { Input } from '@headlessui/react';
 import useImageUpload from '@/hooks/useImageUpload';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { useUserStore } from '@/stores/userStore';
 
 const SNB_LIST = [
   {
@@ -37,18 +38,40 @@ const SNB_LIST = [
 const defaultProfileImage = require('@/assets/imgs/defaultProfile/default.png');
 
 const Snb = () => {
-  const [profileImageUrl, setProfileImageUrl] = useState(defaultProfileImage);
+  const user = useUserStore(state => state.user);
+  const updateProfileImage = useUserStore(state => state.updateProfileImage);
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    user?.profileImageUrl || defaultProfileImage,
+  );
   const { handleChangeImage, fileRef, isUploading } = useImageUpload('users/me/image');
 
   const handleImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const res = await handleChangeImage(e);
-      if (res) {
-        setProfileImageUrl(res.profileImageUrl);
+      try {
+        const res = await handleChangeImage(e);
+        if (res && res.profileImageUrl) {
+          // 로컬 상태 업데이트
+          setProfileImageUrl(res.profileImageUrl);
+          // 전역 상태 업데이트
+          updateProfileImage(res.profileImageUrl);
+          alert('프로필 사진이 성공적으로 변경되었습니다.');
+        }
+      } catch (error) {
+        console.error('프로필 사진 업로드 실패:', error);
+        alert('프로필 사진 업로드에 실패했습니다.');
       }
     },
-    [handleChangeImage],
+    [handleChangeImage, updateProfileImage],
   );
+
+  // user 상태가 변경될 때 프로필 이미지 업데이트
+  useEffect(() => {
+    if (user?.profileImageUrl) {
+      setProfileImageUrl(user.profileImageUrl);
+    } else {
+      setProfileImageUrl(defaultProfileImage);
+    }
+  }, [user?.profileImageUrl]);
 
   const handleButtonClick = () => {
     console.log('버튼 클릭');
