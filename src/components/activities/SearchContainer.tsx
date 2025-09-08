@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useRef } from 'react';
 import { Activities } from '@/types/schema/activitiesSchema';
 import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
 import SearchBarClient from '@/components/activities/SearchBar.client';
@@ -31,15 +31,20 @@ export default function SearchContainer({ initialData, initialKeyword = '' }: Pr
       )}
 
       <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-4'>
-        <div className='flex gap-2'>
+        {/* 카테고리 필터 */}
+        <div className='hide-scrollbar flex flex-1 touch-pan-x flex-nowrap items-center gap-2 overflow-x-auto'>
           <CategoryMenu selected={category} onChange={setCategory} />
         </div>
-        <DropdownOptions
-          items={ACTIVITY_LIST_ORDER_OPTIONS}
-          type='order'
-          placeholderLabel='최신순'
-          onChange={setSort}
-        />
+
+        {/* 정렬 드롭다운 */}
+        <div className='ml-4 shrink-0'>
+          <DropdownOptions
+            items={ACTIVITY_LIST_ORDER_OPTIONS}
+            type='order'
+            placeholderLabel='최신순'
+            onChange={setSort}
+          />
+        </div>
       </div>
 
       <Suspense fallback={<ActivityListSkeleton />}>
