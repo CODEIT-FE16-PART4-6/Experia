@@ -12,8 +12,8 @@ interface ImagePreviewProps {
 
 const ImagePreview = ({ src, alt, imgIdx, className, onRemove }: ImagePreviewProps) => {
   return (
-    <div className='border-primary relative mr-2 h-[120px] w-[120px] overflow-hidden rounded-2xl border-2 md:h-[140px] md:w-[140px]'>
-      <figure className='bg-primary-10 overflow-hidden'>
+    <div className='relative mr-2 h-[120px] w-[120px] md:h-[140px] md:w-[140px]'>
+      <figure className='bg-primary-10 border-primary overflow-hidden rounded-2xl border-2'>
         <Image
           src={src}
           alt={alt}
@@ -25,10 +25,16 @@ const ImagePreview = ({ src, alt, imgIdx, className, onRemove }: ImagePreviewPro
       <button
         type='button'
         aria-label='이미지 삭제'
-        className='group absolute inset-0 z-[1] flex h-full w-full items-center justify-center bg-[rgba(27,27,27,0.6)] p-2 text-lg text-white opacity-0 transition-colors hover:opacity-100'
+        className='group absolute -top-2 -right-2 z-[1] flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(27,27,27,0.6)] p-2 text-lg text-white'
         onClick={() => onRemove(imgIdx)}
       >
-        <DeleteIcon className='h-6 w-6 translate-y-2 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100' />
+        <Image
+          src='/icons/ic_CloseWhite.svg'
+          alt=''
+          width={20}
+          height={20}
+          className='h-full w-full'
+        />
       </button>
     </div>
   );

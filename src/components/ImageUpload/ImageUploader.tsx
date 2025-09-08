@@ -2,10 +2,10 @@ import Image from 'next/image';
 
 import { ChangeEvent } from 'react';
 
+import clsx from 'clsx';
 import ImageUploadButton from './ImageUploadButton';
 import useImageUpload from '@/hooks/useImageUpload';
-import DeleteIcon from '@/assets/icons/ic_delete.svg';
-import clsx from 'clsx';
+import ImagePreview from './ImagePreview';
 
 interface ImageUploaderProps {
   value: string | null;
@@ -45,27 +45,7 @@ const ImageUploader = ({ value, error, onChange }: ImageUploaderProps) => {
       />
       <input type='file' className='hidden' ref={fileRef} onChange={handleImageUrl} />
 
-      {value && (
-        <div className='border-primary relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-2xl border-2 md:h-[140px] md:w-[140px]'>
-          <figure className='bg-primary-10 overflow-hidden'>
-            <Image
-              src={value}
-              alt='이미지'
-              width={140}
-              height={140}
-              className='aspect-square h-full w-full object-cover'
-            />
-          </figure>
-          <button
-            type='button'
-            aria-label='이미지 삭제'
-            className='group absolute inset-0 z-[1] flex h-full w-full items-center justify-center bg-[rgba(27,27,27,0.6)] p-2 text-lg text-white opacity-0 transition-colors hover:opacity-100'
-            onClick={handleRemove}
-          >
-            <DeleteIcon className='h-6 w-6 translate-y-2 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100' />
-          </button>
-        </div>
-      )}
+      {value && <ImagePreview src={value} alt={'배너 이미지 미리보기'} onRemove={handleRemove} />}
     </div>
   );
 };
