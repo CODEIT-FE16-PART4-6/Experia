@@ -88,7 +88,10 @@ const DropdownOptions = ({ items, placeholderLabel, type, onChange }: DropdownOp
           leaveFrom='transform translate-y-2 opacity-100'
           leaveTo='transform -translate-y-2 opacity-0'
         >
-          <MenuItems className='absolute right-0 z-[5] mt-2 w-full rounded-xl border border-gray-300 bg-white shadow-lg focus:outline-none lg:rounded-2xl'>
+          <MenuItems
+            modal={false}
+            className='absolute right-0 z-[5] mt-2 w-full rounded-xl border border-gray-300 bg-white shadow-lg focus:outline-none lg:rounded-2xl'
+          >
             {items.map((item, index) => (
               <MenuItem key={`${item}-${index}`}>
                 <button
