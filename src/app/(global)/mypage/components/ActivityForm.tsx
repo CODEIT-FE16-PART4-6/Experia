@@ -16,13 +16,11 @@ import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 import { REQUEST_URL } from '@/utils/api-public';
 import { useRouter } from 'next/navigation';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
 }
-
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';
 
 const ActivityForm = ({ initialData }: ActivityFormProps) => {
   const router = useRouter();
@@ -125,13 +123,10 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
             subImageUrls: (data.subImages ?? []).map(img => img.imageUrl),
           };
 
-      console.log(payload);
-
-      const res = await fetch(url, {
+      const res = await fetchClientData(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
