@@ -29,7 +29,6 @@ const MainPageClient = ({ initialData, keyword, category, sort }: Props) => {
 
   useEffect(() => {
     if (innerWidth) setPageSize(getPageSize(innerWidth));
-    console.log(sort);
   }, [innerWidth, sort]);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
