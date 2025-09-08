@@ -1,5 +1,10 @@
 'use client';
 
+import { ROUTES } from '@/constants';
+import useLogout from '@/hooks/useLogout';
+import useScrollY from '@/hooks/useScrollY';
+import { useUserStore } from '@/stores/userStore';
+import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import useScrollY from '@/hooks/useScrollY';
@@ -10,6 +15,7 @@ import { useUserStore } from '@/stores/userStore';
 import { ROUTES } from '@/constants';
 import NotificationPopover from '@/components/notification/NotificationPopover';
 import UserDropdown from './UserDropdown';
+
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);

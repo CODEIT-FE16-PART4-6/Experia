@@ -6,9 +6,11 @@ type Props = {
   year: number;
   month: number;
   activities: MyActivitiesDto[];
+  // 부모 컴포넌트(CalenderBoard.tsx)로부터 날짜 클릭 이벤트를 처리하는 함수를 받습니다.
+  onDayClick: (day: number, completed: number, confirmed: number, pending: number) => void;
 };
 
-const CalenderBoardFunction = ({ year, month, activities }: Props) => {
+const CalenderBoardFunction = ({ year, month, activities, onDayClick }: Props) => {
   // // 해당 월의 총 일수를 구한다.
   // const date: Date = new Date(year, month);
   // console.log(date);
@@ -67,11 +69,20 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
     let exist: boolean = false;
     for (let j = 0; j < activities.length; j++) {
       const oneDay: number = Number(activities[j].date.split('-')[2]);
-      console.log('oneDay : ', activities[j]);
+      // console.log('oneDay : ', activities[j]);
       if (i == oneDay) {
         arr.push(
+          // 각 날짜 컴포넌트에 고유한 key와 클릭 이벤트를 처리할 onClick 핸들러를 전달합니다.
           <CalenderOnePartComponent
-            key={`${i}`}
+            key={`activity-${i}`}
+            onClick={() =>
+              onDayClick(
+                i,
+                activities[j].reservations.completed,
+                activities[j].reservations.confirmed,
+                activities[j].reservations.pending,
+              )
+            }
             day={String(i)}
             completed={activities[j].reservations.completed}
             confirmed={activities[j].reservations.confirmed}
@@ -89,8 +100,10 @@ const CalenderBoardFunction = ({ year, month, activities }: Props) => {
 
     if (!exist) {
       arr.push(
+        // 예약이 없는 날짜에도 클릭 이벤트를 처리하기 위해 key와 onClick 핸들러를 전달합니다.
         <CalenderOnePartComponent
-          key={`${i}`}
+          key={`day-${i}`}
+          onClick={() => onDayClick(i, 0, 0, 0)}
           day={String(i)}
           completed={0}
           confirmed={0}
