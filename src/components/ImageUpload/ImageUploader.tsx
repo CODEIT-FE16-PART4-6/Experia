@@ -4,6 +4,8 @@ import { ChangeEvent } from 'react';
 
 import ImageUploadButton from './ImageUploadButton';
 import useImageUpload from '@/hooks/useImageUpload';
+import DeleteIcon from '@/assets/icons/ic_delete.svg';
+import clsx from 'clsx';
 
 interface ImageUploaderProps {
   value: string | null;
@@ -26,12 +28,7 @@ const ImageUploader = ({ value, error, onChange }: ImageUploaderProps) => {
       }
     } catch (err) {
       console.error(err);
-      // 추후 모달로 띄울 예정
-      // if (err.status === 401) {
-      //   alert('로그인이 필요합니다.');
-      // } else {
-      //   alert('문제가 발생했습니다.');
-      // }
+      alert('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -40,31 +37,34 @@ const ImageUploader = ({ value, error, onChange }: ImageUploaderProps) => {
   };
 
   return (
-    <div className='flex'>
+    <div className='flex flex-wrap'>
       <ImageUploadButton
         onClick={handleImageUpload}
         isUploading={isUploading}
-        className={error ? 'border-red-500' : ''}
+        className={clsx('mr-2 mb-2', { 'border-red-500': error })}
       />
       <input type='file' className='hidden' ref={fileRef} onChange={handleImageUrl} />
 
       {value && (
-        <figure className='border-primary bg-primary-10 relative ml-2 flex aspect-square w-[140px] items-center justify-center rounded-2xl border-2'>
-          <Image
-            src={value}
-            alt='이미지'
-            width={140}
-            height={140}
-            className='h-full w-full rounded-2xl object-cover'
-          />
+        <div className='border-primary relative h-[120px] w-[120px] shrink-0 overflow-hidden rounded-2xl border-2 md:h-[140px] md:w-[140px]'>
+          <figure className='bg-primary-10 overflow-hidden'>
+            <Image
+              src={value}
+              alt='이미지'
+              width={140}
+              height={140}
+              className='aspect-square h-full w-full object-cover'
+            />
+          </figure>
           <button
             type='button'
-            className='absolute -top-2 -right-2 z-[1] flex h-6 w-6 items-center justify-center rounded-full bg-black p-2 text-lg text-white'
+            aria-label='이미지 삭제'
+            className='group absolute inset-0 z-[1] flex h-full w-full items-center justify-center bg-[rgba(27,27,27,0.6)] p-2 text-lg text-white opacity-0 transition-colors hover:opacity-100'
             onClick={handleRemove}
           >
-            x
+            <DeleteIcon className='h-6 w-6 translate-y-2 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100' />
           </button>
-        </figure>
+        </div>
       )}
     </div>
   );
