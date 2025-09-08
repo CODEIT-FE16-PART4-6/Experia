@@ -15,7 +15,7 @@ interface DateTimeValues {
 }
 
 const DateTimeInputGroup = ({ name }: Props) => {
-  const { control, setError, clearErrors, getValues } = useFormContext<DateTimeValues>();
+  const { control, setError, clearErrors, getValues, setValue } = useFormContext<DateTimeValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -39,8 +39,18 @@ const DateTimeInputGroup = ({ name }: Props) => {
       return a.startTime < b.startTime ? -1 : 1;
     });
 
-    // 정렬한 시간대를 훅폼 form state에 적용
-    append(newSchedules);
+    // 1) 단일 항목 추가
+    append(value);
+
+    // 2) 정렬
+    const updatedSchedules = [...getValues(name)];
+    updatedSchedules.sort((a, b) => {
+      if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+      return a.startTime < b.startTime ? -1 : 1;
+    });
+
+    // 3) 정렬된 배열로 훅폼 값 업데이트
+    setValue(name, updatedSchedules);
 
     clearErrors(name);
   };
@@ -49,12 +59,12 @@ const DateTimeInputGroup = ({ name }: Props) => {
     <>
       <div className='col-span-4 grid grid-cols-[2fr_1fr_1fr_56px] text-left font-medium'>
         <div className='header-item'>날짜</div>
-        <div className='header-item'>시작 시간</div>
-        <div className='header-item'>종료 시간</div>
+        <div className='header-item'>시작 시간 (24시)</div>
+        <div className='header-item'>종료 시간 (24시)</div>
         <div className='header-item'></div>
       </div>
 
-      <div className='grid-row col-span-3 grid grid-cols-4 gap-5'>
+      <div className='grid-row col-span-3 grid grid-cols-4 gap-x-3 gap-y-5'>
         <AddDateTimeItem onAdd={handleAdd} addedSchedules={fields} />
 
         {fields.map((field, i) => (
