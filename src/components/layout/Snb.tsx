@@ -43,7 +43,7 @@ const Snb = () => {
   const [profileImageUrl, setProfileImageUrl] = useState(
     user?.profileImageUrl || defaultProfileImage,
   );
-  const { handleChangeImage, fileRef, isUploading } = useImageUpload('users/me/image');
+  const { handleChangeImage, fileRef, isUploading } = useImageUpload('/users/me/image');
 
   const handleImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {

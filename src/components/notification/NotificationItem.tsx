@@ -5,6 +5,7 @@ import formatRelativeTime from '@/utils/formatter/formatRelativeTime';
 
 interface Props {
   item: Notification;
+  isRead?: boolean;
   onDelete: (id: number) => void;
 }
 
@@ -15,20 +16,21 @@ const splitContent = (content: string) => {
   return [prefix, status, suffix]; // [앞문장, status, 뒷문장]
 };
 
-const NotificationItem = ({ item, onDelete }: Props) => {
+const NotificationItem = ({ item, isRead, onDelete }: Props) => {
   const splitted = splitContent(item.content) || '';
 
   return (
     <li className='noti-list'>
-      {/* // TODO [P6-137]: 새 알림 마크 - 알림 확인 시 제거 */}
       <span
-        className={clsx('mb-2 inline-block h-1.5 w-1.5 rounded-full', {
+        className={clsx('status-dot mb-2 h-1.5 w-1.5 rounded-full', {
           'bg-blue-primary': splitted[1] === '승인',
           'bg-red-primary': splitted[1] === '거절',
+          hidden: isRead,
+          'inline-block': !isRead,
         })}
       ></span>
 
-      <p className='text-md text-gray-900'>
+      <p className='text-md w-[90%] text-gray-900'>
         {splitted[0]}
         <b
           className={clsx({

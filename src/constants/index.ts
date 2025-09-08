@@ -65,3 +65,5 @@ export const ACTIVITY_CATEGORIES = [
   { id: '5', value: '관광' },
   { id: '6', value: '웰빙' },
 ];
+
+export const NOTIFICATIONS_PER_PAGE = 2;
