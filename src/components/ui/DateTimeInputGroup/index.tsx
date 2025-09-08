@@ -1,4 +1,4 @@
-import { useFormContext, useFieldArray, useController } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import AddDateTimeItem from './AddDateTimeItem';
 import DateTimeItem from './DateTimeItem';
 
@@ -15,7 +15,7 @@ interface DateTimeValues {
 }
 
 const DateTimeInputGroup = ({ name }: Props) => {
-  const { control, setError, clearErrors } = useFormContext<DateTimeValues>();
+  const { control, setError, clearErrors, setValue, getValues } = useFormContext<DateTimeValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -29,7 +29,19 @@ const DateTimeInputGroup = ({ name }: Props) => {
       });
       return;
     }
-    append(value);
+
+    const currentSchedules = getValues(name) || []; // 리액트 훅폼에 등록한 커스텀 필드 'schedules' 가져오기
+    const newSchedules = [...currentSchedules, value];
+
+    // 시간대 오름차순 정렬
+    newSchedules.sort((a, b) => {
+      if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+      return a.startTime < b.startTime ? -1 : 1;
+    });
+
+    // 정렬한 시간대를 훅폼 form state에 적용
+    setValue(name, newSchedules);
+
     clearErrors('schedules');
   };
 
@@ -46,7 +58,7 @@ const DateTimeInputGroup = ({ name }: Props) => {
         <AddDateTimeItem onAdd={handleAdd} addedSchedules={fields} />
 
         {fields.map((field, i) => (
-          <DateTimeItem key={field.id} index={i} value={field} onRemove={() => remove(i)} />
+          <DateTimeItem key={field.id} value={field} onRemove={() => remove(i)} />
         ))}
       </div>
     </>

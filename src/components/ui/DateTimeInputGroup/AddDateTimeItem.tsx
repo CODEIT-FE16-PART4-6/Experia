@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface Props {
-  onAdd: (value: { date: string; startTime: string; endTime: string }) => void;
+  onAdd: (newItem: { date: string; startTime: string; endTime: string }) => void;
   addedSchedules: { date: string; startTime: string; endTime: string }[];
 }
 
@@ -27,7 +27,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
       return;
     }
 
-    const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; // YYYY-MM-DD
     const formattedStartTime = startTime.toTimeString().slice(0, 5); // HH:mm
     const formattedEndTime = endTime.toTimeString().slice(0, 5); // HH:mm
 
@@ -45,12 +45,20 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
 
     // 유효성 검사: 시작 시간 < 종료 시간
     if (startTime.getTime() >= endTime.getTime()) {
-      setError('종료 시간이 시작 시간보다 빠릅니다.');
+      setError('종료 시간이 시작 시간과 같거나 더 빠릅니다.');
       return;
     }
 
+    // date 기준 오름차순 정렬
+    const newItem = {
+      date: formattedDate,
+      startTime: formattedStartTime,
+      endTime: formattedEndTime,
+    };
+
     // 유효성 검사 후 항목 추가
-    onAdd({ date: formattedDate, startTime: formattedStartTime, endTime: formattedEndTime });
+    onAdd(newItem);
+
     setDate(null);
     setStartTime(null);
     setEndTime(null);
