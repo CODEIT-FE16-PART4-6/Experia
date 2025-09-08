@@ -1,69 +1,56 @@
-import { cache } from 'react';
-import Post from './components/Post';
+'use client';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
+import { LinkButton } from '@/components/ui/LinkButton';
+import ActivityCard from '../components/ActivityCard';
+import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
+import { useQuery } from '@tanstack/react-query';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
+const fetchMyActivities = async () => {
+  const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/my-activities?size=20', {
+    method: 'GET',
+    headers: {
+      //임시 토큰값
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjI4MzI1NSwiZXhwIjoxNzU3NDkyODU1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.7f4EC3wcK_Zzpys7mDlyXshKz5MX-2mdlZ12gOrVoJA', //Bearer 뒤에 토큰 붙여서 전송
+      'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
+    },
+  });
+  const data = await response.json();
+  const validatedData = Activities.parse(data);
+  return validatedData.activities;
+};
 
-async function fetchActivities(id: string) {
-  //*** cache check
-
-  /*
-  let callCount = 0;
-  callCount++;
-  console.log(`API 호출 : ${callCount} 
-    ID:${id}`); //revalidate 준 만큼의 텀 이후에 이 로그가 다시 실행됨. (만약 새로고침 마다 발생 = 캐싱 안됨)
-  const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}`);
-*/
-  const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}`, {
-    next: { revalidate: 300, tags: ['activity'] },
+const MyActivitiesPage = () => {
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['activityList'],
+    queryFn: fetchMyActivities,
   });
 
-  if (!res.ok) {
-    throw new Error('Fetch 실패');
-  }
-  const data = await res.json();
-  //console.log('받아온 데이터:', data);
-  return data;
-}
+  const handleDeleteSuccess = () => {
+    refetch(); // 삭제 성공 시 데이터 다시 불러오기
+  };
 
-async function fetchReviews(id: string) {
-  const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}/reviews`, {
-    next: { revalidate: 300, tags: ['activity_reviews'] },
-  });
+  if (isLoading) return <div>로딩중...</div>;
+  if (error) return <div>오류 발생: {error.message}</div>;
 
-  if (!res.ok) {
-    throw new Error('Fetch 실패');
-  }
-  const data = await res.json();
-  //console.log('받아온 데이터:', data);
-  return data;
-}
+  const activities = data || [];
 
-//****************캐시에 저장
-/*
-// fn, keyParts, option
-const initialGetActivity = unstable_cache(async (id: string) => fetchActivities(id), ['activity'], {
-  revalidate: 300, //5 minute
-  tags: ['activity'],
-});
-*/
-const initialGetActivity = cache(async (id: string) => {
-  return fetchActivities(id);
-});
+  return (
+    <div>
+      <SectionTitle
+        title='내 체험 관리'
+        action={<LinkButton href='/mypage/my-activities/add-activity'>체험 등록하기</LinkButton>}
+      />
+      {activities.map(activity => (
+        <ActivityCard
+          key={activity.id}
+          type='activity'
+          data={activity as ActivityType}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
+      ))}
+    </div>
+  );
+};
 
-const initialGetReviews = cache(async (id: string) => {
-  return fetchReviews(id);
-});
-
-//****************
-export default async function Page({ params }: PageProps) {
-  const { id } = await params;
-  console.log('id 출력:', id);
-
-  const Postdata = await initialGetActivity(id);
-
-  const reviewData = await initialGetReviews(id);
-  console.log(reviewData);
-  return <Post postData={Postdata} reviewData={reviewData} />;
-}
+export default MyActivitiesPage;

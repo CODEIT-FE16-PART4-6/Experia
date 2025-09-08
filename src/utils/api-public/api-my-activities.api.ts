@@ -223,3 +223,64 @@ export async function UpdateMyActivitiesReserveOneByReservationId(activityId: nu
     body,
   };
 }
+
+export async function FindAllMyActivitiesData(size: number = 1000, cursorId?: number): Promise<{
+  status: number,
+  body: {
+    "activities": [
+      {
+        "id": number,
+        "userId": number,
+        "title": string,
+        "description": string,
+        "category": string,
+        "price": number,
+        "address": string,
+        "bannerImageUrl": string,
+        "rating": number,
+        "reviewCount": number,
+        "createdAt": string,
+        "updatedAt": string
+      }
+    ],
+    "totalCount": number,
+    "cursorId"?: number
+  }
+
+}> {
+  const response1 = await fetch(
+    `${URL}?size=${size}${cursorId ? '&cursorId=' + cursorId : ''}`,
+    {
+      method: 'get',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }),
+    },
+  )
+    .catch(err => {
+      console.log('api-my-activities.api.ts FindAllMyActivitiesData error : ', err);
+      return err;
+    })
+    .finally(() => console.log('api-my-activities.api.ts FindAllMyActivitiesData request finish'));
+  console.log('FindAllMyActivitiesData response : ', response1);
+
+  // 서버의 응답값 코드
+  const status: number = response1.status;
+
+  // 서버의 body값
+  let body: any = null;
+
+  if (!response1.ok) {
+    console.error('API 호출 실패:', response1);
+    body = await response1.json();
+  } else {
+    body = (await response1.json())
+  }
+
+
+  return {
+    status,
+    body,
+  };
+}
