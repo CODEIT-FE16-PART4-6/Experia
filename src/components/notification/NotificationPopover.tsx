@@ -156,7 +156,7 @@ const NotificationPopover = () => {
                 >
                   {notifications.map((noti: Notification) => {
                     const isRead =
-                      lastReadNotiAt === null ||
+                      lastReadNotiAt !== null &&
                       new Date(noti.createdAt) <= new Date(lastReadNotiAt);
 
                     return (
