@@ -10,8 +10,10 @@
     "prepare": "husky",
     "test": "jest",
     "ai-review": "node scripts/ai-review.js",
+    "ai-review:openai": "node scripts/ai-review-openai.js",
     "commit": "AI_REVIEW=true git commit",
     "commit:ai": "AI_REVIEW=true git commit",
+    "commit:ai:openai": "OPENAI_REVIEW=true git commit",
     "commit:normal": "AI_REVIEW=false git commit",
     "commit:interactive": "./scripts/commit-helper.sh"
   },
