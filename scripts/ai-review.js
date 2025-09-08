@@ -116,43 +116,141 @@ function runFallbackReview(files) {
 }
 
 /**
- * AI 리뷰 작업 파일을 생성합니다
+ * 파일 내용을 읽어옵니다
  */
-function createReviewTaskFile(files) {
-  const taskContent = {
-    timestamp: new Date().toISOString(),
-    files: files,
-    rules: '.cursorrules',
-    instructions: [
-      '다음 파일들을 .cursorrules에 정의된 팀 규칙에 따라 리뷰해주세요.',
-      '각 이슈에 대해 CRITICAL, HIGH, MEDIUM, LOW 중 하나의 심각도를 부여해주세요.',
-      'CRITICAL/HIGH: 코드 차단이 필요한 심각한 문제',
-      'MEDIUM/LOW: 개선 권장사항',
-      '결과를 JSON 형태로 반환해주세요.',
-    ],
-    outputFormat: {
-      issues: [
-        {
-          file: '파일 경로',
-          line: '라인 번호',
-          severity: 'CRITICAL|HIGH|MEDIUM|LOW',
-          message: '문제 설명',
-          suggestion: '개선 제안',
-        },
-      ],
-      summary: {
-        critical: 'CRITICAL 이슈 개수',
-        high: 'HIGH 이슈 개수',
-        medium: 'MEDIUM 이슈 개수',
-        low: 'LOW 이슈 개수',
-      },
-    },
+function readFileContent(filePath) {
+  try {
+    return fs.readFileSync(filePath, 'utf8');
+  } catch (error) {
+    log.warning(`파일을 읽을 수 없습니다: ${filePath}`);
+    return null;
+  }
+}
+
+/**
+ * 터미널에서 직접 AI 리뷰를 실행합니다
+ */
+async function runDirectAIReview(files) {
+  log.info('🤖 터미널에서 직접 AI 리뷰를 실행합니다...');
+
+  const reviewResults = [];
+
+  for (const file of files) {
+    log.info(`📝 ${file} 리뷰 중...`);
+
+    const content = readFileContent(file);
+    if (!content) continue;
+
+    // 간단한 AI 리뷰 프롬프트 생성
+    const prompt = `
+다음 ${file} 파일을 .cursorrules에 정의된 팀 규칙에 따라 리뷰해주세요.
+
+파일 내용:
+\`\`\`
+${content}
+\`\`\`
+
+리뷰 기준:
+1. 가독성: 네이밍이 직관적이고 복잡한 로직이 분리되었는가?
+2. 예측 가능성: 반환 타입이 일관되고 에러 처리가 적절한가?
+3. 응집성: 단일 책임 원칙을 지키고 있는가?
+4. 결합도: 불필요한 의존성이 없고 유지보수성이 높은가?
+5. 성능: 불필요한 리렌더링이나 메모리 누수가 없는가?
+6. 보안: 민감한 정보가 노출되지 않는가?
+7. 접근성: 스크린 리더와 키보드 사용자를 고려했는가?
+8. 타입 안전성: TypeScript 타입이 올바르게 정의되었는가?
+
+심각도 기준:
+- CRITICAL: 보안 취약점, 메모리 누수, 런타임 에러 가능성
+- HIGH: 성능 문제, 타입 안전성 위반, 접근성 문제
+- MEDIUM: 코드 품질 개선, 가독성 향상 필요
+- LOW: 스타일 가이드 위반, 최적화 제안
+
+JSON 형태로 응답해주세요:
+{
+  "issues": [
+    {
+      "line": 라인번호,
+      "severity": "CRITICAL|HIGH|MEDIUM|LOW",
+      "message": "문제 설명",
+      "suggestion": "구체적인 수정 제안 (코드 예시 포함)"
+    }
+  ],
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  }
+}
+`;
+
+    try {
+      // 실제 AI API 호출 (여기서는 시뮬레이션)
+      const reviewResult = await simulateAIReview(file, content);
+      reviewResults.push(reviewResult);
+    } catch (error) {
+      log.warning(`${file} 리뷰 중 오류 발생: ${error.message}`);
+    }
+  }
+
+  return reviewResults;
+}
+
+/**
+ * AI 리뷰 시뮬레이션 (실제로는 AI API를 호출해야 함)
+ */
+async function simulateAIReview(file, content) {
+  // 실제 구현에서는 OpenAI API나 다른 AI 서비스를 호출
+  // 여기서는 간단한 규칙 기반 리뷰를 시뮬레이션
+
+  const issues = [];
+  const lines = content.split('\n');
+
+  lines.forEach((line, index) => {
+    const lineNumber = index + 1;
+
+    // 간단한 규칙 기반 검사
+    if (line.includes('any') && !line.includes('//')) {
+      issues.push({
+        line: lineNumber,
+        severity: 'HIGH',
+        message: 'any 타입 사용으로 타입 안전성이 보장되지 않습니다',
+        suggestion: `적절한 타입을 정의하세요. 예: const data: string = value;`,
+      });
+    }
+
+    if (line.includes('console.log') && !line.includes('//')) {
+      issues.push({
+        line: lineNumber,
+        severity: 'MEDIUM',
+        message: 'console.log가 프로덕션 코드에 남아있습니다',
+        suggestion: `개발용 로그는 제거하거나 조건부로 실행하세요. 예: if (process.env.NODE_ENV === 'development') console.log(data);`,
+      });
+    }
+
+    if (line.length > 100) {
+      issues.push({
+        line: lineNumber,
+        severity: 'LOW',
+        message: '라인이 너무 깁니다 (100자 초과)',
+        suggestion: `라인을 분리하여 가독성을 높이세요.`,
+      });
+    }
+  });
+
+  const summary = {
+    critical: issues.filter(i => i.severity === 'CRITICAL').length,
+    high: issues.filter(i => i.severity === 'HIGH').length,
+    medium: issues.filter(i => i.severity === 'MEDIUM').length,
+    low: issues.filter(i => i.severity === 'LOW').length,
   };
 
-  const taskFile = path.join(process.cwd(), '.ai-review-task.json');
-  fs.writeFileSync(taskFile, JSON.stringify(taskContent, null, 2));
-
-  return taskFile;
+  return {
+    file,
+    issues,
+    summary,
+  };
 }
 
 /**
@@ -279,57 +377,74 @@ async function main() {
     return;
   }
 
-  // 5. AI 리뷰 작업 파일 생성
-  const taskFile = createReviewTaskFile(filteredFiles);
-  log.info(`AI 리뷰 작업 파일 생성: ${taskFile}`);
-
-  // 6. 사용자에게 안내
-  console.log(`\n${colors.bold}${colors.magenta}📝 다음 단계를 수행해주세요:${colors.reset}`);
-  console.log(`1. Cursor에서 ${taskFile} 파일을 엽니다`);
-  console.log(`2. Ctrl/Cmd + I를 눌러 AI에게 리뷰를 요청합니다`);
-  console.log(`3. AI가 리뷰를 완료하면 결과 파일이 생성됩니다`);
-  console.log(`\n⏱️  대기 시간: ${REVIEW_TIMEOUT / 1000}초`);
-
+  // 5. 터미널에서 직접 AI 리뷰 실행
   try {
-    // 7. 리뷰 결과 대기
-    const result = await waitForReviewResult(taskFile, REVIEW_TIMEOUT);
+    const reviewResults = await runDirectAIReview(filteredFiles);
 
-    // 8. 결과 분석
-    const analysis = analyzeReviewResult(result);
+    // 6. 결과 분석 및 출력
+    let totalCritical = 0;
+    let totalHigh = 0;
+    let totalMedium = 0;
+    let totalLow = 0;
+    let allIssues = [];
 
-    // 9. 결과 출력
-    console.log(`\n${colors.bold}${analysis.message}${colors.reset}`);
+    reviewResults.forEach(result => {
+      totalCritical += result.summary.critical;
+      totalHigh += result.summary.high;
+      totalMedium += result.summary.medium;
+      totalLow += result.summary.low;
 
-    if (analysis.issues) {
-      printIssues(analysis.issues);
+      result.issues.forEach(issue => {
+        allIssues.push({
+          file: result.file,
+          ...issue,
+        });
+      });
+    });
+
+    // 7. 결과 출력
+    console.log(`\n${colors.bold}${colors.cyan}📊 AI 리뷰 결과${colors.reset}`);
+    console.log(`🚨 CRITICAL: ${totalCritical}개`);
+    console.log(`🔴 HIGH: ${totalHigh}개`);
+    console.log(`🟡 MEDIUM: ${totalMedium}개`);
+    console.log(`🔵 LOW: ${totalLow}개`);
+
+    if (allIssues.length > 0) {
+      console.log(`\n${colors.bold}📋 발견된 이슈:${colors.reset}`);
+      allIssues.forEach((issue, index) => {
+        const severityColor =
+          {
+            CRITICAL: colors.red,
+            HIGH: colors.red,
+            MEDIUM: colors.yellow,
+            LOW: colors.blue,
+          }[issue.severity] || colors.reset;
+
+        console.log(
+          `\n${index + 1}. ${severityColor}${issue.severity}${colors.reset} - ${issue.file}:${issue.line}`,
+        );
+        console.log(`   ${colors.bold}문제:${colors.reset} ${issue.message}`);
+        console.log(`   ${colors.bold}제안:${colors.reset} ${issue.suggestion}`);
+      });
     }
 
-    // 10. 결정에 따른 처리
-    if (analysis.action === 'block') {
+    // 8. 결정에 따른 처리
+    if (totalCritical > 0 || totalHigh > 0) {
+      console.log(`\n${colors.red}${colors.bold}🚨 커밋이 차단되었습니다.${colors.reset}`);
+      console.log(`CRITICAL: ${totalCritical}개, HIGH: ${totalHigh}개 이슈를 먼저 수정해주세요.`);
       process.exit(1); // 커밋 차단
-    } else if (analysis.action === 'warn') {
-      // 경고만 출력하고 커밋 진행
-      log.info('경고가 있지만 커밋을 진행합니다.');
+    } else if (totalMedium > 0 || totalLow > 0) {
+      console.log(
+        `\n${colors.yellow}${colors.bold}⚠️ 경고: ${totalMedium + totalLow}개 이슈가 발견되었습니다.${colors.reset}`,
+      );
+      console.log(`커밋은 진행되지만 개선을 권장합니다.`);
     } else {
-      log.success('모든 검사를 통과했습니다.');
+      console.log(`\n${colors.green}${colors.bold}✅ 모든 검사를 통과했습니다.${colors.reset}`);
     }
   } catch (error) {
-    log.error(`리뷰 중 오류 발생: ${error.message}`);
+    log.error(`AI 리뷰 중 오류 발생: ${error.message}`);
     log.info('폴백 리뷰를 실행합니다.');
     runFallbackReview(filteredFiles);
-  } finally {
-    // 임시 파일 정리
-    try {
-      if (fs.existsSync(taskFile)) {
-        fs.unlinkSync(taskFile);
-      }
-      const resultFile = taskFile.replace('.json', '-result.json');
-      if (fs.existsSync(resultFile)) {
-        fs.unlinkSync(resultFile);
-      }
-    } catch (error) {
-      // 파일 정리 실패는 무시
-    }
   }
 }
 

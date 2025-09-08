@@ -16,8 +16,14 @@ if [ "$AI_REVIEW" = "true" ]; then
     echo "❌ AI 리뷰에서 문제가 발견되어 커밋이 차단되었습니다."
     exit 1
   fi
+elif [ "$OPENAI_REVIEW" = "true" ]; then
+  echo "🤖 OpenAI AI 리뷰를 시작합니다..."
+  if ! node scripts/ai-review-openai.js; then
+    echo "❌ OpenAI AI 리뷰에서 문제가 발견되어 커밋이 차단되었습니다."
+    exit 1
+  fi
 else
-  echo "ℹ️  AI 리뷰를 건너뜁니다. (AI 리뷰를 원하면 AI_REVIEW=true로 설정하세요)"
+  echo "ℹ️  AI 리뷰를 건너뜁니다. (AI 리뷰를 원하면 AI_REVIEW=true 또는 OPENAI_REVIEW=true로 설정하세요)"
 fi
 
 echo "✅ Pre-commit 훅 완료"
