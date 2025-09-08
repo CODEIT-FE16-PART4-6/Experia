@@ -99,7 +99,7 @@
 
 .datepicker :global(.past-highlight),
 .datepicker :global(.past-highlight:hover) {
-  background-color: #9ca3af; /* 회색 */
+  background-color: #d3d3d3; /* 회색 */
   color: white;
   border-radius: 0.5rem;
 }

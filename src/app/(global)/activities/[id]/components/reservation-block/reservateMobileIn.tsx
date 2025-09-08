@@ -66,14 +66,18 @@ const ReservateMobile = ({ data }: Props) => {
   return (
     <div>
       <div className='flex justify-between p-4'>
-        <div>
+        <div className='mr-[2px]'>
           <div className='flex gap-5'>
             <p className='text-[20px] font-bold text-[#112211]'>
               ₩ {(personCount * data.price).toLocaleString('ko-KR')} /
-              <span className='font-normal text-[#1c4d30]'> 총 {personCount}인</span>
+              <span className='font-normal text-[#1c4d30] max-[475px]:text-[15px]'>
+                {' '}
+                총 {personCount}인
+              </span>
             </p>
-            <div className='flex flex-col justify-center text-[13px] font-semibold text-[#1c4d30]'>
+            <div className='flex flex-col justify-center text-[13px] font-semibold text-[#1c4d30] max-[475px]:text-[10px]'>
               {selectedDate ? selectedDate.toLocaleDateString().replaceAll('.', '/') : ''}
+              <br className='hidden max-[475px]:block' />
               {mySchedule ? mySchedule : ''}
             </div>
           </div>

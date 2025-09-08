@@ -144,7 +144,7 @@ const Calander = ({
               <p className='text-nomad-black mt-4 mb-[14px] hidden text-[18px] font-bold sm:hidden md:block'>
                 예약 가능한 시간
               </p>
-              <div className='flex gap-3'>
+              <div className='flex flex-wrap gap-3'>
                 {selectedDateSchedules.map((schedule, index) => (
                   <button
                     className={`${selectedButton === index ? 'bg-nomad-black text-white' : 'text-nomad-black bg-white hover:bg-[#105844] hover:text-white'} rounded-[7px] border-1 border-solid px-3 py-[10px]`}
