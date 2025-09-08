@@ -107,3 +107,32 @@
     }
   }
 }
+
+/* react-datepicker custom */
+.react-datepicker-wrapper {
+  @apply !block w-full;
+}
+
+.react-datepicker-popper {
+  @apply !z-[3] w-full;
+}
+
+.react-datepicker__header--time--only {
+  @apply hidden;
+}
+
+.react-datepicker--time-only,
+.react-datepicker__time-container,
+.react-datepicker__time-box {
+  @apply !w-full;
+}
+
+.react-datepicker__time-box {
+  font-family: 'pretendard';
+  font-size: 16px;
+}
+
+.react-datepicker__time-list-item {
+  height: auto !important;
+  padding: 10px !important;
+}

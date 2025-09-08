@@ -2,6 +2,8 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useFormContext } from 'react-hook-form';
+import Image from 'next/image';
+import styles from '@/styles/datepicker.module.css';
 
 interface Props {
   onAdd: (newItem: { date: string; startTime: string; endTime: string }) => void;
@@ -17,7 +19,6 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
     clearErrors,
     formState: { errors },
   } = useFormContext();
-  // const [error, setError] = useState('');
 
   const handleAdd = () => {
     if (!date) {
@@ -68,7 +69,6 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
     setDate(null);
     setStartTime(null);
     setEndTime(null);
-    // setError('');
     clearErrors('schedules');
   };
 
@@ -80,44 +80,62 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
 
   return (
     <div className='col-span-4 grid grid-cols-[2fr_1fr_1fr_56px] gap-5'>
-      <DatePicker
-        selected={date}
-        onChange={(v: Date | null) => setDate(v)}
-        placeholderText='yyyy-mm-dd'
-        enableTabLoop={false}
-        className={`${isGlobalError || isDateError ? 'border-red-primary bg-red-100' : ''}`}
-      />
-      <DatePicker
-        selected={startTime}
-        onChange={(v: Date | null) => setStartTime(v)}
-        showTimeSelect
-        showTimeSelectOnly
-        timeFormat='HH:mm'
-        timeIntervals={10} // 10분 간격
-        dateFormat='HH:mm'
-        placeholderText='00:00'
-        enableTabLoop={false}
-        className={`${isGlobalError || isStartError ? 'border-red-primary bg-red-100' : ''}`}
-      />
-      <DatePicker
-        selected={endTime}
-        onChange={(v: Date | null) => setEndTime(v)}
-        showTimeSelect
-        showTimeSelectOnly
-        timeFormat='HH:mm'
-        timeIntervals={10}
-        dateFormat='HH:mm'
-        placeholderText='00:00'
-        enableTabLoop={false}
-        className={`${isGlobalError || isEndError ? 'border-red-primary bg-red-100' : ''}`}
-      />
+      <div className='relative w-full'>
+        <DatePicker
+          selected={date}
+          onChange={(v: Date | null) => setDate(v)}
+          placeholderText='yyyy-mm-dd'
+          enableTabLoop={false}
+          className={`${isGlobalError || isDateError ? 'border-red-primary bg-red-100' : ''}`}
+          wrapperClassName={styles.datepicker}
+          calendarClassName={styles.datepicker}
+        />
+        <span className='pointer-events-none absolute top-1/2 right-4 -translate-y-1/2'>
+          <Image src='/icons/ic_Calendar.svg' alt='체험일자 선택' width={24} height={24} />
+        </span>
+      </div>
+
+      <div className='relative w-full'>
+        <DatePicker
+          selected={startTime}
+          onChange={(v: Date | null) => setStartTime(v)}
+          showTimeSelect
+          showTimeSelectOnly
+          timeFormat='HH:mm'
+          timeIntervals={10} // 10분 간격
+          dateFormat='HH:mm'
+          placeholderText='00:00'
+          enableTabLoop={false}
+          className={`${isGlobalError || isStartError ? 'border-red-primary bg-red-100' : ''}`}
+          wrapperClassName={styles.datepicker}
+          calendarClassName={styles.datepicker}
+        />
+      </div>
+
+      <div className='relative w-full'>
+        <DatePicker
+          selected={endTime}
+          onChange={(v: Date | null) => setEndTime(v)}
+          showTimeSelect
+          showTimeSelectOnly
+          timeFormat='HH:mm'
+          timeIntervals={10}
+          dateFormat='HH:mm'
+          placeholderText='00:00'
+          enableTabLoop={false}
+          className={`${isGlobalError || isEndError ? 'border-red-primary bg-red-100' : ''}`}
+          wrapperClassName={styles.datepicker}
+          calendarClassName={styles.datepicker}
+        />
+      </div>
 
       <button
         type='button'
+        aria-label='예약 시간대 추가 버튼'
         onClick={handleAdd}
-        className='bg-primary flex h-[56px] w-[56px] items-center justify-center rounded px-2 py-1 text-white'
+        className='bg-primary hover:bg-primary-dark flex h-[56px] w-[56px] items-center justify-center rounded-lg px-2 py-1 text-white transition-colors'
       >
-        +
+        <Image src='/icons/ic_Plus.svg' alt='' width={24} height={24} />
       </button>
 
       {typeof errorMsg === 'string' && <p className='col-span-4 text-red-500'>{errorMsg}</p>}
