@@ -1,4 +1,4 @@
-import formatPrice from '@/utils/formatPrice';
+import formatPrice from '@/utils/formatter/formatPrice';
 
 describe('formatPrice', () => {
   // 숫자가 올바르게 포맷되는지
