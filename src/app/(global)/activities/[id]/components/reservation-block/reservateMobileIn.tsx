@@ -69,11 +69,11 @@ const ReservateMobile = ({ data }: Props) => {
         <div>
           <div className='flex gap-5'>
             <p className='text-[20px] font-bold text-[#112211]'>
-              ₩ {data.price.toLocaleString('ko-KR')} /
+              ₩ {(personCount * data.price).toLocaleString('ko-KR')} /
               <span className='font-normal text-[#1c4d30]'> 총 {personCount}인</span>
             </p>
-            <div className='flex flex-col justify-center font-semibold text-[#1c4d30]'>
-              {selectedDate ? selectedDate.toLocaleDateString().replaceAll('.', '/') : ''}{' '}
+            <div className='flex flex-col justify-center text-[13px] font-semibold text-[#1c4d30]'>
+              {selectedDate ? selectedDate.toLocaleDateString().replaceAll('.', '/') : ''}
               {mySchedule ? mySchedule : ''}
             </div>
           </div>
@@ -114,7 +114,7 @@ const ReservateMobile = ({ data }: Props) => {
             setSelectedScheduleId={setSelectedScheduleId}
             setMySchedule={setMySchedule}
           />
-          <p className='font-gray-800 text-[20px]'>예약할 인원을 선택해주세요.</p>
+          <p className='font-gray-800 mt-[25px] text-[20px]'>예약할 인원을 선택해주세요.</p>
           <div
             className='mt-2 mb-6 flex h-10 w-[120px] justify-between overflow-hidden rounded-[7px] border-[1px] border-solid border-gray-400'
             style={{ boxShadow: '1px 2.5px 5px rgba(0, 0, 0, 0.1)' }}

@@ -121,16 +121,27 @@ const Calander = ({
           minDate={new Date()} //오늘이전선택불가
           wrapperClassName={styles.datepicker}
           calendarClassName={styles.datepicker}
+          dayClassName={date => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // 오늘 0시 기준
+
+            const isPast = date < today;
+            const isHighlighted = highlightDates.some(
+              highlightDate => date.toDateString() === highlightDate.toDateString(),
+            );
+
+            return isPast && isHighlighted ? 'past-highlight' : '';
+          }}
         />
       </div>
-      <p className='text-nomad-black pt-6 text-[18px] font-bold sm:block md:hidden'>
+      <p className='text-nomad-black mb-[14px] pt-6 text-[18px] font-bold sm:block md:hidden'>
         예약 가능한 시간
       </p>
       {selectedDate ? (
         <div>
           {selectedDateSchedules ? (
             <>
-              <p className='text-nomad-black mt-4 mb-[14px] text-[18px] font-bold sm:hidden md:block'>
+              <p className='text-nomad-black mt-4 mb-[14px] hidden text-[18px] font-bold sm:hidden md:block'>
                 예약 가능한 시간
               </p>
               <div className='flex gap-3'>
