@@ -1,27 +1,49 @@
 'use client';
 
+import { ROUTES } from '@/constants';
+import useLogout from '@/hooks/useLogout';
+import useScrollY from '@/hooks/useScrollY';
+import { useUserStore } from '@/stores/userStore';
+import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import useScrollY from '@/hooks/useScrollY';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import clsx from 'clsx';
 import Avatar from '@/components/ui/Avatar';
 import { useUserStore } from '@/stores/userStore';
 import { ROUTES } from '@/constants';
-import useLogout from '@/hooks/useLogout';
 import NotificationPopover from '@/components/notification/NotificationPopover';
+import UserDropdown from './UserDropdown';
+
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollY = useScrollY();
   const user = useUserStore(state => state.user); // 유저정보 가져오기
   const [DropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleProfileClick = () => {
     setDropdownOpen(prev => !prev);
   };
 
-  const logout = useLogout();
+  // 바깥쪽 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+
+    if (DropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [DropdownOpen]);
 
   useEffect(() => {
     scrollY > 100 ? setIsScrolled(true) : setIsScrolled(false);
@@ -47,30 +69,17 @@ const Header = () => {
                 <NotificationPopover />
               </li>
               <li className='pl-3 md:pl-5'>
-                <button
-                  type='button'
-                  className='hover:text-primary flex items-center gap-2.5 transition-colors'
-                  onClick={handleProfileClick}
-                >
-                  <Avatar imgSrc={user.profileImageUrl ?? null} size='md' />
-                  {user.nickname}
-                </button>
-                {DropdownOpen && (
-                  <div className='group absolute top-10 right-2 z-50 mt-2 w-40 overflow-hidden rounded-md border border-gray-300 bg-white shadow-2xl'>
-                    <Link
-                      href={ROUTES.MY_PAGE}
-                      className='flex h-[50px] w-full cursor-pointer flex-col justify-center border-b border-gray-300 px-2 py-2 text-center hover:bg-gray-200'
-                    >
-                      마이페이지
-                    </Link>
-                    <div
-                      className='group-hover:gray-100 flex h-[50px] w-full cursor-pointer flex-col justify-center px-2 py-2 text-center hover:bg-gray-200'
-                      onClick={() => logout()}
-                    >
-                      로그아웃
-                    </div>
-                  </div>
-                )}
+                <div ref={dropdownRef} className='relative'>
+                  <button
+                    type='button'
+                    className='hover:text-primary flex items-center gap-2.5 transition-colors'
+                    onClick={handleProfileClick}
+                  >
+                    <Avatar imgSrc={user.profileImageUrl ?? null} size='md' />
+                    {user.nickname}
+                  </button>
+                  <UserDropdown isOpen={DropdownOpen} onClose={() => setDropdownOpen(false)} />
+                </div>
               </li>
             </ul>
           ) : (
