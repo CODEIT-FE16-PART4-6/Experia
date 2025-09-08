@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 import formatPrice from '@/utils/formatter/formatPrice';
 import parsePrice from '@/utils/formatter/parsePrice';
+import Image from 'next/image';
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
@@ -230,7 +231,14 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
         </div>
 
         <div className='mb-4 flex flex-col gap-3 md:gap-4'>
-          <FormLabel inputId='address'>주소</FormLabel>
+          <div className='flex flex-col'>
+            <FormLabel inputId='address'>주소</FormLabel>
+            <p className='text-md flex gap-1 text-gray-700'>
+              <Image src='/icons/ic_info.svg' alt='가이드' width={16} height={16} />
+              국가, 도시/지역구(행정구역), 도로명주소를 입력해주세요.
+            </p>
+          </div>
+
           <Controller
             name='address'
             control={methods.control}
