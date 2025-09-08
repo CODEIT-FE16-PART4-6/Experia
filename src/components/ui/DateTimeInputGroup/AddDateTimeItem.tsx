@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface Props {
@@ -32,7 +31,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
     const formattedStartTime = startTime.toTimeString().slice(0, 5); // HH:mm
     const formattedEndTime = endTime.toTimeString().slice(0, 5); // HH:mm
 
-    // 중복 시간 체크
+    // 유효성 검사: 중복 시간 체크
     const duplicate = addedSchedules.some(
       schedule =>
         schedule.date === formattedDate &&
@@ -44,7 +43,13 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
       return;
     }
 
-    // 유효성 검사, 중복 체크 후 항목 추가
+    // 유효성 검사: 시작 시간 < 종료 시간
+    if (startTime.getTime() >= endTime.getTime()) {
+      setError('종료 시간이 시작 시간보다 빠릅니다.');
+      return;
+    }
+
+    // 유효성 검사 후 항목 추가
     onAdd({ date: formattedDate, startTime: formattedStartTime, endTime: formattedEndTime });
     setDate(null);
     setStartTime(null);
