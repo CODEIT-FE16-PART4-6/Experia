@@ -57,20 +57,19 @@ const DateTimeInputGroup = ({ name }: Props) => {
 
   return (
     <>
-      <div className='col-span-4 grid grid-cols-[2fr_1fr_1fr_56px] text-left font-medium'>
+      <div className='date-time-grid-header-layout'>
         <div className='header-item'>날짜</div>
         <div className='header-item'>시작 시간 (24시)</div>
+        <div className='header-item'></div>
         <div className='header-item'>종료 시간 (24시)</div>
         <div className='header-item'></div>
       </div>
 
-      <div className='grid-row col-span-3 grid grid-cols-4 gap-x-3 gap-y-5'>
-        <AddDateTimeItem onAdd={handleAdd} addedSchedules={fields} />
+      <AddDateTimeItem onAdd={handleAdd} addedSchedules={fields} />
 
-        {fields.map((field, i) => (
-          <DateTimeItem key={field.id} value={field} onRemove={() => remove(i)} />
-        ))}
-      </div>
+      {fields.map((field, i) => (
+        <DateTimeItem key={field.id} value={field} onRemove={() => remove(i)} />
+      ))}
     </>
   );
 };

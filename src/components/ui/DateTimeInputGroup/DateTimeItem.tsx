@@ -6,10 +6,31 @@ interface Props {
 
 const DateTimeItem = ({ value, onRemove }: Props) => {
   return (
-    <div className='col-span-4 grid grid-cols-[2fr_1fr_1fr_56px] gap-5'>
-      <input type='date' readOnly value={value.date} className='border p-1' />
-      <input type='time' readOnly value={value.startTime} className='border p-1' />
-      <input type='time' readOnly value={value.endTime} className='border p-1' />
+    <div className='date-time-list-grid-layout'>
+      <h6 className='mt-2 font-semibold sm:hidden'>등록된 예약 시간대</h6>
+
+      <input
+        type='text'
+        readOnly
+        value={value.date}
+        className='text-primary pointer-events-none border-gray-300 bg-white p-3.5 font-medium shadow-sm'
+      />
+
+      <input
+        type='text'
+        readOnly
+        value={value.startTime}
+        className='text-primary pointer-events-none w-[30%] grow border-gray-300 bg-white p-3.5 font-medium shadow-sm sm:w-full sm:grow-0'
+      />
+
+      <span className='self-center text-lg font-bold'>~</span>
+
+      <input
+        type='text'
+        readOnly
+        value={value.endTime}
+        className='text-primary pointer-events-none w-[30%] grow border-gray-300 bg-white p-3.5 font-medium shadow-sm sm:w-full sm:grow-0'
+      />
 
       <button
         type='button'

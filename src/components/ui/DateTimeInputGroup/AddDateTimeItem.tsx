@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useFormContext } from 'react-hook-form';
 import Image from 'next/image';
 import styles from '@/styles/datepicker.module.css';
+import clsx from 'clsx';
 
 interface Props {
   onAdd: (newItem: { date: string; startTime: string; endTime: string }) => void;
@@ -14,6 +15,8 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
   const [date, setDate] = useState<Date | null>(null);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
+  const [isStartOpen, setIsStartOpen] = useState(false);
+  const [isEndOpen, setIsEndOpen] = useState(false);
   const {
     setError,
     clearErrors,
@@ -79,7 +82,11 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
   const isEndError = typeof errorMsg === 'string' && errorMsg.includes('종료');
 
   return (
-    <div className='col-span-4 grid grid-cols-[2fr_1fr_1fr_56px] gap-5'>
+    <div
+      className={clsx('date-time-grid-layout', {
+        'border border-x-0 border-t-0 border-b-gray-300 pb-3 md:pb-5': addedSchedules.length > 0,
+      })}
+    >
       <div className='relative w-full'>
         <DatePicker
           selected={date}
@@ -95,7 +102,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
         </span>
       </div>
 
-      <div className='relative w-full'>
+      <div className='relative w-[30%] grow sm:w-full sm:grow-0'>
         <DatePicker
           selected={startTime}
           onChange={(v: Date | null) => setStartTime(v)}
@@ -109,10 +116,23 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
           className={`${isGlobalError || isStartError ? 'border-red-primary bg-red-100' : ''}`}
           wrapperClassName={styles.datepicker}
           calendarClassName={styles.datepicker}
+          onCalendarOpen={() => setIsStartOpen(true)}
+          onCalendarClose={() => setIsStartOpen(false)}
         />
+
+        <span
+          className={clsx(
+            'absolute top-1/2 right-0 -translate-1/2 transition-transform',
+            isStartOpen ? 'rotate-180' : '',
+          )}
+        >
+          <Image src='/icons/ic_ArrowDownLine.svg' alt='시작 시간 선택' width={20} height={20} />
+        </span>
       </div>
 
-      <div className='relative w-full'>
+      <span className='self-center text-lg font-bold'>~</span>
+
+      <div className='relative w-[30%] grow sm:w-full sm:grow-0'>
         <DatePicker
           selected={endTime}
           onChange={(v: Date | null) => setEndTime(v)}
@@ -126,7 +146,18 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
           className={`${isGlobalError || isEndError ? 'border-red-primary bg-red-100' : ''}`}
           wrapperClassName={styles.datepicker}
           calendarClassName={styles.datepicker}
+          onCalendarOpen={() => setIsEndOpen(true)}
+          onCalendarClose={() => setIsEndOpen(false)}
         />
+
+        <span
+          className={clsx(
+            'absolute top-1/2 right-0 -translate-1/2 transition-transform',
+            isEndOpen ? 'rotate-180' : '',
+          )}
+        >
+          <Image src='/icons/ic_ArrowDownLine.svg' alt='종료 시간 선택' width={20} height={20} />
+        </span>
       </div>
 
       <button

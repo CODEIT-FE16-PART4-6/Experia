@@ -92,47 +92,51 @@
   /* notification */
   .noti-list {
     @apply relative rounded-md bg-white px-3 py-4 break-keep;
+  }
 
-    /* form */
-    .form-header {
-      @apply mb-4;
-    }
+  /* form */
+  .form-header {
+    @apply mb-4;
+  }
 
-    .form-content {
-      @apply flex grow flex-col gap-6;
-    }
+  .form-content {
+    @apply flex grow flex-col gap-6;
+  }
 
-    .form-footer {
-      @apply sticky bottom-0;
-    }
+  .form-footer {
+    @apply sticky bottom-0;
+  }
+
+  /* 예약 시간대 그리드 */
+  .date-time-grid-layout {
+    @apply flex flex-wrap gap-4 sm:col-span-5 sm:grid sm:grid-cols-[2fr_1fr_auto_1fr_56px];
+  }
+
+  .date-time-grid-header-layout {
+    @apply hidden gap-4 text-left font-medium sm:grid sm:grid-cols-[2fr_1fr_auto_1fr_56px];
+  }
+
+  .date-time-list-grid-layout {
+    @apply flex flex-wrap gap-x-4 gap-y-5 sm:grid sm:grid-cols-[2fr_1fr_auto_1fr_56px];
   }
 }
 
 /* react-datepicker custom */
-.react-datepicker-wrapper {
-  @apply !block w-full;
+/* module.css에서 .datepicker :global로 선택 불가능한 클래스들만 여기서 커스텀 */
+.react-datepicker {
+  box-shadow: 0 0px 12px 3px rgba(0, 0, 0, 0.05);
 }
 
 .react-datepicker-popper {
-  @apply !z-[3] w-full;
+  width: 100%;
+  z-index: 5 !important;
 }
 
-.react-datepicker__header--time--only {
-  @apply hidden;
+.react-datepicker__triangle {
+  display: none;
 }
 
-.react-datepicker--time-only,
 .react-datepicker__time-container,
-.react-datepicker__time-box {
-  @apply !w-full;
-}
-
-.react-datepicker__time-box {
-  font-family: 'pretendard';
-  font-size: 16px;
-}
-
-.react-datepicker__time-list-item {
-  height: auto !important;
-  padding: 10px !important;
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
+  width: 100% !important;
 }
