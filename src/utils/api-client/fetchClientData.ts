@@ -45,7 +45,7 @@ const refreshAccessToken = async () => {
 
 // fetch 래퍼 함수 (외부에서 이 함수 사용)
 const fetchClientData = async (endpoint: string, options: RequestInit = {}) => {
-  const accessToken = localStorage.getItem('access_token');
+  let accessToken = localStorage.getItem('access_token');
   const headers = new Headers(options.headers);
 
   // 요청 헤더에 액세스 토큰 추가
