@@ -6,7 +6,7 @@ import { fetchServerData } from '@/utils/api-server';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
-import { useEffect, useState, useRef, useCallback, Suspense } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
@@ -20,7 +20,7 @@ type Props = {
   keyword: string
 }
 
-const MainPageClient = ({ initialData, keyword }: Props) => {
+const PopularPageClient = ({ initialData, keyword }: Props) => {
   const innerWidth = useWindowWidth();
   const [pageSize, setPageSize] = useState(ITEM_DEFAULT_PAGESIZE);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -67,7 +67,7 @@ const MainPageClient = ({ initialData, keyword }: Props) => {
 
   return (
     <>
-      <section className="mx-auto max-w-[1200px] mt-[34px] px-4">
+      <section className="mx-auto max-w-[1200px] mt-[34px] px-4 lg:px-0">
         {keyword && (
           <div className="mb-4">
             <p className="text-black text-2xl md:text-3xl pb-2">
@@ -99,4 +99,4 @@ const MainPageClient = ({ initialData, keyword }: Props) => {
   );
 };
 
-export default MainPageClient;
+export default PopularPageClient;
