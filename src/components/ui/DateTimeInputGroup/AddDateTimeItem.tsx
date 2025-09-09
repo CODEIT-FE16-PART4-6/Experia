@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useFormContext } from 'react-hook-form';
 import Image from 'next/image';
-import styles from '@/styles/datepicker.module.css';
+import styles from '@/app/(global)/activities/[id]/components/reservation-block/Reservation.module.css';
 import clsx from 'clsx';
 
 interface Props {

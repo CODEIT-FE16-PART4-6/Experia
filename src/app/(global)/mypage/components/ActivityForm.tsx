@@ -1,7 +1,5 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useForm, FormProvider, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@/components/Button';
@@ -17,8 +15,6 @@ import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { ACTIVITY_CATEGORIES } from '@/constants';
 import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/activitiesSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import ImageUploader from '@/components/ImageUpload/ImageUploader';
-import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 import { useRouter } from 'next/navigation';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 import formatPrice from '@/utils/formatter/formatPrice';
