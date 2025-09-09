@@ -19,6 +19,8 @@ const getPageSize = (width: number) => {
 const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
   const innerWidth = useWindowWidth();
   const [pageSize, setPageSize] = useState(POPULAR_ACTIVITIES_COUNT);
+  const sortOrder = 'most_reviewed'; // 댓글 많은 순으로 값 고정!
+
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +42,7 @@ const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
     string[],
     string | null | number
   >({
-    queryKey: ['popularActivities',],
+    queryKey: ['popularActivities', sortOrder],
     queryFn: ({ pageParam = null }) =>
       fetchServerData<PopularActivities>({
         path: '/activities',
@@ -48,6 +50,7 @@ const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
           method: 'cursor',
           size: pageSize,
           cursorId: pageParam ?? undefined,
+          sort: sortOrder, // API 호출하면 정렬 매개변수 전달!
         },
       }),
     initialPageParam: null,
@@ -70,7 +73,7 @@ const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
     <div className="pl-4 lg:px-0 mb-10 md:mb-14 lg:mb-20">
       <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-4">
         <PopularList data={data} />
-        <div ref={loadMoreRef} className="flex-shrink-0" style={{ width: '1px' }} />
+        <div ref={loadMoreRef} className="w-[1px] flex-shrink-0" />
         {isFetchingMore && <LoadingSpinner />}
       </div>
 
