@@ -1,5 +1,8 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useForm, FormProvider, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@/components/Button';
@@ -7,19 +10,16 @@ import DropdownSelect from '@/components/DropdownSelect';
 import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 import InputField from '@/components/InputField';
+import AddressField from '@/components/form/AddressField';
 import FormLabel from '@/components/form/FormLabel';
 import TextAreaField from '@/components/form/TextAreaField';
-import AddressField from '@/components/form/AddressField';
 import DateTimeInputGroup from '@/components/ui/DateTimeInputGroup';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { ACTIVITY_CATEGORIES } from '@/constants';
 import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/activitiesSchema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 import formatPrice from '@/utils/formatter/formatPrice';
 import parsePrice from '@/utils/formatter/parsePrice';
-import Image from 'next/image';
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
@@ -234,10 +234,19 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
         <div className='mb-4 flex flex-col gap-3 md:gap-4'>
           <div className='flex flex-col'>
             <FormLabel inputId='address'>주소</FormLabel>
-            <p className='text-md flex gap-1 text-gray-700'>
-              <Image src='/icons/ic_info.svg' alt='가이드' width={16} height={16} />
-              국가, 도시/지역구(행정구역), 도로명주소를 입력해주세요.
-            </p>
+            <div className='text-md flex items-start gap-1 text-gray-700'>
+              <Image
+                src='/icons/ic_info.svg'
+                alt='가이드'
+                width={16}
+                height={16}
+                className='mt-1'
+              />
+              <p>
+                <b>국가, 도시/지역구(행정구역), 도로명주소</b>를 입력해주세요. <br />
+                예) 서울시 송파구 송파동 32-1 / Skógarhlíð 10, 105 Reykjavík, 아이슬란드
+              </p>
+            </div>
           </div>
 
           <Controller
