@@ -1,7 +1,11 @@
 // eslint.config.mjs에 규칙 추가
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+
 import { FlatCompat } from '@eslint/eslintrc';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import importPlugin from 'eslint-plugin-import';
+import prettier from 'eslint-plugin-prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,11 +18,10 @@ const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
     plugins: {
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-      prettier: require('eslint-plugin-prettier'),
-      import: require('eslint-plugin-import'),
+      '@typescript-eslint': typescriptEslint,
+      prettier: prettier,
+      import: importPlugin,
     },
-    extends: ['next/core-web-vitals', 'next/typescript', 'plugin:prettier/recommended'],
     rules: {
       'no-unused-vars': 'off', // JS용 기본 비활성화
       '@typescript-eslint/no-unused-vars': [
