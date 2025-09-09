@@ -15,9 +15,11 @@ interface DropdownOptionsItem {
 interface DropdownOptionsProps {
   items: DropdownOptionsItem[];
   placeholderLabel?: string;
+  type: 'order' | 'filter';
+  onChange?: (value: string) => void;
 }
 
-const DropdownOptions = ({ items, placeholderLabel }: DropdownOptionsProps) => {
+const DropdownOptions = ({ items, placeholderLabel, type, onChange }: DropdownOptionsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedItem, setSelectedItem] = useState(placeholderLabel ?? items[0].label);
@@ -25,11 +27,15 @@ const DropdownOptions = ({ items, placeholderLabel }: DropdownOptionsProps) => {
   const handleClick = (item: DropdownOptionsItem) => {
     setSelectedItem(item.label);
 
-    const currentParams = new URLSearchParams(searchParams);
-    currentParams.set('option', item.value);
+    if (type === 'filter') {
+      const currentParams = new URLSearchParams(searchParams);
+      currentParams.set('option', item.value);
 
-    // URL 업데이트 (페이지 이동 없이 쿼리 파라미터만 변경)
-    router.push(`?${currentParams.toString()}`);
+      // URL 업데이트 (페이지 이동 없이 쿼리 파라미터만 변경)
+      router.push(`?${currentParams.toString()}`);
+    }
+
+    onChange?.(item.value);
   };
 
   const handleReset = () => {
@@ -43,14 +49,16 @@ const DropdownOptions = ({ items, placeholderLabel }: DropdownOptionsProps) => {
 
   return (
     <div className='flex gap-2'>
-      <Button
-        type='button'
-        className='flex h-[42px] w-[42px] items-center justify-center rounded-xl p-0 lg:h-[56px] lg:w-[56px] lg:rounded-2xl'
-        onClick={handleReset}
-        title='필터 초기화'
-      >
-        <RefreshIcon className='aspect-square h-[20px] w-[20px] lg:h-6 lg:w-6' />
-      </Button>
+      {type === 'filter' && (
+        <Button
+          type='button'
+          className='flex h-[42px] w-[42px] items-center justify-center rounded-xl p-0 lg:h-[56px] lg:w-[56px] lg:rounded-2xl'
+          onClick={handleReset}
+          title='필터 초기화'
+        >
+          <RefreshIcon className='aspect-square h-[20px] w-[20px] lg:h-6 lg:w-6' />
+        </Button>
+      )}
 
       <Menu as='div' className='relative w-[120px] lg:w-[160px]'>
         {/* 트리거 버튼 */}
@@ -80,7 +88,10 @@ const DropdownOptions = ({ items, placeholderLabel }: DropdownOptionsProps) => {
           leaveFrom='transform translate-y-2 opacity-100'
           leaveTo='transform -translate-y-2 opacity-0'
         >
-          <MenuItems className='absolute right-0 mt-2 w-full rounded-xl border border-gray-300 bg-white shadow-lg focus:outline-none lg:rounded-2xl'>
+          <MenuItems
+            modal={false}
+            className='absolute right-0 z-[5] mt-2 w-full rounded-xl border border-gray-300 bg-white shadow-lg focus:outline-none lg:rounded-2xl'
+          >
             {items.map((item, index) => (
               <MenuItem key={`${item}-${index}`}>
                 <button
