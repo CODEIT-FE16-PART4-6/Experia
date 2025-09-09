@@ -31,7 +31,7 @@ const PopOverCurrentData = async (activityId: number, date: string): Promise<{
 
   const scheduleIds: number[] = data1.body.map(ele => ele.scheduleId);
 
-  let reservationStatus = [];
+  const reservationStatus = [];
   const myActivitiesStatusKeys = Object.keys(MyActivitiesStatus);
   for (let i = 0; i < scheduleIds.length; i++) {
     for (let j = 0; j < myActivitiesStatusKeys.length; j++) {
@@ -49,7 +49,7 @@ const PopOverCurrentData = async (activityId: number, date: string): Promise<{
   }
 
 
-  let todayData: {
+  const todayData: {
     [key: string]: {
       id: number;
       status: MyActivitiesStatus;

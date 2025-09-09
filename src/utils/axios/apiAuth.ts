@@ -1,8 +1,10 @@
 'use client';
 
 import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import { REQUEST_URL } from '../api-public';
+
 import { ROUTES } from '@/constants';
+
+import { REQUEST_URL } from '../api-public';
 
 let isRefreshing = false; // 토큰 재발급 진행중 여부
 

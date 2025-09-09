@@ -1,4 +1,5 @@
 import { cache } from 'react';
+
 import Post from './components/Post';
 
 interface PageProps {

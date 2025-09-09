@@ -1,12 +1,13 @@
-import DatePicker from 'react-datepicker';
 import { useState, useMemo } from 'react';
+import DatePicker from 'react-datepicker';
 
 //style
 import 'react-datepicker/dist/react-datepicker.css';
+import { ActivityDetail } from '@/types/schema/activitiesSchema';
+
 import styles from './Reservation.module.css';
 
 //schema
-import { ActivityDetail } from '@/types/schema/activitiesSchema';
 
 type DateType = ActivityDetail['schedules'][number]['date'];
 // ActivityDetail 타입에서 scheduleId 타입 추출

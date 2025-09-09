@@ -1,14 +1,15 @@
 'use client'
 
-import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
-import InputField from '@/components/InputField'
 import Link from 'next/link'
-import Button from '@/components/Button'
-import { SignupRequest, SignupRequestSchema } from "@/types/schema/userSchema"
-import { useState } from "react"
 import { useRouter } from 'next/navigation';
+import { useState } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
+
+import Button from '@/components/Button'
+import InputField from '@/components/InputField'
+import { SignupRequest, SignupRequestSchema } from "@/types/schema/userSchema"
 
 const SignupPage = () => {
   const router = useRouter();

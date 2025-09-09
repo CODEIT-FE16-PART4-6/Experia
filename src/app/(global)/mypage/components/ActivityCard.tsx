@@ -1,14 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ReservationType } from '@/types/schema/reservationSchema';
-import { ActivityType } from '@/types/schema/activitiesSchema';
+import { useRouter } from 'next/navigation';
+
 import StarIcon from '@/assets/icons/ic_StarSmall.svg';
 import Button from '@/components/Button';
-import ReviewCreateModal from '@/components/review/ReviewCreateModal';
-import useModalStore from '@/stores/modalStore';
 import { DropdownMeatball } from '@/components/DropdownMeatball';
 import DeleteModal from '@/components/activities/Modals/DeleteModal';
-import { useRouter } from 'next/navigation';
+import ReviewCreateModal from '@/components/review/ReviewCreateModal';
+import useModalStore from '@/stores/modalStore';
+import { ActivityType } from '@/types/schema/activitiesSchema';
+import { ReservationType } from '@/types/schema/reservationSchema';
+
 
 interface ActivityCardProps {
   data: ReservationType | ActivityType;

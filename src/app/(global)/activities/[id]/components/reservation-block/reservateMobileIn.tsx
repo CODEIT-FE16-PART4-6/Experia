@@ -1,16 +1,19 @@
 'use client';
 
 //hook
+import Image from 'next/image';
 import { useState } from 'react';
+
 //comp
 import Button from '@/components/Button';
-import Calander from './Calander';
-//util
-import apiAuth from '@/utils/axios/apiAuth';
-import Image from 'next/image';
-//shema
-import { ReservationRequest } from '@/types/schema/reservationSchema';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
+import { ReservationRequest } from '@/types/schema/reservationSchema';
+import apiAuth from '@/utils/axios/apiAuth';
+
+import Calander from './Calander';
+
+//util
+//shema
 interface Props {
   data: ActivityDetail;
 }
@@ -114,7 +117,6 @@ const ReservateMobile = ({ data }: Props) => {
             data={data}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
-            selectedSchedule={selectedSchedule}
             setSelectedScheduleId={setSelectedScheduleId}
             setMySchedule={setMySchedule}
           />

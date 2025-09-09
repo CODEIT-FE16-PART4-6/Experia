@@ -1,14 +1,16 @@
 'use client';
 //img
 import Image from 'next/image';
+
 //comp
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
 import { DropdownMeatball } from '@/components/DropdownMeatball';
-import useModalStore from '@/stores/modalStore';
 import DeleteModal from '@/components/activities/Modals/DeleteModal';
+import useModalStore from '@/stores/modalStore';
 
 //hooks
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 interface PostType {
   id: number;

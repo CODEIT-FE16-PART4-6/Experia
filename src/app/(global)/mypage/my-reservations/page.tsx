@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+
 import MyReservationsContent from './MyReservationsContent';
 
 const MyReservationsPage = () => {

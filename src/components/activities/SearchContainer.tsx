@@ -1,14 +1,15 @@
 'use client';
 
 import { Suspense, useState, useRef } from 'react';
-import { Activities } from '@/types/schema/activitiesSchema';
-import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
-import SearchBarClient from '@/components/activities/SearchBar.client';
-import MainPageClient from '@/components/activities/MainPage.client';
-import SectionTitle from '@/components/ui/Section/SectionTitle';
-import CategoryMenu from '@/components/ui/CategoryMenu';
+
 import DropdownOptions from '@/components/DropdownOptions';
+import MainPageClient from '@/components/activities/MainPage.client';
+import SearchBarClient from '@/components/activities/SearchBar.client';
+import CategoryMenu from '@/components/ui/CategoryMenu';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
+import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
 import { ACTIVITY_LIST_ORDER_OPTIONS } from '@/constants';
+import { Activities } from '@/types/schema/activitiesSchema';
 
 type Props = {
   initialData: Activities;

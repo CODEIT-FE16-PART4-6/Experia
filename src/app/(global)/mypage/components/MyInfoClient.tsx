@@ -1,13 +1,15 @@
 'use client';
 
 import { useRef } from 'react';
-import SectionTitle from '@/components/ui/Section/SectionTitle';
+import { SubmitHandler } from 'react-hook-form';
+
 import MyInfoForm from '@/app/(global)/mypage/components/MyInfoForm';
 import Button from '@/components/Button';
-import fetchClientData from '@/utils/api-client/fetchClientData';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { useUserStore } from '@/stores/userStore';
-import { SubmitHandler } from 'react-hook-form';
 import { MyInfoFormValues } from '@/types/schema/myInfoFormSchema';
+import fetchClientData from '@/utils/api-client/fetchClientData';
+
 
 const MyInfoClient = () => {
   const formRef = useRef<HTMLFormElement>(null);

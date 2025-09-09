@@ -1,12 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import Button from '@/components/Button';
 import { useState, useMemo } from 'react';
+
+import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import 'react-datepicker/dist/react-datepicker.css';
-import apiAuth from '@/utils/axios/apiAuth';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
+import apiAuth from '@/utils/axios/apiAuth';
+
 // import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
 import Calander from './Calander';
 

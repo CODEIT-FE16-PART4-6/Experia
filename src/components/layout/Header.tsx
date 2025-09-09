@@ -1,14 +1,16 @@
 'use client';
 
+import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import useScrollY from '@/hooks/useScrollY';
 import { useEffect, useState, useRef } from 'react';
-import clsx from 'clsx';
-import Avatar from '@/components/ui/Avatar';
-import { useUserStore } from '@/stores/userStore';
-import { ROUTES } from '@/constants';
+
 import NotificationPopover from '@/components/notification/NotificationPopover';
+import Avatar from '@/components/ui/Avatar';
+import { ROUTES } from '@/constants';
+import useScrollY from '@/hooks/useScrollY';
+import { useUserStore } from '@/stores/userStore';
+
 import UserDropdown from './UserDropdown';
 
 const Header = () => {

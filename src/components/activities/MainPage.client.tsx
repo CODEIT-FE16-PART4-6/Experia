@@ -1,14 +1,16 @@
 'use client';
 
 import { useSuspenseInfiniteQuery, InfiniteData } from '@tanstack/react-query';
-import ActivityList from './ActivityList.client';
-import { fetchServerData } from '@/utils/api-server';
-import { Activities } from '@/types/schema/activitiesSchema';
-import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
-import useWindowWidth from '@/hooks/useWindowWidth';
 import { useEffect, useState, useRef, useCallback, Suspense } from 'react';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import useWindowWidth from '@/hooks/useWindowWidth';
+import { Activities } from '@/types/schema/activitiesSchema';
+import { fetchServerData } from '@/utils/api-server';
+
+import ActivityList from './ActivityList.client';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return ITEM_PAGESIZE.lg;

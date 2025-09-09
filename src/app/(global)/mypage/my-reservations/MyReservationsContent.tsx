@@ -1,12 +1,15 @@
 'use client';
-import SectionTitle from '@/components/ui/Section/SectionTitle';
-import ActivityCard from '../components/ActivityCard';
 import { useQuery } from '@tanstack/react-query';
-import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
-import DropdownOptions from '@/components/DropdownOptions';
-import { RESERVATION_STATUS } from '@/constants';
-import { ReservationType } from '@/types/schema/reservationSchema';
 import { useSearchParams } from 'next/navigation';
+
+import DropdownOptions from '@/components/DropdownOptions';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
+import { RESERVATION_STATUS } from '@/constants';
+import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
+import { ReservationType } from '@/types/schema/reservationSchema';
+
+import ActivityCard from '../components/ActivityCard';
+
 
 const fetchReservations = async () => {
   const response = await fetch(
@@ -55,7 +58,9 @@ const MyReservationsContent = () => {
     <div className='min-h-screen'>
       <SectionTitle
         title='예약 내역'
-        action={<DropdownOptions items={RESERVATION_STATUS} placeholderLabel='필터' />}
+        action={
+          <DropdownOptions items={RESERVATION_STATUS} placeholderLabel='필터' type='filter' />
+        }
       />
       <div className='flex flex-col gap-4'>
         {filteredReservations.map(reservation => (

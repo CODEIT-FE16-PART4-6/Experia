@@ -1,9 +1,13 @@
 'use client';
-import SectionTitle from '@/components/ui/Section/SectionTitle';
-import { LinkButton } from '@/components/ui/LinkButton';
-import ActivityCard from '../components/ActivityCard';
-import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
 import { useQuery } from '@tanstack/react-query';
+
+import { LinkButton } from '@/components/ui/LinkButton';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
+import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
+
+import ActivityCard from '../components/ActivityCard';
+
+
 
 const fetchMyActivities = async () => {
   const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/my-activities?size=20', {

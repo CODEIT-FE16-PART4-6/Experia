@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
 //downComponent
+import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
+
+import PostContent from './layout/PostContent';
 import PostHeader from './layout/PostHeader';
 import PostImage from './layout/PostImage';
-import PostContent from './layout/PostContent';
 import ReservateIn from './reservation-block/reservateIn';
 import ReservateMobile from './reservation-block/reservateMobileIn';
-import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
+
 
 type Activity = z.infer<typeof ActivityDetail>;
 type ActivityReviewList = z.infer<typeof ActivityReview>;

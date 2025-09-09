@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import Button from '@/components/Button';
 import Image from 'next/image';
+import { useState } from 'react';
+
+import Button from '@/components/Button';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 
 interface titleType {
