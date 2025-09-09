@@ -1,17 +1,19 @@
 'use client';
 
-import { Fragment, useRef, useState } from 'react';
-import clsx from 'clsx';
 import { Popover, PopoverPanel, PopoverButton, Transition } from '@headlessui/react';
+import { useInfiniteQuery, useMutation, useQueryClient, InfiniteData } from '@tanstack/react-query';
+import clsx from 'clsx';
+import { Fragment, useRef, useState } from 'react';
+
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
-import { useInfiniteQuery, useMutation, useQueryClient, InfiniteData } from '@tanstack/react-query';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import NotificationItem from './NotificationItem';
+import { NOTIFICATIONS_PER_PAGE } from '@/constants';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { Notifications, Notification } from '@/types/schema/notificationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import { NOTIFICATIONS_PER_PAGE } from '@/constants';
+
+import NotificationItem from './NotificationItem';
 
 const fetchMyNotifications = async (pageParam: number | null = null) => {
   const cursorQuery = pageParam !== null ? `&cursorId=${pageParam}` : '';
@@ -156,7 +158,7 @@ const NotificationPopover = () => {
                 >
                   {notifications.map((noti: Notification) => {
                     const isRead =
-                      lastReadNotiAt === null ||
+                      lastReadNotiAt !== null &&
                       new Date(noti.createdAt) <= new Date(lastReadNotiAt);
 
                     return (

@@ -1,5 +1,4 @@
 import Image from 'next/image';
-
 import { ChangeEvent } from 'react';
 
 import clsx from 'clsx';

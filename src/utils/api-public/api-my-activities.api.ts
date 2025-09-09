@@ -1,6 +1,8 @@
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
-import { REQUEST_URL, tokenTmp } from '.';
+
 import { MyActivitiesDto, SignUpResponseDto } from './api';
+
+import { REQUEST_URL, tokenTmp } from '.';
 // import { REQUEST_URL, tokenTmp } from "./index.ts";
 
 const URL: string = `${REQUEST_URL}/my-activities`;

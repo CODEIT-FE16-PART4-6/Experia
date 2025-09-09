@@ -1,6 +1,5 @@
 'use client';
 
-import { Fragment } from 'react';
 import {
   Listbox,
   ListboxButton,
@@ -11,6 +10,7 @@ import {
 import clsx from 'clsx';
 import Image from 'next/image';
 import { cn } from '@/utils/cn';
+import { Fragment } from 'react';
 
 interface DropdownSelectItem {
   id: string | number;

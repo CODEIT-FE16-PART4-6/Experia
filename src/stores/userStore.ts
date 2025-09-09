@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+
 import { User } from '@/types/schema/userSchema';
 
 export interface UserState {

@@ -1,5 +1,7 @@
-import { MyActivitiesDto } from '@/utils/api-public/api';
 import { JSX } from 'react';
+
+import { MyActivitiesDto } from '@/utils/api-public/api';
+
 import CalenderOnePartComponent from '../calenderOnePart/CalenderOnePart';
 
 type Props = {

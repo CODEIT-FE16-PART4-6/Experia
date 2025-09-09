@@ -1,4 +1,5 @@
 import { SignUpResponseDto } from './api';
+
 import { REQUEST_URL } from '.';
 
 const URL: string = `${REQUEST_URL}/users`;

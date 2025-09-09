@@ -121,6 +121,19 @@
   }
 }
 
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 /* react-datepicker custom */
 /* module.css에서 .datepicker :global로 선택 불가능한 클래스들만 여기서 커스텀 */
 .react-datepicker {

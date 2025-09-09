@@ -1,4 +1,3 @@
-import { ReactNode, Fragment } from 'react';
 import {
   Dialog,
   DialogPanel,
@@ -7,6 +6,7 @@ import {
   DialogBackdrop,
 } from '@headlessui/react';
 import Image from 'next/image';
+import { ReactNode, Fragment } from 'react';
 
 interface ModalProps {
   modal: { id: string; content: ReactNode };
