@@ -69,9 +69,6 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
     // 유효성 검사 후 항목 추가
     onAdd(newItem);
 
-    setDate(null);
-    setStartTime(null);
-    setEndTime(null);
     clearErrors('schedules');
   };
 
