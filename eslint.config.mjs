@@ -29,7 +29,7 @@ const eslintConfig = [
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       'import/order': [
-        'error', // 오류로 설정
+        'warn', // 경고로 설정
         {
           groups: [
             'builtin', // 내장 모듈 (path, fs 등)
@@ -40,7 +40,6 @@ const eslintConfig = [
             'index', // 인덱스 모듈 (index.js)
             'unknown', // 알 수 없는 모듈
           ],
-          'newlines-between': 'always', // 그룹 사이에 줄바꿈
           alphabetize: {
             order: 'asc', // 알파벳 순서로 정렬
           },
