@@ -1,3 +1,4 @@
+'use client';
 import ActivityItemSkeleton from './ActivityItemSkeleton';
 
 const ActivityListSkeleton = () => {
@@ -6,7 +7,13 @@ const ActivityListSkeleton = () => {
   ));
 
   return (
-    <ul className='mb-12 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4'>{skeletonItems}</ul>
+    <>
+      <section className="mx-auto max-w-[1200px] mt-[34px] px-4">
+        <ul className="mb-12 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+          {skeletonItems}
+        </ul>
+      </section>
+    </>
   );
 };
 

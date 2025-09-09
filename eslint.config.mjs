@@ -13,7 +13,11 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
-    plugins: ['@typescript-eslint', 'prettier', 'import'],
+    plugins: {
+      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
+      prettier: require('eslint-plugin-prettier'),
+      import: require('eslint-plugin-import'),
+    },
     extends: ['next/core-web-vitals', 'next/typescript', 'plugin:prettier/recommended'],
     rules: {
       'no-unused-vars': 'off', // JS용 기본 비활성화

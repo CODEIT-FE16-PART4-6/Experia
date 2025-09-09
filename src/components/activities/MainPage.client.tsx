@@ -6,7 +6,7 @@ import { fetchServerData } from '@/utils/api-server';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback, Suspense } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
@@ -15,61 +15,86 @@ const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.md) return ITEM_PAGESIZE.md;
   return ITEM_PAGESIZE.sm;
 };
+type Props = {
+  initialData: Activities
+  keyword: string
+}
 
-const MainPageClient = ({ initialData }: { initialData: Activities }) => {
+const MainPageClient = ({ initialData, keyword }: Props) => {
   const innerWidth = useWindowWidth();
   const [pageSize, setPageSize] = useState(ITEM_DEFAULT_PAGESIZE);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (innerWidth) setPageSize(getPageSize(innerWidth));
-  }, [innerWidth]);
+  }, [innerWidth,]);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
     useSuspenseInfiniteQuery<
       Activities,
       Error,
       InfiniteData<Activities, unknown>,
-      [string, number],
+      [string, number, string | null],
       number | null
     >({
-      queryKey: ['activities', pageSize],
-      queryFn: ({ pageParam = null }) =>
-        fetchServerData<Activities>({
+      queryKey: ['activities', pageSize, keyword || null],
+      queryFn: ({ pageParam = null }) => {
+        return fetchServerData<Activities>({
           path: '/activities',
-          query: { method: 'cursor', cursorId: pageParam ?? undefined, size: pageSize },
-        }),
-      initialPageParam: null, // 첫 요청 시 cursorId = null
-      getNextPageParam: lastPage => {
-        // 응답에 cursorId가 있으면 다음 요청에 사용
-        return lastPage.activities.length > 0 ? lastPage.cursorId : undefined;
+          query: {
+            method: 'cursor',
+            cursorId: pageParam ?? undefined,
+            size: pageSize,
+            keyword: keyword || undefined,
+          },
+        })
       },
-      initialData: { pages: [initialData], pageParams: [null] }, // 서버에서 받은 데이터로 초기 캐시 세팅
-    });
+      initialPageParam: null,
+      initialData: keyword ? undefined : { pages: [initialData], pageParams: [null] },
+      getNextPageParam: lastPage =>
+        lastPage.activities.length > 0 ? lastPage.cursorId : undefined,
+    })
 
-  // 무한 스크롤 트리거
   useIntersectionObserver({
     target: loadMoreRef,
     onIntersect: fetchNextPage,
     enabled: hasNextPage,
   });
 
+  // 모든 페이지의 활동 목록을 하나의 배열로 병합
+  const totalCount = data.pages.flatMap(page => page.activities).length;
   const isFetchingMore = hasNextPage && isFetchingNextPage;
 
   return (
     <>
-      <ActivityList data={data} />
-      <div ref={loadMoreRef} className='min-h-10'>
-        {isError && (
-          <p className='pb-16 text-center'>
-            목록 불러오기에 실패했습니다.
-            <button className='ml-2 underline underline-offset-4' onClick={() => fetchNextPage()}>
-              다시 시도
-            </button>
-          </p>
+      <section className="mx-auto max-w-[1200px] mt-[34px] px-4">
+        {keyword && (
+          <div className="mb-4">
+            <p className="text-black text-2xl md:text-3xl pb-2">
+              <strong className="text-nomad-black font-bold">{keyword}</strong>으로 검색한 결과입니다.
+            </p>
+            <p className="text-black text-base">총 {totalCount}개의 결과</p>
+          </div>
         )}
-        {isFetchingMore && <LoadingSpinner />}
-      </div>
+
+        <ActivityList data={data} />
+        <div ref={loadMoreRef} className='min-h-10'>
+          {totalCount === 0 && (
+            <p className="text-center text-gray-600 text-xl md:text-2xl py-55 ">
+              검색 결과가 없습니다.
+            </p>
+          )}
+          {isError && (
+            <p className='pb-16 text-center'>
+              목록 불러오기에 실패했습니다.
+              <button className='ml-2 underline underline-offset-4' onClick={() => fetchNextPage()}>
+                다시 시도
+              </button>
+            </p>
+          )}
+          {isFetchingMore && <LoadingSpinner />}
+        </div>
+      </section>
     </>
   );
 };

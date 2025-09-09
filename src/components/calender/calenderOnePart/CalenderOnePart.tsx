@@ -12,6 +12,8 @@ type Props = {
   isLastRow?: boolean;
   isFirstRow?: boolean;
   isLastRowAb?: boolean;
+  // 부모로부터 클릭 이벤트를 처리하는 함수를 받기 위한 prop입니다.
+  onClick?: () => void;
 };
 
 export default function CalenderOnePartComponent({
@@ -23,6 +25,7 @@ export default function CalenderOnePartComponent({
   isLastRow = false,
   isFirstRow = false,
   isLastRowAb = false,
+  onClick,
 }: Props) {
   if (day == '0') {
     return (
@@ -42,8 +45,10 @@ export default function CalenderOnePartComponent({
 
   return (
     <div
-      className={`${!isLastCol ? '-mr-px' : ''} ${!isLastRow ? '-mb-px' : ''} ${!isFirstRow ? 'border-t' : ''} flex h-[154px] flex-col justify-between border-r border-l border-[#e8e8e8] ${isLastRowAb ? 'border-b' : ''} ${isLastRow ? 'border-b' : ''} ${isLastRow ? 'border-t-[0px]' : ''}`}
-    >
+      // 전달받은 onClick 함수를 div의 클릭 이벤트에 연결합니다.
+      onClick={onClick}
+      // onClick prop이 있을 경우, 사용자에게 클릭 가능함을 시각적으로 알리기 위해 cursor-pointer 클래스를 추가합니다.
+      className={`${!isLastCol ? '-mr-px' : ''} ${!isLastRow ? '-mb-px' : ''} ${!isFirstRow ? 'border-t' : ''} flex h-[154px] flex-col justify-between border-r border-l border-[#e8e8e8] ${isLastRowAb ? 'border-b' : ''} ${isLastRow ? 'border-b' : ''} ${isLastRow ? 'border-t-[0px]' : ''} ${onClick ? 'cursor-pointer' : ''}`}>
       <div className='flex px-3 py-3 text-[21px]'>
         <p>{`${day}`}</p>
         <div className='mt-1 ml-1'>

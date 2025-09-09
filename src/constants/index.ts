@@ -5,6 +5,8 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/signin',
   NOT_FOUND: '*',
+  MY_PAGE: '/mypage',
+  SIGN_UP: '/signup',
 };
 
 export const BREAKPOINTS = {
@@ -63,3 +65,5 @@ export const ACTIVITY_CATEGORIES = [
   { id: '5', value: '관광' },
   { id: '6', value: '웰빙' },
 ];
+
+export const NOTIFICATIONS_PER_PAGE = 2;
