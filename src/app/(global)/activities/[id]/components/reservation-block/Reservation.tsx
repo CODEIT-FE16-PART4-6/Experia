@@ -10,7 +10,7 @@ import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
 
 // import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
-import Calander from './Calander';
+import Calander from './Calender';
 
 interface Props {
   data: ActivityDetail;
@@ -18,7 +18,7 @@ interface Props {
 
 const Reservation = ({ data }: Props) => {
   // ActivityDetail 타입에서 date 타입 추출
-  type DateType = ActivityDetail['schedules'][number]['date'];
+  //type DateType = ActivityDetail['schedules'][number]['date'];
   // ActivityDetail 타입에서 scheduleId 타입 추출
   type ScheduleIdType = ActivityDetail['schedules'][number]['id'];
   //선택된 날짜의 schedules 필터링

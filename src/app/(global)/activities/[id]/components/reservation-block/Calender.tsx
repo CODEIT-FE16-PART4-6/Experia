@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 
-import styles from './Reservation.module.css';
+import styles from '@/styles/datepicker.module.css';
 
 //schema
 
@@ -145,7 +145,7 @@ const Calander = ({
       </p>
       {selectedDate ? (
         <div>
-          {selectedDateSchedules ? (
+          {selectedDateSchedules.length > 0 ? (
             <>
               <p className='text-nomad-black mt-4 mb-[14px] hidden text-[18px] font-bold sm:hidden md:block'>
                 예약 가능한 시간
@@ -166,7 +166,9 @@ const Calander = ({
               <hr className='mt-3 hidden border-gray-300 lg:block' />
             </>
           ) : (
-            <span>예약 가능한 시간이 없습니다.</span>
+            <p className='mt-6 mb-8 flex justify-center text-gray-600'>
+              예약 가능한 시간이 없습니다.
+            </p>
           )}
         </div>
       ) : (
