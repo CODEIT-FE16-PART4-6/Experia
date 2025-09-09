@@ -72,6 +72,15 @@ const Reservation = ({ data }: Props) => {
       alert('예약 생성에 실패했습니다. 다시 시도해주세요.');
     }
   };
+
+  // 캘린더 컴포넌트 공통 props
+  const calendarProps = {
+    data,
+    selectedDate,
+    setSelectedDate,
+    setSelectedScheduleId,
+    setMySchedule,
+  };
   return (
     <section>
       <div className='mb-2 font-bold md:text-[24px] lg:text-[32px]'>
@@ -87,14 +96,7 @@ const Reservation = ({ data }: Props) => {
         {mySchedule ? mySchedule : ''}
       </div>
       <div className='md:hidden lg:block'>
-        <Calander
-          data={data}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          selectedSchedule={selectedSchedule}
-          setSelectedScheduleId={setSelectedScheduleId}
-          setMySchedule={setMySchedule}
-        />
+        <Calander {...calendarProps} />
       </div>
       <button
         className='text-nomad-black mb-[27px] font-semibold md:block lg:hidden'
@@ -119,14 +121,7 @@ const Reservation = ({ data }: Props) => {
               />
             </button>
           </div>
-          <Calander
-            data={data}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            selectedSchedule={selectedSchedule}
-            setSelectedScheduleId={setSelectedScheduleId}
-            setMySchedule={setMySchedule}
-          />
+          <Calander {...calendarProps} />
           <Button
             onClick={() => {
               setWhiteBox(false);

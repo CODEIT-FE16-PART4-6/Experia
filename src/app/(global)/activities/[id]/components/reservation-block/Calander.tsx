@@ -17,7 +17,6 @@ interface Props {
   data: ActivityDetail;
   selectedDate: Date | null;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  selectedSchedule: ScheduleIdType;
   setSelectedScheduleId: React.Dispatch<React.SetStateAction<ScheduleIdType>>;
   setMySchedule: React.Dispatch<React.SetStateAction<string | null>>;
 }
@@ -26,7 +25,6 @@ const Calander = ({
   data,
   selectedDate,
   setSelectedDate,
-  selectedSchedule,
   setSelectedScheduleId,
   setMySchedule,
 }: Props) => {
@@ -66,6 +64,11 @@ const Calander = ({
         scheduleDate.getDate(),
       );
 
+      // 선택된 날짜와 일치하는지 확인
+      if (scheduleDateTime.getTime() !== selectedDate.getTime()) {
+        return false;
+      }
+
       //오늘 이전 날짜 제외
       if (scheduleDateTime < today) return false;
       //TODO [P6-123] 오늘날짜인데 시간대가 모두 지났을 경우 처리
@@ -93,6 +96,8 @@ const Calander = ({
   const handleSelectDate = (date: Date | null) => {
     setSelectedDate(date);
     setSelectedScheduleId(0); //날짜 변경시 시간대 스케줄도 초기화
+    setSelectedButton(null); //선택된 시간대 버튼도 초기화
+    setMySchedule(null); //선택된 시간대 문자열도 초기화
   };
 
   //스케줄 선택 핸들러(schedules.Id 저장)
