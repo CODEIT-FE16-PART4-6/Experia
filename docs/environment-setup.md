@@ -33,7 +33,8 @@ docker run -d \
 
 ### 3. 환경별 배포 설정
 
-- **Development (dev 브랜치)**: Vercel 자동배포 (별도 도메인)
+- **Development (dev 브랜치)**: Vercel 자동배포 (개발 환경)
+- **Staging (P6-158-vercel 브랜치)**: Vercel 자동배포 (스테이징 환경)
 - **Production (main 브랜치)**: AWS EC2 (포트 7100, 기존 도메인)
 
 ### 4. 리소스 할당
@@ -52,5 +53,53 @@ docker run -d \
 
 ### 브랜치별 역할
 
-- **dev**: 개발/테스트 환경 (Vercel 자동배포)
+- **dev**: 개발 환경 (Vercel 자동배포)
+- **P6-158-vercel**: 스테이징 환경 (Vercel 자동배포)
 - **main**: 프로덕션 환경 (Distroless, 포트 7100)
+
+## Vercel 배포 설정
+
+### 1. Vercel CLI 설치 및 설정
+
+```bash
+# Vercel CLI 설치
+npm install -g vercel
+
+# Vercel 로그인
+vercel login
+
+# 프로젝트 연결
+vercel link
+```
+
+### 2. 환경별 배포 명령어
+
+```bash
+# 개발 환경 배포
+npm run vercel:dev
+
+# 스테이징 환경 배포
+npm run vercel:staging
+
+# 프로덕션 환경 배포
+npm run vercel:prod
+
+# 기본 배포 (개발 환경)
+npm run vercel:deploy
+```
+
+### 3. Vercel 환경변수 설정
+
+Vercel 대시보드에서 다음 환경변수들을 설정해야 합니다:
+
+```
+NEXT_PUBLIC_BACKEND_URL = https://api-dev.experia.com
+NEXT_PUBLIC_TEAM = development
+NODE_ENV = development
+```
+
+### 4. 자동 배포 설정
+
+- **dev 브랜치**: Push 시 자동 배포
+- **P6-158-vercel 브랜치**: Push 시 자동 배포
+- **main 브랜치**: GitHub Actions를 통한 AWS EC2 배포

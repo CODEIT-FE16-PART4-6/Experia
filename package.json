@@ -15,7 +15,11 @@
     "commit:ai": "AI_REVIEW=true git commit",
     "commit:ai:openai": "OPENAI_REVIEW=true git commit",
     "commit:normal": "AI_REVIEW=false git commit",
-    "commit:interactive": "./scripts/commit-helper.sh"
+    "commit:interactive": "./scripts/commit-helper.sh",
+    "vercel:dev": "./scripts/vercel-deploy.sh development",
+    "vercel:staging": "./scripts/vercel-deploy.sh staging",
+    "vercel:prod": "./scripts/vercel-deploy.sh production",
+    "vercel:deploy": "./scripts/vercel-deploy.sh"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
