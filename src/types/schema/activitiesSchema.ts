@@ -1,4 +1,6 @@
-import { z } from 'zod';
+import { string, z } from 'zod';
+
+export type PopularActivities = Activities;
 
 export const Activities = z.object({
   cursorId: z.number().optional().nullable(),
@@ -70,7 +72,7 @@ export type ActivityDetail = z.infer<typeof ActivityDetail>;
 export enum MyActivitiesStatus {
   declined = 'declined',
   pending = 'pending',
-  confirmed = 'confirmed'
+  confirmed = 'confirmed',
 }
 export const ActivityReview = z.object({
   averageRating: z.number(),
