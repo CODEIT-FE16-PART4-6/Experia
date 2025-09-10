@@ -31,10 +31,10 @@ docker run -d \
   your-image:production
 ```
 
-### 3. 환경별 포트 설정
+### 3. 환경별 배포 설정
 
-- **Development (dev 브랜치)**: 포트 7100
-- **Production (main 브랜치)**: 포트 7100 (AWS 도메인 연결 유지)
+- **Development (dev 브랜치)**: Vercel 자동배포 (별도 도메인)
+- **Production (main 브랜치)**: AWS EC2 (포트 7100, 기존 도메인)
 
 ### 4. 리소스 할당
 
@@ -52,5 +52,5 @@ docker run -d \
 
 ### 브랜치별 역할
 
-- **dev**: 테스트/스테이징 환경 (Alpine, 포트 7100)
+- **dev**: 개발/테스트 환경 (Vercel 자동배포)
 - **main**: 프로덕션 환경 (Distroless, 포트 7100)

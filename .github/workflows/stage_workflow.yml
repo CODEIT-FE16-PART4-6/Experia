@@ -12,8 +12,19 @@ name: NestJS application test
 # WEBHOOK : Google Chat에 푸시
 
 on:
-  push:
-    branches: [dev]
+  # dev 브랜치는 Vercel로 자동배포
+  # push:
+  #   branches: [dev]  # Vercel 자동배포로 대체
+  workflow_dispatch: # 수동 실행만 허용 (긴급시)
+    inputs:
+      environment:
+        description: '배포 환경 선택'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
 
 # on:
 #   workflow_dispatch:
