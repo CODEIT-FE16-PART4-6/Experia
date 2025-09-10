@@ -4,14 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
-import { useUserStore } from '@/stores/userStore';
 import { SignupRequest, SignupRequestSchema } from '@/types/schema/userSchema';
-import { REQUEST_URL } from '@/utils/api-public';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -19,8 +17,6 @@ const SignupPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const setUser = useUserStore(state => state.setUser);
-  const user = useUserStore(state => state.user);
 
   const {
     register,
@@ -36,7 +32,7 @@ const SignupPage = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${REQUEST_URL}/users`, {
+      const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -53,7 +49,7 @@ const SignupPage = () => {
       }
 
       // 로그인 API 호출
-      const loginResponse = await fetch(`${REQUEST_URL}/auth/login`, {
+      const loginResponse = await fetch('https://sp-globalnomad-api.vercel.app/16-6/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: data.email, password: data.password }),
@@ -68,7 +64,7 @@ const SignupPage = () => {
       // 토큰 & 사용자 정보 저장
       localStorage.setItem('access_token', loginResult.accessToken);
       localStorage.setItem('refresh_token', loginResult.refreshToken);
-      setUser(loginResult.user);
+      localStorage.setItem('user', JSON.stringify(loginResult.user));
 
       router.push('/');
     } catch (err: unknown) {
@@ -81,13 +77,6 @@ const SignupPage = () => {
       setLoading(false);
     }
   };
-
-  // 이미 로그인 되어있는 경우, 메인 페이지로 리다이렉션
-  useEffect(() => {
-    if (user) {
-      router.replace('/');
-    }
-  }, [user, router]);
 
   return (
     <main className='flex min-h-screen items-center justify-center bg-white'>
