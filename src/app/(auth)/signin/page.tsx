@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -17,6 +17,7 @@ import { REQUEST_URL } from '@/utils/api-public';
 
 const LoginPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,8 +73,11 @@ const LoginPage = () => {
           },
         });
 
-        // 로그인 성공: 메인 페이지로 리다이렉션 (요청 성공 시에만 실행되도록 if문 안으로 이동)
-        router.push('/');
+        // 쿼리 파라미터에서 callbackUrl 가져오기 (리다이렉션)
+        const callbackUrl = searchParams.get('callbackUrl');
+
+        // 로그인 성공: callbackUrl 또는 메인 페이지로 리다이렉션 (요청 성공 시에만 실행되도록 if문 안으로 이동)
+        router.push(callbackUrl || '/');
       }
     } catch (err: unknown) {
       console.error('로그인 중 오류 발생', err);
