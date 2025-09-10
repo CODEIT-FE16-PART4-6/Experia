@@ -7,8 +7,6 @@ interface Props {
 const DateTimeItem = ({ value, onRemove }: Props) => {
   return (
     <div className='date-time-list-grid-layout'>
-      <h6 className='mt-2 font-semibold sm:hidden'>등록된 예약 시간대</h6>
-
       <input
         type='text'
         readOnly

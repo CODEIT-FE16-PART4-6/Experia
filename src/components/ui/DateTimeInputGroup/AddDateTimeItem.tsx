@@ -81,7 +81,7 @@ const AddDateTimeItem = ({ onAdd, addedSchedules }: Props) => {
   return (
     <div
       className={clsx('date-time-grid-layout', {
-        'border border-x-0 border-t-0 border-b-gray-300 pb-3 md:pb-5': addedSchedules.length > 0,
+        'border border-x-0 border-t-0 border-b-gray-300 pb-5': addedSchedules.length > 0,
       })}
     >
       <div className='relative w-full'>

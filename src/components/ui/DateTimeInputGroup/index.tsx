@@ -67,6 +67,8 @@ const DateTimeInputGroup = ({ name }: Props) => {
 
       <AddDateTimeItem onAdd={handleAdd} addedSchedules={fields} />
 
+      <h6 className='mt-2 font-semibold sm:hidden'>등록된 예약 시간대</h6>
+
       {fields.map((field, i) => (
         <DateTimeItem key={field.id} value={field} onRemove={() => remove(i)} />
       ))}
