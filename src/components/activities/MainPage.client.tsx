@@ -1,15 +1,13 @@
 'use client';
 
 import { useSuspenseInfiniteQuery, InfiniteData } from '@tanstack/react-query';
-import { useEffect, useState, useRef, useCallback, Suspense } from 'react';
-
+import { useEffect, useState, useRef } from 'react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
-
 import ActivityList from './ActivityList.client';
 
 const getPageSize = (width: number) => {
@@ -74,7 +72,7 @@ const MainPageClient = ({ initialData, keyword, category, sort }: Props) => {
 
   return (
     <>
-      <section className='mx-auto mt-[34px] max-w-[1200px] px-4'>
+      <section className="mx-auto max-w-[1200px] mt-[34px] px-4 lg:px-0">
         {keyword && (
           <div className='mb-4'>
             <p className='pb-2 text-2xl text-black md:text-3xl'>

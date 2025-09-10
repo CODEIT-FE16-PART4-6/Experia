@@ -120,3 +120,8 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  @apply text-gray-200;
+}
