@@ -102,6 +102,13 @@ jobs:
       - name: Remove Production Container
         run: docker rm production-container || true
 
+      # 기존 dev 컨테이너도 중지 (포트 충돌 방지)
+      - name: Stop Dev Container
+        run: docker stop codeit-16-6-final-project-frontend || true
+
+      - name: Remove Dev Container
+        run: docker rm codeit-16-6-final-project-frontend || true
+
       # 기존 Production 이미지 정리
       - name: Remove Old Production Images
         run: docker rmi $(docker images -a -q | grep production) || true
@@ -132,7 +139,8 @@ jobs:
             --log-opt max-file=3 \
             --memory=2g \
             --cpus=2.0 \
-            --env-file .env.production \
+            -e NEXT_PUBLIC_BACKEND_URL="${{ secrets.NEXT_PUBLIC_BACKEND_URL }}" \
+            -e NEXT_PUBLIC_TEAM="${{ secrets.NEXT_PUBLIC_TEAM }}" \
             ${{ env.DOCKER_IMAGE }}:production
 
       # 배포 완료 알림
