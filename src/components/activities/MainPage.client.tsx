@@ -20,7 +20,7 @@ type Props = {
   keyword: string
 }
 
-const PopularPageClient = ({ initialData, keyword }: Props) => {
+const MainPageClient = ({ initialData, keyword }: Props) => {
   const innerWidth = useWindowWidth();
   const [pageSize, setPageSize] = useState(ITEM_DEFAULT_PAGESIZE);
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -99,4 +99,4 @@ const PopularPageClient = ({ initialData, keyword }: Props) => {
   );
 };
 
-export default PopularPageClient;
+export default MainPageClient;
