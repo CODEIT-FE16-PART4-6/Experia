@@ -17,10 +17,11 @@ import { REQUEST_URL } from '@/utils/api-public';
 
 const LoginPage = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [callbackUrl, setCallbackUrl] = useState<string | null>(null);
   const setUser = useUserStore(state => state.setUser); // 전역 상태 관리 훅
   const user = useUserStore(state => state.user); // 전역 상태 관리 훅
 
@@ -74,9 +75,6 @@ const LoginPage = () => {
           },
         });
 
-        // 쿼리 파라미터에서 callbackUrl 가져오기 (리다이렉션)
-        const callbackUrl = searchParams.get('callbackUrl');
-
         // 로그인 성공: callbackUrl 또는 메인 페이지로 리다이렉션 (요청 성공 시에만 실행되도록 if문 안으로 이동)
         router.push(callbackUrl || '/');
       }
@@ -99,6 +97,12 @@ const LoginPage = () => {
       router.replace('/');
     }
   }, [user, router]);
+
+  // 이미 로그인 한 상태 + callbackUrl 있을 경우, callbackUrl 페이지로 리다이렉션
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setCallbackUrl(params.get('callbackUrl'));
+  }, []);
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-white'>
