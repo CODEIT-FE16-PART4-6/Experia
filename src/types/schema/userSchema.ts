@@ -61,3 +61,43 @@ export const SignupResponseSchema = z.object({
 
 export type SignupRequest = z.infer<typeof SignupRequestSchema>;
 export type SignupResponse = z.infer<typeof SignupResponseSchema>;
+
+// 카카오 로그인 관련 스키마
+export const KakaoUserInfoSchema = z.object({
+  id: z.number(),
+  properties: z.object({
+    nickname: z.string(),
+    profile_image: z.string().nullable(),
+  }),
+  kakao_account: z
+    .object({
+      email: z.string().email().optional(),
+      email_verified: z.boolean().optional(),
+    })
+    .optional(),
+});
+
+export const KakaoAuthResponseSchema = z.object({
+  access_token: z.string(),
+  token_type: z.string(),
+  refresh_token: z.string().optional(),
+  expires_in: z.number(),
+  scope: z.string().optional(),
+});
+
+export const KakaoLoginRequestSchema = z.object({
+  userInfo: KakaoUserInfoSchema,
+  accessToken: z.string(),
+});
+
+export const KakaoLoginResponseSchema = z.object({
+  user: UserSchema,
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  isNewUser: z.boolean().optional(),
+});
+
+export type KakaoUserInfo = z.infer<typeof KakaoUserInfoSchema>;
+export type KakaoAuthResponse = z.infer<typeof KakaoAuthResponseSchema>;
+export type KakaoLoginRequest = z.infer<typeof KakaoLoginRequestSchema>;
+export type KakaoLoginResponse = z.infer<typeof KakaoLoginResponseSchema>;
