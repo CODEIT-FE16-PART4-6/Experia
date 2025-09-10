@@ -1,23 +1,18 @@
 'use client';
 
-//hook
-//lib
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useState } from 'react';
 import 'photoswipe/style.css';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 
-//SSR
-//img
 import ImageArrowLeft from '@/assets/imgs/activityPage/imageArrowLeft.svg';
 import ImageArrowRight from '@/assets/imgs/activityPage/imageArrowRight.svg';
-//comp
 import ImageRef from '@/components/ImageRef';
 
 interface SubImage {
   id: number;
-  imageUrl?: string | null; //<=@
+  imageUrl?: string | null;
 }
 
 interface ImagePropType {
@@ -26,11 +21,11 @@ interface ImagePropType {
   tag: string;
 }
 
-const MAX_SUB_ITEMS = 4; // 서브 이미지의 최대 개수
+const MAX_SUB_ITEMS = 4;
 
 const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
-  const emptySlots = MAX_SUB_ITEMS - subImages.length; // 빈 이미지 슬롯 카운트
-  const [currentIndex, setCurrentIndex] = useState(0); // 모바일 버전 이미지 인덱스 스테이트
+  const emptySlots = MAX_SUB_ITEMS - subImages.length;
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const tagName = new Map([
     ['문화 · 예술', 'culture'],
@@ -41,7 +36,6 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
     ['웰빙', 'wellbeing'],
   ]);
 
-  //모바일 전용 이미지 배열 배너 이미지 + 서브 이미지들
   const mobileImages = [
     { id: 'banner', url: bannerImageUrl, alt: '대표 이미지' },
     ...subImages.map(img => ({
@@ -60,7 +54,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
   };
 
   const englishTag = tagName.get(tag) || 'default';
-  //console.log(englishTag);
+
   return (
     <>
       <div className='relative block h-[310px] md:hidden'>
@@ -77,7 +71,6 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
               </div>
             ))}
           </div>
-          {/* 이미지가 두개 이상일때 이미지 넘기는 버튼 렌더링*/}
           {mobileImages.length > 1 && (
             <div className='group'>
               <button
@@ -92,7 +85,6 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
               >
                 <ImageArrowRight size={24} />
               </button>
-              {/* 인디케이터 */}
               <div className='absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-[5px] bg-black/70 px-2 py-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
                 {mobileImages.map((_, idx) => (
                   <button
@@ -106,8 +98,7 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
           )}
         </div>
       </div>
-      {/*테블릿, PC 화면 렌더링 */}
-      <Gallery options={{ fitRatio: 0.5 } as any}>
+      <Gallery>
         <div
           className={clsx(
             'hidden h-[310px] md:grid',

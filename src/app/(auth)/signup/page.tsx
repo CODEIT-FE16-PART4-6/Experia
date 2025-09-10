@@ -43,7 +43,6 @@ const SignupPage = () => {
       });
 
       const result = await response.json();
-      console.log('회원가입 응답:', result);
 
       // HTTP 상태 코드 체크
       if (!response.ok) {
@@ -61,7 +60,6 @@ const SignupPage = () => {
       });
 
       const loginResult = await loginResponse.json();
-      console.log('자동 로그인 응답:', loginResult);
 
       if (!loginResult.accessToken || !loginResult.refreshToken) {
         throw new Error('자동 로그인 실패: 토큰을 받지 못했습니다.');
@@ -74,7 +72,6 @@ const SignupPage = () => {
 
       router.push('/');
     } catch (err: unknown) {
-      console.error('회원가입 중 오류 발생', err);
       if (err instanceof Error) {
         setError(err.message);
       } else {

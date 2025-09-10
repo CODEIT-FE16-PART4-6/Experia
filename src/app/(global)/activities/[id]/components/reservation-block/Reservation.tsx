@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
@@ -18,7 +18,6 @@ interface Props {
 
 const Reservation = ({ data }: Props) => {
   // ActivityDetail 타입에서 date 타입 추출
-  type DateType = ActivityDetail['schedules'][number]['date'];
   // ActivityDetail 타입에서 scheduleId 타입 추출
   type ScheduleIdType = ActivityDetail['schedules'][number]['id'];
   //선택된 날짜의 schedules 필터링
@@ -29,13 +28,6 @@ const Reservation = ({ data }: Props) => {
   const [whiteBox, setWhiteBox] = useState(false);
   const [mySchedule, setMySchedule] = useState<string | null>(null);
 
-  // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
-  const highlightDates = useMemo(() => {
-    return data.schedules.map(schedule => {
-      const date = new Date(schedule.date);
-      return date;
-    });
-  }, [data.schedules]);
   //TODO [P6-127] . React DevTools로 컴포넌트 렌더링 시간을 측정하고, useMemo 사용 전후를 비교하기
   //const highlightDates = data.schedules.map(schedule => new Date(schedule.date))
 
