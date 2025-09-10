@@ -5,4 +5,79 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/signin',
   NOT_FOUND: '*',
+  MY_PAGE: '/mypage',
+  SIGN_UP: '/signup',
 };
+
+export const BREAKPOINTS = {
+  lg: 1280,
+  md: 720,
+  sm: 520,
+};
+
+export const ITEM_PAGESIZE = {
+  lg: 8,
+  md: 9,
+  sm: 6,
+};
+
+export const ITEM_DEFAULT_PAGESIZE = 12; // 목록 렌더링 갯수 기본값: 12개 (반응형 그리드 레이아웃에 맞춤)
+
+export const RESERVATION_STATUS = [
+  {
+    label: '예약 신청',
+    value: 'pending',
+  },
+  {
+    label: '예약 취소',
+    value: 'canceled',
+  },
+  {
+    label: '예약 승인',
+    value: 'confirmed',
+  },
+  {
+    label: '예약 거절',
+    value: 'declined',
+  },
+  {
+    label: '체험 완료',
+    value: 'completed',
+  },
+];
+
+export const PATHS = {
+  MAIN: '/',
+  ACTIVITY_DETAIL: (id: number) => `/activities/${id}`,
+  MYPAGE: '/mypage',
+  MY_ACTIVITIES: '/mypage/my-activities',
+  MY_RESERVATIONS: '/mypage/my-reservations',
+  RESERVATIONS: '/mypage/reservations',
+  LOGIN: '/signin',
+  SIGNUP: '/signup',
+};
+
+export const ACTIVITY_CATEGORIES = [
+  { id: '1', value: '문화 · 예술' },
+  { id: '2', value: '식음료' },
+  { id: '3', value: '스포츠' },
+  { id: '4', value: '투어' },
+  { id: '5', value: '관광' },
+  { id: '6', value: '웰빙' },
+];
+
+export const ACTIVITY_LIST_ORDER_OPTIONS = [
+  {
+    label: '가격 낮은 순',
+    value: 'price_asc',
+  },
+  {
+    label: '가격 높은 순',
+    value: 'price_desc',
+  },
+  {
+    label: '최신순',
+    value: 'latest',
+  },
+];
+export const NOTIFICATIONS_PER_PAGE = 2;

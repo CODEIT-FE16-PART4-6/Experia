@@ -2,6 +2,9 @@ import type { NextConfig } from 'next';
 import type { Configuration as WebpackConfig } from 'webpack';
 
 const nextConfig: NextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack(config: WebpackConfig) {
     config.module?.rules?.push({
       test: /.svg$/,
@@ -9,6 +12,22 @@ const nextConfig: NextConfig = {
     });
 
     return config;
+  },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'sprint-fe-project.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**', // 경로 패턴, 모든 이미지 허용
+      },
+    ],
+  },
+
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
 };
 

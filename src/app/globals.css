@@ -3,7 +3,7 @@
 @theme {
   /* breakpoints */
   --breakpoint-sm: 520px; /* mobile ~ mini tablet */
-  --breakpoint-md: 640px; /* tablet */
+  --breakpoint-md: 720px; /* tablet */
   --breakpoint-lg: 1280px; /* desktop */
 
   /* colors */
@@ -29,6 +29,7 @@
   --color-red-light: #ffe4e0;
 
   --color-green: #00ac07;
+  --color-green-light: #ced8d5;
 
   --color-orange: #ff7c1d;
   --color-orange-light: #fff4e8;
@@ -58,6 +59,9 @@
   --text-xs--line-height: 18px;
   --text-xs-tight: 12px;
   --text-xs-tight--line-height: 18px;
+
+  /* shadow */
+  --shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.05);
 }
 
 /* reset */
@@ -69,73 +73,50 @@
   button {
     @apply cursor-pointer disabled:cursor-not-allowed;
   }
-@import 'tailwindcss';
 
-@theme {
-  /* breakpoints */
-  --breakpoint-sm: 520px; /* mobile ~ mini tablet */
-  --breakpoint-md: 640px; /* tablet */
-  --breakpoint-lg: 1280px; /* desktop */
-
-  /* colors */
-  --color-black: #1b1b1b;
-  --color-white: #fff;
-
-  --color-gray-100: #fafafa;
-  --color-gray-200: #eee;
-  --color-gray-300: #ddd;
-  --color-gray-400: #cbc9cf;
-  --color-gray-500: #adae88;
-  --color-gray-600: #a4a1aa;
-  --color-gray-700: #79747e;
-  --color-gray-800: #4b4b4b;
-
-  --color-primary: #0b3b2d;
-  --color-primary-dark: #112211; /* nomad black */
-
-  --color-red-primary: #ff472e;
-  --color-red-secondary: #ffc2ba;
-  --color-red-light: #ffe4e0;
-
-  --color-green: #00ac07;
-
-  --color-orange: #ff7c1d;
-  --color-orange-light: #fff4e8;
-
-  --color-yellow: #ffc23d;
-
-  --color-blue-primary: #0085ff;
-  --color-blue-secondary: #2eb4ff;
-  --color-blue-light: #e5f3ff;
-
-  /* font-size */
-  --text-3xl: 32px;
-  --text-3xl--line-height: 42px;
-  --text-2xl: 24px;
-  --text-2xl--line-height: 32px;
-  --text-xl: 20px;
-  --text-xl--line-height: 32px;
-  --text-lg: 18px;
-  --text-lg--line-height: 26px;
-  --text-base: 16px;
-  --text-base--line-height: 26px;
-  --text-md: 14px;
-  --text-md--line-height: 24px;
-  --text-sm: 13px;
-  --text-sm--line-height: 22px;
-  --text-xs: 12px;
-  --text-xs--line-height: 18px;
-  --text-xs-tight: 12px;
-  --text-xs-tight--line-height: 18px;
-}
-
-/* reset */
-@layer base {
-  body {
-    @apply text-gray-800;
+  label {
+    @apply mb-2 block text-base font-medium;
   }
 
-  button {
-    @apply cursor-pointer disabled:cursor-not-allowed;
+  input {
+    @apply w-full rounded-md border bg-white p-3.5 text-base transition-colors duration-300 outline-none;
+  }
+}
+
+@layer components {
+  /* nav */
+  .nav-list {
+    @apply hover:text-primary px-3 py-2 transition-all hover:font-bold;
+  }
+
+  /* notification */
+  .noti-list {
+    @apply relative rounded-md bg-white px-3 py-4 break-keep;
+  }
+
+  /* form */
+  .form-header {
+    @apply mb-4;
+  }
+
+  .form-content {
+    @apply flex grow flex-col gap-6;
+  }
+
+  .form-footer {
+    @apply sticky bottom-0;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
