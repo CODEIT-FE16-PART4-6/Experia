@@ -9,15 +9,14 @@ import DropdownSelect from '@/components/DropdownSelect';
 import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 import InputField from '@/components/InputField';
+import AddressField from '@/components/form/AddressField';
 import FormLabel from '@/components/form/FormLabel';
 import TextAreaField from '@/components/form/TextAreaField';
-import AddressField from '@/components/form/AddressField';
 import DateTimeInputGroup from '@/components/ui/DateTimeInputGroup';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { ACTIVITY_CATEGORIES } from '@/constants';
 import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/activitiesSchema';
 import { REQUEST_URL } from '@/utils/api-public';
-
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
@@ -126,8 +125,6 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
             bannerImageUrl: data.bannerImageUrl,
             subImageUrls: (data.subImages ?? []).map(img => img.imageUrl),
           };
-
-      console.log(payload);
 
       const res = await fetch(url, {
         method,

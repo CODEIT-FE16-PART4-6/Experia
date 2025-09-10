@@ -10,7 +10,6 @@ import { useUserStore } from '@/stores/userStore';
 import { MyInfoFormValues } from '@/types/schema/myInfoFormSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 
-
 const MyInfoClient = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const updateUser = useUserStore(state => state.updateUser);
@@ -18,7 +17,11 @@ const MyInfoClient = () => {
   const handleUpdateMyInfo: SubmitHandler<MyInfoFormValues> = async data => {
     try {
       // 비밀번호가 입력되지 않은 경우 제외하고 전송
-      const updateData: any = {
+      const updateData: {
+        nickname: string;
+        email: string;
+        password?: string;
+      } = {
         nickname: data.nickname,
         email: data.email,
       };
