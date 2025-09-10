@@ -1,14 +1,14 @@
 'use client';
 
 import { useSuspenseInfiniteQuery, InfiniteData } from '@tanstack/react-query';
-import ActivityList from './ActivityList.client';
-import { fetchServerData } from '@/utils/api-server';
-import { Activities } from '@/types/schema/activitiesSchema';
-import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
-import useWindowWidth from '@/hooks/useWindowWidth';
 import { useEffect, useState, useRef } from 'react';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { BREAKPOINTS, ITEM_PAGESIZE, ITEM_DEFAULT_PAGESIZE } from '@/constants';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import useWindowWidth from '@/hooks/useWindowWidth';
+import { Activities } from '@/types/schema/activitiesSchema';
+import { fetchServerData } from '@/utils/api-server';
+import ActivityList from './ActivityList.client';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return ITEM_PAGESIZE.lg;
@@ -16,28 +16,30 @@ const getPageSize = (width: number) => {
   return ITEM_PAGESIZE.sm;
 };
 type Props = {
-  initialData: Activities
-  keyword: string
-}
+  initialData: Activities;
+  keyword: string;
+  category?: string | null;
+  sort?: string | null;
+};
 
-const MainPageClient = ({ initialData, keyword }: Props) => {
+const MainPageClient = ({ initialData, keyword, category, sort }: Props) => {
   const innerWidth = useWindowWidth();
   const [pageSize, setPageSize] = useState(ITEM_DEFAULT_PAGESIZE);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (innerWidth) setPageSize(getPageSize(innerWidth));
-  }, [innerWidth,]);
+  }, [innerWidth, sort]);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
     useSuspenseInfiniteQuery<
       Activities,
       Error,
       InfiniteData<Activities, unknown>,
-      [string, number, string | null],
+      [string, number, string | null, string | null, string | null],
       number | null
     >({
-      queryKey: ['activities', pageSize, keyword || null],
+      queryKey: ['activities', pageSize, keyword || null, category || null, sort || null],
       queryFn: ({ pageParam = null }) => {
         return fetchServerData<Activities>({
           path: '/activities',
@@ -46,14 +48,17 @@ const MainPageClient = ({ initialData, keyword }: Props) => {
             cursorId: pageParam ?? undefined,
             size: pageSize,
             keyword: keyword || undefined,
+            category: category || undefined,
+            sort: sort || undefined,
           },
-        })
+        });
       },
       initialPageParam: null,
-      initialData: keyword ? undefined : { pages: [initialData], pageParams: [null] },
+      initialData:
+        keyword || category || sort ? undefined : { pages: [initialData], pageParams: [null] },
       getNextPageParam: lastPage =>
         lastPage.activities.length > 0 ? lastPage.cursorId : undefined,
-    })
+    });
 
   useIntersectionObserver({
     target: loadMoreRef,
@@ -69,21 +74,24 @@ const MainPageClient = ({ initialData, keyword }: Props) => {
     <>
       <section className="mx-auto max-w-[1200px] mt-[34px] px-4 lg:px-0">
         {keyword && (
-          <div className="mb-4">
-            <p className="text-black text-2xl md:text-3xl pb-2">
-              <strong className="text-nomad-black font-bold">{keyword}</strong>으로 검색한 결과입니다.
+          <div className='mb-4'>
+            <p className='pb-2 text-2xl text-black md:text-3xl'>
+              <strong className='text-nomad-black font-bold'>{keyword}</strong>으로 검색한
+              결과입니다.
             </p>
-            <p className="text-black text-base">총 {totalCount}개의 결과</p>
+            <p className='text-base text-black'>총 {totalCount}개의 결과</p>
           </div>
         )}
 
         <ActivityList data={data} />
+
         <div ref={loadMoreRef} className='min-h-10'>
           {totalCount === 0 && (
-            <p className="text-center text-gray-600 text-xl md:text-2xl py-55 ">
+            <p className='py-55 text-center text-xl text-gray-600 md:text-2xl'>
               검색 결과가 없습니다.
             </p>
           )}
+
           {isError && (
             <p className='pb-16 text-center'>
               목록 불러오기에 실패했습니다.
@@ -92,6 +100,7 @@ const MainPageClient = ({ initialData, keyword }: Props) => {
               </button>
             </p>
           )}
+
           {isFetchingMore && <LoadingSpinner />}
         </div>
       </section>

@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Activity } from '@/types/schema/activitiesSchema';
 import { useState } from 'react';
+
+import { Activity } from '@/types/schema/activitiesSchema';
 
 const ActivityItem = ({ item }: { item: Activity }) => {
   const [isLoaded, setIsLoaded] = useState(false);

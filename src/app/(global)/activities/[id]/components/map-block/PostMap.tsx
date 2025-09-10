@@ -7,16 +7,17 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 //Map
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import getGeoCoordinate from '@/utils/getGeoCoordinate';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import type { LatLngExpression } from 'leaflet';
 
 //icon(leaflet production)
-import icon from 'leaflet/dist/images/marker-icon.png';
 import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
+import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
+import getGeoCoordinate from '@/utils/getGeoCoordinate';
 
 const DefaultIcon = L.icon({
   iconUrl: icon.src,

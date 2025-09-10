@@ -1,9 +1,13 @@
 'use client';
-import SectionTitle from '@/components/ui/Section/SectionTitle';
-import { LinkButton } from '@/components/ui/LinkButton';
-import ActivityCard from '../components/ActivityCard';
-import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
 import { useQuery } from '@tanstack/react-query';
+
+import { LinkButton } from '@/components/ui/LinkButton';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
+import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
+
+import ActivityCard from '../components/ActivityCard';
+
+
 
 const fetchMyActivities = async () => {
   const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/my-activities?size=20', {
@@ -21,10 +25,14 @@ const fetchMyActivities = async () => {
 };
 
 const MyActivitiesPage = () => {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: ['activityList'],
     queryFn: fetchMyActivities,
   });
+
+  const handleDeleteSuccess = () => {
+    refetch(); // 삭제 성공 시 데이터 다시 불러오기
+  };
 
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div>오류 발생: {error.message}</div>;
@@ -38,7 +46,12 @@ const MyActivitiesPage = () => {
         action={<LinkButton href='/mypage/my-activities/add-activity'>체험 등록하기</LinkButton>}
       />
       {activities.map(activity => (
-        <ActivityCard key={activity.id} type='activity' data={activity as ActivityType} />
+        <ActivityCard
+          key={activity.id}
+          type='activity'
+          data={activity as ActivityType}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
       ))}
     </div>
   );

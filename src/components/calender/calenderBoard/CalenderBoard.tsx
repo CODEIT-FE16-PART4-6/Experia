@@ -1,11 +1,15 @@
-import { MyActivitiesDto } from '@/utils/api-public/api';
 import { JSX } from 'react';
+
+import { MyActivitiesDto } from '@/utils/api-public/api';
+
 import CalenderBoardFunction from './CalenderBoard.function';
 
 type Props = {
   year: number;
   month: number;
   activities: MyActivitiesDto[];
+  // 부모 컴포넌트(Calender.tsx)로부터 날짜 클릭 이벤트를 처리하는 함수를 받습니다.
+  onDayClick: (day: number, completed: number, confirmed: number, pending: number) => void;
 };
 
 const dayOftheWeek = {
@@ -17,7 +21,7 @@ const dayOftheWeek = {
     'h-full px-[12px] py-[12px] flex items-center bg-white border border-[#e8e8e8] rounded-tr-[10px]',
 };
 
-const CalenderBoard = ({ year, month, activities }: Props) => {
+const CalenderBoard = ({ year, month, activities, onDayClick }: Props) => {
   console.log('CalenderBoard year : ', year);
   console.log('CalenderBoard month : ', month);
 
@@ -39,7 +43,13 @@ const CalenderBoard = ({ year, month, activities }: Props) => {
       <p className={dayOftheWeek.style}>THUR</p>
       <p className={dayOftheWeek.style}>FRI</p>
       <p className={dayOftheWeek.onlySat}>SAT</p>
-      <CalenderBoardFunction year={year} month={month} activities={activities} />
+      {/* CalenderBoardFunction으로 onDayClick 핸들러를 그대로 전달합니다. */}
+      <CalenderBoardFunction
+        year={year}
+        month={month}
+        activities={activities}
+        onDayClick={onDayClick}
+      />
     </div>
   );
 };

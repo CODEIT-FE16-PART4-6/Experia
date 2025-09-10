@@ -1,7 +1,8 @@
 'use client'
-import React, { useEffect, useRef, useState } from "react"
-import InputField from "@/components/InputField"
 import Image from "next/image"
+import React, { useEffect, useRef, useState } from "react"
+
+import InputField from "@/components/InputField"
 import debounce from "@/utils/debounce"
 
 interface SearchBarProps {

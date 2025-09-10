@@ -1,5 +1,5 @@
-import PrevArrowCalender from '@/assets/imgs/prevArrowCalender.svg';
 import NextArrowCalender from '@/assets/imgs/nextArrowCalender.svg';
+import PrevArrowCalender from '@/assets/imgs/prevArrowCalender.svg';
 
 type Props = {
   year: number;

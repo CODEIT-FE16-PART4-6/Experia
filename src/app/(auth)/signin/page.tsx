@@ -1,17 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
-import Link from 'next/link';
+import { useUserStore } from '@/stores/userStore';
 import { LoginRequestSchema, LoginRequest } from '@/types/schema/userSchema';
 import { REQUEST_URL } from '@/utils/api-public';
+
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useUserStore } from '@/stores/userStore';
 
 const LoginPage = () => {
   const router = useRouter();

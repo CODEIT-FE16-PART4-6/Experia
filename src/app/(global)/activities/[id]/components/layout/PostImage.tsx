@@ -1,12 +1,13 @@
 'use client';
 
 //hook
-import { useState } from 'react';
 //lib
 import clsx from 'clsx';
 import Image from 'next/image';
+import { useState } from 'react';
 import 'photoswipe/style.css';
 import { Gallery, Item } from 'react-photoswipe-gallery';
+
 //SSR
 //img
 import ImageArrowLeft from '@/assets/imgs/activityPage/imageArrowLeft.svg';

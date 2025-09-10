@@ -73,3 +73,19 @@ export const ACTIVITY_CATEGORIES = [
   { id: '5', value: '관광' },
   { id: '6', value: '웰빙' },
 ];
+
+export const ACTIVITY_LIST_ORDER_OPTIONS = [
+  {
+    label: '가격 낮은 순',
+    value: 'price_asc',
+  },
+  {
+    label: '가격 높은 순',
+    value: 'price_desc',
+  },
+  {
+    label: '최신순',
+    value: 'latest',
+  },
+];
+export const NOTIFICATIONS_PER_PAGE = 2;

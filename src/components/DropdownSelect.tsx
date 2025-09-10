@@ -1,6 +1,5 @@
 'use client';
 
-import { Fragment } from 'react';
 import {
   Listbox,
   ListboxButton,
@@ -9,6 +8,7 @@ import {
   Transition,
 } from '@headlessui/react';
 import clsx from 'clsx';
+import { Fragment } from 'react';
 
 interface DropdownSelectItem {
   id: string | number;
