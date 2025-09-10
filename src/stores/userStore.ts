@@ -47,7 +47,10 @@ export const useUserStore = create<UserState>()(
           console.error('로그아웃 API 실패', e);
         }
 
-        window.location.href = ROUTES.LOGIN;
+        const currentPathnmae = window.location.pathname;
+        if (currentPathnmae.startsWith(ROUTES.MY_PAGE)) {
+          window.location.href = ROUTES.LOGIN;
+        }
       },
     }),
 
