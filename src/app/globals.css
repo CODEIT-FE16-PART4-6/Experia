@@ -107,3 +107,8 @@
     }
   }
 }
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  @apply text-gray-200;
+}
