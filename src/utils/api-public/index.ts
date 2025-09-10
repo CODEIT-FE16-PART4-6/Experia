@@ -1,5 +1,5 @@
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://sp-globalnomad-api.vercel.app';
-const TEAM = process.env.NEXT_PUBLIC_TEAM || 'development';
+const TEAM = process.env.NEXT_PUBLIC_TEAM || '16-6';
 
 // 환경변수 체크 (개발 환경에서는 경고만)
 if (!process.env.NEXT_PUBLIC_BACKEND_URL || !process.env.NEXT_PUBLIC_TEAM) {
