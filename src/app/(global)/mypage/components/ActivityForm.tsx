@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm, FormProvider, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@/components/Button';
@@ -9,15 +10,14 @@ import DropdownSelect from '@/components/DropdownSelect';
 import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 import InputField from '@/components/InputField';
+import AddressField from '@/components/form/AddressField';
 import FormLabel from '@/components/form/FormLabel';
 import TextAreaField from '@/components/form/TextAreaField';
-import AddressField from '@/components/form/AddressField';
 import DateTimeInputGroup from '@/components/ui/DateTimeInputGroup';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { ACTIVITY_CATEGORIES } from '@/constants';
 import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/activitiesSchema';
 import { REQUEST_URL } from '@/utils/api-public';
-
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
@@ -28,6 +28,7 @@ const token =
 
 const ActivityForm = ({ initialData }: ActivityFormProps) => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const methods = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivityFormValueSchema),
@@ -107,6 +108,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
   };
 
   const onSubmit: SubmitHandler<ActivityFormValues> = async data => {
+    setIsSubmitting(true);
     try {
       const url = isEdit
         ? `${REQUEST_URL}/my-activities/${initialData?.id}`
@@ -144,6 +146,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
 
         console.error('서버 에러:', error);
         alert(error.message || errorDefaultMsg);
+        setIsSubmitting(false);
         return;
       }
 
@@ -152,21 +155,30 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
       alert(alertMsg);
 
       // 등록/수정 후 상세 페이지로 이동
-      router.push(`/activities/${result.id}`);
+      await router.push(`/activities/${result.id}`);
     } catch (err) {
       console.error('네트워크 에러:', err);
       alert('서버와의 통신에 실패했습니다.');
+      setIsSubmitting(false);
     }
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pb-[180px]'>
+      <form onSubmit={handleSubmit(onSubmit)} className='relative flex flex-col gap-4 pb-[180px]'>
+        {isSubmitting && (
+          <div className='absolute inset-0 z-50 flex items-center justify-center bg-white/75'>
+            <div className='flex flex-col items-center gap-2'>
+              <div className='h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500' />
+              <p className='text-sm text-gray-600'>업로드 중...</p>
+            </div>
+          </div>
+        )}
         <SectionTitle
           title={isEdit ? '내 체험 수정' : '내 체험 등록'}
           action={
-            <Button variant='POSITIVE' size='md' type='submit'>
-              {isEdit ? '수정하기' : '등록하기'}
+            <Button variant='POSITIVE' size='md' type='submit' disabled={isSubmitting}>
+              {isSubmitting ? '업로드 중 . . .' : isEdit ? '수정하기' : '등록하기'}
             </Button>
           }
         />

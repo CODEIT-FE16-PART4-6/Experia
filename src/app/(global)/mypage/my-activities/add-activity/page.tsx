@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { Suspense } from 'react';
 import ArrowLeftIcon from '@/assets/icons/ic_arrowLeftLine.svg';
 
 import ActivityForm from '../../components/ActivityForm';
@@ -14,7 +15,9 @@ const AddNewActivityPage = () => {
         <ArrowLeftIcon className='group-hover:text-primary h-4 w-4 text-gray-600' />
         돌아가기
       </Link>
-      <ActivityForm />
+      <Suspense fallback={<p>Suspense Test...</p>}>
+        <ActivityForm />
+      </Suspense>
     </section>
   );
 };
