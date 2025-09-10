@@ -13,12 +13,8 @@
     }
   ],
   "env": {
-    "NODE_ENV": "development"
-  },
-  "build": {
-    "env": {
-      "NEXT_PUBLIC_BACKEND_URL": "@next_public_backend_url_dev",
-      "NEXT_PUBLIC_TEAM": "@next_public_team_dev"
-    }
+    "NODE_ENV": "development",
+    "NEXT_PUBLIC_BACKEND_URL": "https://api-dev.experia.com",
+    "NEXT_PUBLIC_TEAM": "development"
   }
 }
