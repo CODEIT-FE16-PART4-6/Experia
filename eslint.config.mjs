@@ -28,6 +28,7 @@ const eslintConfig = [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
+      '@typescript-eslint/no-explicit-any': 'error', // any 타입 사용 금지
       'import/order': [
         'warn', // 경고로 설정
         {
