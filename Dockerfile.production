@@ -30,34 +30,25 @@ ENV NEXT_PUBLIC_TEAM=$NEXT_PUBLIC_TEAM
 RUN npm run build
 
 # ===========================================
-# Stage 2: Production Stage (운영용 최적화)
+# Stage 2: Distroless Production Stage
 # ===========================================
-FROM node:22.18.0-alpine AS production
-
-# Install tzdata package
-RUN apk add --no-cache tzdata
-
-ENV TZ="Asia/Seoul"
+FROM gcr.io/distroless/nodejs22-debian12 AS production
 
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# package.json과 package-lock.json 복사
-COPY package.json package-lock.json ./
-
-# 운영용 의존성만 설치 (devDependencies 제외)
-RUN npm ci --only=production && npm cache clean --force
+# 운영용 의존성만 복사
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
 
 # 빌드된 파일들을 builder stage에서 복사
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.ts ./
 
-# 불필요한 파일들 정리
-RUN npm prune --omit=dev
-
 # 포트 노출
 EXPOSE 3000
 
-# 운영용 명령어 실행
-CMD ["npm", "run", "start"]
+# Distroless에서는 직접 Node.js 실행
+# next start 대신 node_modules/.bin/next start 사용
+CMD ["node_modules/.bin/next", "start"]

@@ -1,4 +1,6 @@
-import { z } from 'zod';
+import { string, z } from 'zod';
+
+export type PopularActivities = Activities;
 
 export const Activities = z.object({
   cursorId: z.number().optional().nullable(),

@@ -1,7 +1,7 @@
 'use client';
 
+import PopularPageClient from './PopularPage.client'
 import { Suspense, useState, useRef } from 'react';
-
 import DropdownOptions from '@/components/DropdownOptions';
 import MainPageClient from '@/components/activities/MainPage.client';
 import SearchBarClient from '@/components/activities/SearchBar.client';
@@ -25,11 +25,17 @@ export default function SearchContainer({ initialData, initialKeyword = '' }: Pr
     <>
       <SearchBarClient onSearch={setKeyword} initialQuery={keyword} />
 
-      {!keyword && (
-        <section className='mx-auto mt-[34px] max-w-[1200px] px-4'>
-          <SectionTitle title='🌏 모든 체험' />
-        </section>
-      )}
+      <section className="mx-auto max-w-[1200px] mt-[34px]">
+        {!keyword && (
+          <>
+            <Suspense fallback={<ActivityListSkeleton />}>
+              <SectionTitle title="🔥 인기 체험" />
+              <PopularPageClient initialData={initialData} />
+            </Suspense>
+          </>
+        )}
+
+      {!keyword && (<SectionTitle title="🌏 모든 체험" />)}
 
       <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-4'>
         {/* 카테고리 필터 */}
@@ -56,6 +62,7 @@ export default function SearchContainer({ initialData, initialKeyword = '' }: Pr
           sort={sort}
         />
       </Suspense>
+      </section>
     </>
   );
 }

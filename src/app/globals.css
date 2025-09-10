@@ -153,3 +153,9 @@
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
   width: 100% !important;
 }
+
+/* swiper custom */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  @apply text-gray-200;
+}
