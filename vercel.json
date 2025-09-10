@@ -17,5 +17,10 @@
     }
   },
   "regions": ["icn1"],
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "git": {
+    "deploymentEnabled": {
+      "main": false
+    }
+  }
 }
