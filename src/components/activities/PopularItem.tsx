@@ -7,7 +7,7 @@ const PopularItem = ({ item }: { item: Activity }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <li className="max-w-none text-black lg:max-w-[342px]">
+    <li className="max-w-none text-black lg:max-w-[390px]">
       <Link href={`/activities/${item.id}`} className="group block relative">
         <div className="relative w-full aspect-square overflow-hidden rounded-[20px]">
           <Image
