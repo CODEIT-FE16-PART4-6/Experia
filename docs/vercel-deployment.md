@@ -16,7 +16,7 @@
 Vercel 대시보드 → Project Settings → Environment Variables:
 
 ```
-NEXT_PUBLIC_BACKEND_URL = https://api-dev.experia.com
+NEXT_PUBLIC_BACKEND_URL = https://sp-globalnomad.koyeb.app
 NEXT_PUBLIC_TEAM = development
 NODE_ENV = development
 ```
@@ -30,12 +30,12 @@ NODE_ENV = development
   "version": 2,
   "env": {
     "NODE_ENV": "development",
-    "NEXT_PUBLIC_BACKEND_URL": "https://api-dev.experia.com",
+    "NEXT_PUBLIC_BACKEND_URL": "https://sp-globalnomad.koyeb.app",
     "NEXT_PUBLIC_TEAM": "development"
   },
   "build": {
     "env": {
-      "NEXT_PUBLIC_BACKEND_URL": "https://api-dev.experia.com",
+      "NEXT_PUBLIC_BACKEND_URL": "https://sp-globalnomad.koyeb.app",
       "NEXT_PUBLIC_TEAM": "development"
     }
   },

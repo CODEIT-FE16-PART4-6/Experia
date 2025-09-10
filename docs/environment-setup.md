@@ -93,7 +93,7 @@ npm run vercel:deploy
 Vercel 대시보드에서 다음 환경변수들을 설정해야 합니다:
 
 ```
-NEXT_PUBLIC_BACKEND_URL = https://api-dev.experia.com
+NEXT_PUBLIC_BACKEND_URL = https://sp-globalnomad.koyeb.app
 NEXT_PUBLIC_TEAM = development
 NODE_ENV = development
 ```

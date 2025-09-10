@@ -1,4 +1,4 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api-dev.experia.com';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://sp-globalnomad.koyeb.app';
 const TEAM = process.env.NEXT_PUBLIC_TEAM || 'development';
 
 // 환경변수 체크 (개발 환경에서는 경고만)

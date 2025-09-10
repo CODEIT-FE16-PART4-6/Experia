@@ -106,17 +106,17 @@ fi
 log_info "환경변수 설정 중..."
 case $ENVIRONMENT in
     "development")
-        vercel env add NEXT_PUBLIC_BACKEND_URL development <<< "https://api-dev.experia.com" || true
+        vercel env add NEXT_PUBLIC_BACKEND_URL development <<< "https://sp-globalnomad.koyeb.app" || true
         vercel env add NEXT_PUBLIC_TEAM development <<< "development" || true
         vercel env add NODE_ENV development <<< "development" || true
         ;;
     "staging")
-        vercel env add NEXT_PUBLIC_BACKEND_URL preview <<< "https://api-staging.experia.com" || true
+        vercel env add NEXT_PUBLIC_BACKEND_URL preview <<< "https://sp-globalnomad.koyeb.app" || true
         vercel env add NEXT_PUBLIC_TEAM preview <<< "staging" || true
         vercel env add NODE_ENV preview <<< "staging" || true
         ;;
     "production")
-        vercel env add NEXT_PUBLIC_BACKEND_URL production <<< "https://api.experia.com" || true
+        vercel env add NEXT_PUBLIC_BACKEND_URL production <<< "https://sp-globalnomad.koyeb.app" || true
         vercel env add NEXT_PUBLIC_TEAM production <<< "production" || true
         vercel env add NODE_ENV production <<< "production" || true
         ;;
