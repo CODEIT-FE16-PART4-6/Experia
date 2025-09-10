@@ -39,6 +39,8 @@ jobs:
           npm test
 
   build:
+    # test 작업이 성공한 후에만 실행
+    needs: test
     # 워크플로우가 실행될 가상 환경을 지정합니다.
     runs-on: ubuntu-22.04
     steps:
