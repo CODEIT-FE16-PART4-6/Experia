@@ -98,7 +98,8 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
           )}
         </div>
       </div>
-      <Gallery>
+      {/*테블릿, PC 화면 렌더링 */}
+      <Gallery options={{ fitRatio: 0.5 } as any}>
         <div
           className={clsx(
             'hidden h-[310px] md:grid',
