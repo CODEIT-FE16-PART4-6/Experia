@@ -1,15 +1,17 @@
-'use client'
+'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import Image from 'next/image'
-import Link from 'next/link'
+import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { useState, useEffect } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import Button from '@/components/Button'
-import InputField from '@/components/InputField'
-import { SignupRequest, SignupRequestSchema } from "@/types/schema/userSchema"
+import Button from '@/components/Button';
+import InputField from '@/components/InputField';
+import { useUserStore } from '@/stores/userStore';
+import { SignupRequest, SignupRequestSchema } from '@/types/schema/userSchema';
+import { REQUEST_URL } from '@/utils/api-public';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -17,6 +19,8 @@ const SignupPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const setUser = useUserStore(state => state.setUser);
+  const user = useUserStore(state => state.user);
 
   const {
     register,
@@ -25,14 +29,14 @@ const SignupPage = () => {
   } = useForm<SignupRequest>({
     resolver: zodResolver(SignupRequestSchema),
     mode: 'onChange',
-  })
+  });
 
-  const onSubmit: SubmitHandler<SignupRequest> = async (data) => {
+  const onSubmit: SubmitHandler<SignupRequest> = async data => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/users', {
+      const response = await fetch(`${REQUEST_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -50,26 +54,25 @@ const SignupPage = () => {
       }
 
       // 로그인 API 호출
-      const loginResponse = await fetch('https://sp-globalnomad-api.vercel.app/16-6/auth/login', {
+      const loginResponse = await fetch(`${REQUEST_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: data.email, password: data.password }),
-      })
+      });
 
-      const loginResult = await loginResponse.json()
-      console.log('자동 로그인 응답:', loginResult)
+      const loginResult = await loginResponse.json();
+      console.log('자동 로그인 응답:', loginResult);
 
       if (!loginResult.accessToken || !loginResult.refreshToken) {
-        throw new Error('자동 로그인 실패: 토큰을 받지 못했습니다.')
+        throw new Error('자동 로그인 실패: 토큰을 받지 못했습니다.');
       }
 
       // 토큰 & 사용자 정보 저장
       localStorage.setItem('access_token', loginResult.accessToken);
       localStorage.setItem('refresh_token', loginResult.refreshToken);
-      localStorage.setItem('user', JSON.stringify(loginResult.user));
+      setUser(loginResult.user);
 
       router.push('/');
-
     } catch (err: unknown) {
       console.error('회원가입 중 오류 발생', err);
       if (err instanceof Error) {
@@ -82,10 +85,17 @@ const SignupPage = () => {
     }
   };
 
+  // 이미 로그인 되어있는 경우, 메인 페이지로 리다이렉션
+  useEffect(() => {
+    if (user) {
+      router.replace('/');
+    }
+  }, [user, router]);
+
   return (
     <main className='flex min-h-screen items-center justify-center bg-white'>
       <div className='w-full max-w-2xl px-4'>
-        <div className='flex justify-center mb-14'>
+        <div className='mb-14 flex justify-center'>
           <Link href='/'>
             <Image src='/images/logo.svg' alt='Experia 로고' width={260} height={42} />
           </Link>
@@ -94,62 +104,62 @@ const SignupPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-7'>
             <InputField
-              label="이메일"
-              placeholder="이메일 입력해 주세요"
-              type="email"
-              autoComplete="email"
+              label='이메일'
+              placeholder='이메일 입력해 주세요'
+              type='email'
+              autoComplete='email'
               {...register('email')}
               error={errors.email?.message}
             />
 
             <InputField
-              label="닉네임"
-              placeholder="닉네임을 입력해 주세요"
-              type="text"
-              autoComplete="username"
+              label='닉네임'
+              placeholder='닉네임을 입력해 주세요'
+              type='text'
+              autoComplete='username'
               {...register('nickname')}
               error={errors.nickname?.message}
             />
 
-            <div className="relative">
+            <div className='relative'>
               <InputField
-                label="비밀번호"
-                placeholder="비밀번호 입력해 주세요"
-                type={showPassword ? "text" : "password"}
-                autoComplete="new-password"
+                label='비밀번호'
+                placeholder='비밀번호 입력해 주세요'
+                type={showPassword ? 'text' : 'password'}
+                autoComplete='new-password'
                 {...register('password')}
                 error={errors.password?.message}
               />
               <button
-                type="button"
+                type='button'
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-[50px]"
+                className='absolute top-[50px] right-4'
               >
                 <Image
                   src={showPassword ? '/icons/ic_EyeOff.svg' : '/icons/ic_Eye.svg'}
-                  alt="비밀번호 표시 토글"
+                  alt='비밀번호 표시 토글'
                   width={24}
                   height={24}
                 />
               </button>
             </div>
-            <div className="relative">
+            <div className='relative'>
               <InputField
-                label="비밀번호 확인"
-                placeholder="비밀번호 한번 더 입력해 주세요"
-                type={showPasswordConfirm ? "text" : "password"}
-                autoComplete="new-password"
+                label='비밀번호 확인'
+                placeholder='비밀번호 한번 더 입력해 주세요'
+                type={showPasswordConfirm ? 'text' : 'password'}
+                autoComplete='new-password'
                 {...register('passwordConfirm')}
                 error={errors.passwordConfirm?.message}
               />
               <button
-                type="button"
+                type='button'
                 onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
-                className="absolute right-4 top-[50px]"
+                className='absolute top-[50px] right-4'
               >
                 <Image
                   src={showPasswordConfirm ? '/icons/ic_EyeOff.svg' : '/icons/ic_Eye.svg'}
-                  alt="비밀번호 확인 표시 토글"
+                  alt='비밀번호 확인 표시 토글'
                   width={24}
                   height={24}
                 />
@@ -157,40 +167,35 @@ const SignupPage = () => {
             </div>
 
             <div className='flex flex-col'>
-              {error && <p className='text-red-600 text-sm mb-2'>{error}</p>}
-              <Button
-                type='submit'
-                variant='POSITIVE'
-                size='lg'
-                disabled={!isValid || loading}
-              >
+              {error && <p className='mb-2 text-sm text-red-600'>{error}</p>}
+              <Button type='submit' variant='POSITIVE' size='lg' disabled={!isValid || loading}>
                 {loading ? '회원가입 중...' : '회원가입 하기'}
               </Button>
             </div>
           </div>
 
-          <div className="mt-6 text-center">
-            <div className="text-gray-900 text-base mb-4">
+          <div className='mt-6 text-center'>
+            <div className='mb-4 text-base text-gray-900'>
               이미 회원이신가요?
-              <Link href="/signin" className="text-nomad-black underline ml-1">
+              <Link href='/signin' className='text-nomad-black ml-1 underline'>
                 로그인하기
               </Link>
             </div>
 
-            <div className="flex items-center my-6">
-              <div className="flex-1 h-px bg-gray-300"></div>
-              <p className="mx-9 text-gray-800 text-xl">SNS 계정으로 회원가입하기</p>
-              <div className="flex-1 h-px bg-gray-300"></div>
+            <div className='my-6 flex items-center'>
+              <div className='h-px flex-1 bg-gray-300'></div>
+              <p className='mx-9 text-xl text-gray-800'>SNS 계정으로 회원가입하기</p>
+              <div className='h-px flex-1 bg-gray-300'></div>
             </div>
 
-            <div className="flex justify-center mt-4">
+            <div className='mt-4 flex justify-center'>
               <Link href='https://www.kakaocorp.com/'>
                 <Image
                   src='/icons/ic_SocialLogo.svg'
                   alt='kakao 로고'
                   width={48}
                   height={48}
-                  className="sm:w-18 sm:h-18"
+                  className='sm:h-18 sm:w-18'
                 />
               </Link>
             </div>
@@ -198,7 +203,7 @@ const SignupPage = () => {
         </form>
       </div>
     </main>
-  )
-}
+  );
+};
 
 export default SignupPage;

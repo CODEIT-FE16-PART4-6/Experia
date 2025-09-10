@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@/components/Button';
@@ -22,6 +22,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const setUser = useUserStore(state => state.setUser); // 전역 상태 관리 훅
+  const user = useUserStore(state => state.user); // 전역 상태 관리 훅
 
   const {
     register, // input폼 연결
@@ -91,6 +92,13 @@ const LoginPage = () => {
       setLoading(false); // 로딩 상태 해제
     }
   };
+
+  // 이미 로그인 되어있는 경우, 메인 페이지로 리다이렉션
+  useEffect(() => {
+    if (user) {
+      router.replace('/');
+    }
+  }, [user, router]);
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-white'>
