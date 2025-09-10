@@ -9,6 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
+import { ROUTES } from '@/constants';
 import { useUserStore } from '@/stores/userStore';
 import { SignupRequest, SignupRequestSchema } from '@/types/schema/userSchema';
 
@@ -72,7 +73,7 @@ const SignupPage = () => {
         setUser(loginResult.user);
       }
 
-      router.push('/');
+      router.push(ROUTES.HOME);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);

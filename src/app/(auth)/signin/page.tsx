@@ -9,6 +9,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
+import { ROUTES } from '@/constants';
 import { useUserStore } from '@/stores/userStore';
 import { LoginRequestSchema, LoginRequest } from '@/types/schema/userSchema';
 import { REQUEST_URL } from '@/utils/api-public';
@@ -64,7 +65,7 @@ const LoginPage = () => {
         setUser(responseData.user);
       }
 
-      router.push('/');
+      router.push(ROUTES.HOME);
     } catch (err: unknown) {
       console.error('로그인 중 오류 발생', err);
 
