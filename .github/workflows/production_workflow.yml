@@ -125,7 +125,7 @@ jobs:
       - name: Run Production Container
         run: |
           docker run -d \
-            -p 8000:3000 \
+            -p 7100:3000 \
             --name production-container \
             --restart always \
             --log-opt max-size=10m \
