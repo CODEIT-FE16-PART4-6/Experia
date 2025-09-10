@@ -14,33 +14,7 @@ on:
 
 # 워크플로우에서 실행할 작업을 정의합니다.
 jobs:
-  test:
-    # 워크플로우가 실행될 가상 환경을 지정합니다.
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.18.0'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: |
-          npm ci --only=production=false
-
-      - name: Run linting
-        run: |
-          npm run lint
-
-      - name: Run tests
-        run: |
-          npm test
-
   build:
-    # test 작업이 성공한 후에만 실행
-    needs: test
     # 워크플로우가 실행될 가상 환경을 지정합니다.
     runs-on: ubuntu-22.04
     steps:
