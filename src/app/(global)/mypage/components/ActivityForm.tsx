@@ -20,6 +20,7 @@ import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/acti
 import fetchClientData from '@/utils/api-client/fetchClientData';
 import formatPrice from '@/utils/formatter/formatPrice';
 import parsePrice from '@/utils/formatter/parsePrice';
+import { REQUEST_URL } from '@/utils/api-public';
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
@@ -132,7 +133,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
             bannerImageUrl: formData.bannerImageUrl,
             subImageUrls: (formData.subImages ?? []).map(img => img.imageUrl),
           };
-
+      
       const data = await fetchClientData(url, {
         method,
         headers: {

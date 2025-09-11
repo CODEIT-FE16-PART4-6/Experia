@@ -6,18 +6,9 @@ type Props = {
 };
 
 const SelectMyActivity = ({ list, onChange }: Props) => {
-  console.log('SelectMyActivity list : ', list);
-
   const arr: JSX.Element[] = [];
 
-  // useEffect(() => {
-  //   if (Array.isArray(list) && list.length > 0) {
-  //     onChange(list[0].id);
-  //   }
-  // }, [list, onChange]);
-
   const handleOnChange = (id: number = 0) => {
-    console.log('SelectMyActivity handleOnChange id : ', id);
     if (id > 0) {
       onChange(id);
     }

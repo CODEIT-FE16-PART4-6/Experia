@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 interface Props {
   value: { date: string; startTime: string; endTime: string };
   onRemove: () => void;

@@ -3,8 +3,8 @@ import { REQUEST_URL } from '@/utils/api-public';
 
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (value: string) => void;
-  reject: (err?: any) => void;
+  resolve: (value: unknown) => void;
+  reject: (reason?: unknown) => void;
 }> = [];
 
 // 토큰 재발급 함수
