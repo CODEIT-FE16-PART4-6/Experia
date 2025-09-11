@@ -9,6 +9,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
+import { ROUTES } from '@/constants';
+import { useUserStore } from '@/stores/userStore';
 import { SignupRequest, SignupRequestSchema } from '@/types/schema/userSchema';
 
 const SignupPage = () => {
@@ -17,6 +19,7 @@ const SignupPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const setUser = useUserStore(state => state.setUser); // 전역 상태 관리 훅
 
   const {
     register,
@@ -61,12 +64,16 @@ const SignupPage = () => {
         throw new Error('자동 로그인 실패: 토큰을 받지 못했습니다.');
       }
 
-      // 토큰 & 사용자 정보 저장
+      // 토큰 저장
       localStorage.setItem('access_token', loginResult.accessToken);
       localStorage.setItem('refresh_token', loginResult.refreshToken);
-      localStorage.setItem('user', JSON.stringify(loginResult.user));
 
-      router.push('/');
+      // 전역 상태에 유저 정보 저장 (로그인과 동일한 로직)
+      if (loginResult.user) {
+        setUser(loginResult.user);
+      }
+
+      router.push(ROUTES.HOME);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);

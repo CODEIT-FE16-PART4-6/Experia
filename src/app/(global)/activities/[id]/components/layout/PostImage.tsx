@@ -98,7 +98,6 @@ const PostImage = ({ bannerImageUrl, subImages, tag }: ImagePropType) => {
           )}
         </div>
       </div>
-      {/*테블릿, PC 화면 렌더링 */}
       <Gallery>
         <div
           className={clsx(
