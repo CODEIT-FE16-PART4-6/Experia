@@ -2,14 +2,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 
+import ActivityCard from '@/app/(global)/mypage/components/ActivityCard';
 import DropdownOptions from '@/components/DropdownOptions';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { RESERVATION_STATUS } from '@/constants';
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
 import { ReservationType } from '@/types/schema/reservationSchema';
-
-import ActivityCard from '../components/ActivityCard';
-
 
 const fetchReservations = async () => {
   const response = await fetch(

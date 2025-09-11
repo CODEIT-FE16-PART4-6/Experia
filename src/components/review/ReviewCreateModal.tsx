@@ -5,16 +5,13 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 
+import Button from '@/components/Button';
+import { StarRating } from '@/components/StarRating';
 import TextAreaField from '@/components/form/TextAreaField';
 import useModalStore from '@/stores/modalStore';
 import { ReservationType } from '@/types/schema/reservationSchema';
 import { ReviewPostReq, ReviewPostReqSchema } from '@/types/schema/reviewSchema';
 import { REQUEST_URL } from '@/utils/api-public';
-
-import Button from '../Button';
-import { StarRating } from '../StarRating';
-
-
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';

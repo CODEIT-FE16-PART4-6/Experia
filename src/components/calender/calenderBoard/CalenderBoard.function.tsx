@@ -1,8 +1,7 @@
 import { JSX } from 'react';
 
+import CalenderOnePartComponent from '@/components/calender/calenderOnePart/CalenderOnePart';
 import { MyActivitiesDto } from '@/utils/api-public/api';
-
-import CalenderOnePartComponent from '../calenderOnePart/CalenderOnePart';
 
 type Props = {
   year: number;

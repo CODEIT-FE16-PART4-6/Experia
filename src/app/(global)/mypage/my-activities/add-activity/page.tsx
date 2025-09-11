@@ -1,8 +1,7 @@
 import Link from 'next/link';
 
+import ActivityForm from '@/app/(global)/mypage/components/ActivityForm';
 import ArrowLeftIcon from '@/assets/icons/ic_arrowLeftLine.svg';
-
-import ActivityForm from '../../components/ActivityForm';
 
 const AddNewActivityPage = () => {
   return (

@@ -1,10 +1,9 @@
 import Link from 'next/link';
 
+import ActivityForm from '@/app/(global)/mypage/components/ActivityForm';
 import ArrowLeftIcon from '@/assets/icons/ic_arrowLeftLine.svg';
 import { ActivityFormValues } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
-
-import ActivityForm from '../../../components/ActivityForm';
 
 interface EditActivityPageProps {
   params: Promise<{ id: string }>;
