@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export type PopularActivities = Activities;
+
 export const Activities = z.object({
   cursorId: z.number().optional().nullable(),
   totalCount: z.number(),
@@ -70,7 +72,7 @@ export type ActivityDetail = z.infer<typeof ActivityDetail>;
 export enum MyActivitiesStatus {
   declined = 'declined',
   pending = 'pending',
-  confirmed = 'confirmed'
+  confirmed = 'confirmed',
 }
 export const ActivityReview = z.object({
   averageRating: z.number(),
@@ -110,12 +112,12 @@ export const ActivityFormValueSchema = z.object({
         endTime: z.string(),
       }),
     )
-    .min(1, '시간대를 하나 이상 추가해주세요.'),
-  bannerImageUrl: z.url('이미지 URL이 올바르지 않습니다').min(1, '대표 이미지를 등록해주세요.'),
+    .min(1, '시간대를 한 개 이상 추가해주세요.'),
+  bannerImageUrl: z.url('이미지 URL이 올바르지 않습니다.').min(1, '대표 이미지를 등록해주세요.'),
   subImages: z.array(
     z.object({
       id: z.number().optional(),
-      imageUrl: z.url('이미지 URL이 올바르지 않습니다'),
+      imageUrl: z.url('이미지 URL이 올바르지 않습니다.'),
     }),
   ),
 });

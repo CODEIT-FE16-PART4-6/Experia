@@ -10,7 +10,7 @@ let isRefreshing = false; // 토큰 재발급 진행중 여부
 
 let failedQueue: Array<{
   resolve: (value: unknown) => void;
-  reject: (reason?: any) => void;
+  reject: (reason?: unknown) => void;
 }> = [];
 
 // 요청 대기 큐 (race condition 방지)

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Field, Input, Label } from '@headlessui/react';
 import { forwardRef } from 'react';
 
@@ -15,7 +15,7 @@ const InputField = forwardRef<HTMLInputElement, InputProps>(
   ({ type, placeholder, autoComplete, label, className, error, ...rest }, ref) => {
     return (
       <Field>
-        {label && (<Label>{label}</Label>)}
+        {label && <Label>{label}</Label>}
         <div className='relative w-full'>
           <Input
             type={type}
@@ -23,10 +23,10 @@ const InputField = forwardRef<HTMLInputElement, InputProps>(
             autoComplete={autoComplete}
             ref={ref}
             {...rest}
-            className={`focus:border-primary ${error ? 'border-red-600' : 'border-gray-600'} ${className}`}
+            className={`${error ? 'border-red-600 bg-red-100' : 'border-gray-600'} ${className}`}
           />
         </div>
-        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+        {error && <p className='mt-3 text-red-500'>{error}</p>}
       </Field>
     );
   },

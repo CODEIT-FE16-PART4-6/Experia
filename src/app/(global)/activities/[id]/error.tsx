@@ -10,7 +10,7 @@ export default function ErrorPrint({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.log(error);
+    // 에러 로깅은 필요시에만 활성화
   }, [error]);
 
   return (

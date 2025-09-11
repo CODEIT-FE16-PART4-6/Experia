@@ -10,7 +10,7 @@ import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
 
 // import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
-import Calander from './Calender';
+import Calander from '@/app/(global)/activities/[id]/components/reservation-block/Calender';
 
 interface Props {
   data: ActivityDetail;
@@ -18,7 +18,6 @@ interface Props {
 
 const Reservation = ({ data }: Props) => {
   // ActivityDetail 타입에서 date 타입 추출
-  //type DateType = ActivityDetail['schedules'][number]['date'];
   // ActivityDetail 타입에서 scheduleId 타입 추출
   type ScheduleIdType = ActivityDetail['schedules'][number]['id'];
   //선택된 날짜의 schedules 필터링
@@ -29,14 +28,6 @@ const Reservation = ({ data }: Props) => {
   const [whiteBox, setWhiteBox] = useState(false);
   const [mySchedule, setMySchedule] = useState<string | null>(null);
 
-  // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
-  /*
-  const highlightDates = useMemo(() => {
-    return data.schedules.map(schedule => {
-      const date = new Date(schedule.date);
-      return date;
-    });
-  }, [data.schedules]); */
   //TODO [P6-127] . React DevTools로 컴포넌트 렌더링 시간을 측정하고, useMemo 사용 전후를 비교하기
   //const highlightDates = data.schedules.map(schedule => new Date(schedule.date))
 
@@ -70,8 +61,19 @@ const Reservation = ({ data }: Props) => {
       if (response.status === 201) {
         alert('예약이 완료되었습니다.');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('예약 생성 실패:', error);
+
+      // 409 에러인 경우 (이미 확정 예약이 있는 경우)
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { status?: number } };
+        if (axiosError.response?.status === 409) {
+          alert('해당 날짜에 이미 확정 예약이 있는 체험을 예약할 수 없습니다.');
+          return;
+        }
+      }
+
+      // 그 외의 에러인 경우
       alert('예약 생성에 실패했습니다. 다시 시도해주세요.');
     }
   };

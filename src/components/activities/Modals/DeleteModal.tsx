@@ -12,21 +12,19 @@ interface titleType {
 }
 
 const DeleteModal = ({ title, onClose, activityId, onDeleteSuccess }: titleType) => {
-  const [message, setMessage] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
 
-      const result = await fetchClientData(`/my-activities/${activityId}`, {
+      await fetchClientData(`/my-activities/${activityId}`, {
         method: 'DELETE',
       });
-      setMessage('삭제가 완료 되었습니다.');
       onDeleteSuccess?.();
       onClose();
-    } catch (err) {
-      setMessage('에러가 발생했습니다.');
+    } catch {
+      alert('에러가 발생했습니다.');
     }
   };
 

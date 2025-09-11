@@ -60,7 +60,6 @@ const NotificationPopover = () => {
       }
 
       if (!res.ok) {
-        console.log(res);
         throw new Error('알림 삭제에 실패했습니다.');
       }
     },

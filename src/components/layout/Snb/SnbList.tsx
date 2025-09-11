@@ -17,7 +17,7 @@ interface SnbListProps {
 
 const SnbList = ({ item }: SnbListProps) => {
   const pathname = usePathname();
-  const { path, icon: Icon, label } = item;
+  const { path, label } = item;
 
   return (
     <li className='group hover:text-primary'>
