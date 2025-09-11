@@ -1,6 +1,7 @@
 # 테스트 스크립트
 
 이 폴더는 서버 및 로그인 기능을 테스트하는 TypeScript 스크립트들을 포함합니다.
+(`src/utils/test/` 폴더)
 
 ## 파일 구조
 
@@ -25,8 +26,8 @@ npm run test:login
 
 ```bash
 # tsx를 사용하여 직접 실행
-npx tsx src/test/run-server-test.ts
-npx tsx src/test/run-login-test.ts
+npx tsx src/utils/test/run-server-test.ts
+npx tsx src/utils/test/run-login-test.ts
 ```
 
 ## 테스트 환경
