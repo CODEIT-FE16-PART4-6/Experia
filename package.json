@@ -34,7 +34,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "leaflet": "^1.9.4",
-    "next": "15.4.6",
+    "next": "15.5.3",
     "nth-check": "^2.1.1",
     "photoswipe": "^5.4.4",
     "prettier": "^3.6.2",
