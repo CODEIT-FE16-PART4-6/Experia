@@ -12,7 +12,7 @@
 
 ## 사용법
 
-### 1. npm 스크립트 사용 (권장)
+### 1. npm 스크립트 사용 (권장) ✅
 
 ```bash
 # 서버 기본 기능 테스트
@@ -22,12 +22,37 @@ npm run test:server
 npm run test:login
 ```
 
-### 2. 직접 실행
+### 2. npx tsx 사용
 
 ```bash
-# tsx를 사용하여 직접 실행
+# 실행 스크립트 사용
 npx tsx src/utils/test/run-server-test.ts
 npx tsx src/utils/test/run-login-test.ts
+
+# 테스트 파일 직접 실행
+npx tsx src/utils/test/server.test.ts
+npx tsx src/utils/test/login.test.ts
+```
+
+### 3. 주의사항
+
+❌ **다음과 같이 실행하면 안 됩니다:**
+
+```bash
+# TypeScript 파일은 node로 실행할 수 없음
+node src/utils/test/run-server-test.ts  # ❌ 오류 발생
+node src/utils/test/server.test.ts      # ❌ 오류 발생
+```
+
+✅ **올바른 실행 방법:**
+
+```bash
+# npm 스크립트 사용 (가장 간단)
+npm run test:server
+npm run test:login
+
+# 또는 npx tsx 사용
+npx tsx src/utils/test/run-server-test.ts
 ```
 
 ## 테스트 환경
