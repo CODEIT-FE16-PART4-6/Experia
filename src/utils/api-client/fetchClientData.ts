@@ -3,7 +3,7 @@ import { REQUEST_URL } from '@/utils/api-public';
 
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (value: unknown) => void;
+  resolve: (value: string | PromiseLike<string>) => void;
   reject: (reason?: unknown) => void;
 }> = [];
 
