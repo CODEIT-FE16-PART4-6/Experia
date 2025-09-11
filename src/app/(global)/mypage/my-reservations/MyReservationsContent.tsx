@@ -18,7 +18,7 @@ const fetchReservations = async () => {
       headers: {
         //임시 토큰값
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU1MTE2MiwiZXhwIjoxNzU3NTUyOTYyLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gbV16jekDH2O3j00_DhppRdqaU0I9zLo8cA6uV5T928',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU4MTUxOSwiZXhwIjoxNzU3NTgzMzE5LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.VlqK4JWRYzsO7kQMaGMsKOVF1HmV6mtXnF_J0wRtueo',
         'Content-Type': 'application/json',
       },
     },

@@ -150,6 +150,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
       // 등록/수정 후 상세 페이지로 이동
 
       router.push(`/activities/${data.id}`);
+      router.refresh();
     } catch (err) {
       const errorDefaultMsg = `체험 ${isEdit ? '수정' : '등록'}에 실패했습니다.`;
 
@@ -166,7 +167,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
         {isSubmitting && (
           <div className='absolute inset-0 z-50 flex justify-center bg-[#fafafa]/75'>
             <div className='mt-[100px] flex flex-col items-center gap-2'>
-              <div className='h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500' />
+              <div className='h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-[#0a3618]' />
               <p className='text-sm text-gray-600'>업로드 중...</p>
             </div>
           </div>

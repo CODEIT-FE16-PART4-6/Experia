@@ -13,7 +13,7 @@ const fetchMyActivities = async () => {
     headers: {
       //임시 토큰값
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU3MDc5MywiZXhwIjoxNzU3NTcyNTkzLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.1YVGAKVgntqHdJ5iTmn0MrVnuDH8gAMMDYg9kYAwcyA', //Bearer 뒤에 토큰 붙여서 전송
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU4MDQ3NSwiZXhwIjoxNzU3NTgyMjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.ieXtW-KxOdBBLr2toi61hLCsqNcKnHzxv9sWKO_YUdM', //Bearer 뒤에 토큰 붙여서 전송
       'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
     },
   });
