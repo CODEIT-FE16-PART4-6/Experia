@@ -2,24 +2,24 @@ import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 
 import { MyActivitiesDto } from './api';
 
-import { REQUEST_URL, tokenTmp } from '.';
+import { REQUEST_URL } from '.';
 
 const URL: string = `${REQUEST_URL}/my-activities`;
-
-const token: string = tokenTmp;
 
 export async function FindAllMyActivities(
   activityId: number,
   year: number,
   month: number,
 ): Promise<{ status: number; body: MyActivitiesDto[] | { message: string } | null }> {
+  const accessToken = localStorage.getItem('access_token');
+
   const response = await fetch(
     `${URL}/${activityId}/reservation-dashboard?year=${year}&month=${String(month).padStart(2, '0')}`,
     {
       method: 'get',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       }),
     },
   ).catch(err => {
@@ -60,11 +60,13 @@ export async function FindAllMyActivitiesOneDay(
       }[]
     | null;
 }> {
+  const accessToken = localStorage.getItem('access_token');
+
   const response1 = await fetch(`${URL}/${activityId}/reserved-schedule?date=${date}`, {
     method: 'GET',
     headers: new Headers({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     }),
   }).catch(err => {
     return err;
@@ -129,13 +131,15 @@ export async function FindAllMyActivitiesOnePart(
     cursorId: number;
   } | null;
 }> {
+  const accessToken = localStorage.getItem('access_token');
+
   const response1 = await fetch(
     `${URL}/${activityId}/reservations?${!coursorId ? '' : 'coursorId=' + coursorId}&size=${size}&scheduleId=${scheduleId}&status=${statusType}`,
     {
       method: 'get',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
       }),
     },
   ).catch(err => {
@@ -204,12 +208,14 @@ export async function UpdateMyActivitiesReserveOneByReservationId(
     teamId: string;
   } | null;
 }> {
+  const accessToken = localStorage.getItem('access_token');
+
   const response1 = await fetch(`${URL}/${activityId}/reservations/${reservationId}`, {
     method: 'PATCH',
     headers: new Headers({
       accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     }),
     body: JSON.stringify({
       status: myActivitiesStatus,
@@ -276,11 +282,13 @@ export async function FindAllMyActivitiesData(
     cursorId?: number;
   } | null;
 }> {
+  const accessToken = localStorage.getItem('access_token');
+
   const response1 = await fetch(`${URL}?size=${size}${cursorId ? '&cursorId=' + cursorId : ''}`, {
     method: 'get',
     headers: new Headers({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     }),
   }).catch(err => {
     return err;

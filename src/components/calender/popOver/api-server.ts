@@ -1,15 +1,14 @@
 'use server';
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
-import { REQUEST_URL, tokenTmp } from '@/utils/api-public';
+import { REQUEST_URL } from '@/utils/api-public';
 
 const URL: string = `${REQUEST_URL}/my-activities`;
-
-const _token: string = tokenTmp;
 
 export async function UpdateServerMyActivitiesReserveOneByReservationId(
   activityId: number,
   reservationId: number,
   myActivitiesStatus: MyActivitiesStatus = MyActivitiesStatus.confirmed,
+  accessToken?: string,
 ): Promise<{
   status: number;
   body: {
@@ -34,7 +33,7 @@ export async function UpdateServerMyActivitiesReserveOneByReservationId(
     method: 'PATCH',
     headers: new Headers({
       'Content-Type': 'application/json',
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjUwMCwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjQ0NzU3NiwiZXhwIjoxNzU3NjU3MTc2LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.AZGJJNrRA_ccUa0w2qJm3RneEzMp7RMLu4SxkP0pOSE`,
+      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     }),
     body: JSON.stringify({
       status: myActivitiesStatus,
