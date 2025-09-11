@@ -7,24 +7,18 @@ import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { RESERVATION_STATUS } from '@/constants';
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
 import { ReservationType } from '@/types/schema/reservationSchema';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
 import ActivityCard from '../components/ActivityCard';
 
 const fetchReservations = async () => {
-  const response = await fetch(
-    'https://sp-globalnomad-api.vercel.app/16-6/my-reservations?size=10',
-    {
-      method: 'GET',
-      headers: {
-        //임시 토큰값
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU1MTE2MiwiZXhwIjoxNzU3NTUyOTYyLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gbV16jekDH2O3j00_DhppRdqaU0I9zLo8cA6uV5T928',
-        'Content-Type': 'application/json',
-      },
+  const response = await fetchClientData('/my-reservations?size=10', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
-  const data = await response.json();
-  const validatedData = ReservationResponseSchema.parse(data);
+  });
+  const validatedData = ReservationResponseSchema.parse(response);
   return validatedData.reservations; //reservations 배열만 반환
 };
 

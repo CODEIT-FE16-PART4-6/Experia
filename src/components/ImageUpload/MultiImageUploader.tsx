@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { ChangeEvent } from 'react';
 
 import useImageUpload from '@/hooks/useImageUpload';

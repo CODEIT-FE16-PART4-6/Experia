@@ -7,7 +7,7 @@ interface AddressFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 const AddressField = forwardRef<HTMLInputElement, AddressFieldProps>(
-  ({ placeholder, error, ...rest }, ref) => {
+  ({ placeholder: _placeholder, error, ...rest }, ref) => {
     return (
       <Field>
         <Input
