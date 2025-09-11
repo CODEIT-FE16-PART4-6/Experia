@@ -1,12 +1,14 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import useModalStore from '@/stores/modalStore';
 import { MyActivitiesDto } from '@/utils/api-public/api';
 import {
   FindAllMyActivities,
   FindAllMyActivitiesData,
 } from '@/utils/api-public/api-my-activities.api';
-import { useEffect, useState } from 'react';
+
 import CalenderBoard from './calenderBoard/CalenderBoard';
 import CalenderArrow from './calenderSelect/calenderArrow/CalenderArrow';
 import PopOver from './popOver/PopOver';
@@ -23,25 +25,20 @@ const CalenderPage = () => {
     month: today.getMonth(),
   });
 
-  console.log('CalenderPage start');
-
   const [activities, activitiesSet] = useState<MyActivitiesDto[]>([]);
   const [activitiesList, activitiesListSet] = useState<{ id: number; activityName: string }[]>([]);
   const [activityId, activityIdSet] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
-      console.log('CalenderPage activitiesList  start');
       const { body } = await FindAllMyActivitiesData(1000);
-      console.log('CalenderPage activitiesList : ', body);
-      if (body.totalCount > 0) {
+      if (body && body.totalCount > 0) {
         activitiesListSet(
           body.activities.map(ele => {
             const listEle = {
               id: ele.id,
               activityName: ele.title,
             };
-            console.log('activitiesListSet listEle : ', listEle);
             return listEle;
           }),
         );
@@ -67,8 +64,6 @@ const CalenderPage = () => {
       cancelled = true;
     };
   }, [date.year, date.month, activityId]);
-
-  console.log('CalenderPage date : ', date);
 
   const handelSetMonth = (add: boolean = true) => {
     let month = date.month;
@@ -114,16 +109,10 @@ const CalenderPage = () => {
     openModal(<PopOver activityId={activityId} date={fullDate} />);
   };
 
-  console.log('나의 체험에 예약한 리스트 : ', activities);
-
   return (
     <div className='mx-[17px] mb-4 sm:mx-[23px]'>
       <SelectMyActivity list={activitiesList} onChange={handleSetActivityId} />
       <CalenderArrow year={date.year} month={date.month} onClick={handelSetMonth} />
-      {/* 
-        달력의 날짜 클릭 이벤트를 처리하기 위해 onDayClick 핸들러를 props로 전달합니다.
-        이전에는 모달을 직접 렌더링했지만, 이제 전역 스토어를 통해 처리되므로 관련 코드를 삭제했습니다.
-      */}
       <CalenderBoard
         year={date.year}
         month={date.month}

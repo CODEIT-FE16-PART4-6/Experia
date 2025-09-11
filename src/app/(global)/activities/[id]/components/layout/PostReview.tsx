@@ -1,7 +1,9 @@
 import Image from 'next/image';
-import { ReviewType } from '../postContentTypes';
+
 import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
 import CreateReview from '../CreateReview';
+import { ReviewType } from '../postContentTypes';
+
 interface ReviewContentType {
   totalCount: number;
   averageRating: number;

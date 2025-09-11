@@ -2,8 +2,9 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { User } from '@/types/schema/userSchema';
 
+import { ROUTES } from '@/constants';
+import { User } from '@/types/schema/userSchema';
 export interface UserState {
   user: User | null;
   setUser: (user: User | null) => void;
@@ -34,7 +35,23 @@ export const useUserStore = create<UserState>()(
         })),
 
       // 액션: 로그아웃
-      clearUser: () => set({ user: null }),
+      clearUser: async () => {
+        set({ user: null });
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+
+        // 쿠키에 저장된 토큰도 제거
+        try {
+          await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (e) {
+          console.error('로그아웃 API 실패', e);
+        }
+
+        const currentPathnmae = window.location.pathname;
+        if (currentPathnmae.startsWith(ROUTES.MY_PAGE)) {
+          window.location.href = ROUTES.LOGIN;
+        }
+      },
     }),
 
     // persist option

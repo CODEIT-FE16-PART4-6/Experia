@@ -1,5 +1,5 @@
 import { MyActivitiesDto } from '@/utils/api-public/api';
-import { JSX } from 'react';
+
 import CalenderBoardFunction from './CalenderBoard.function';
 
 type Props = {
@@ -20,10 +20,6 @@ const dayOftheWeek = {
 };
 
 const CalenderBoard = ({ year, month, activities, onDayClick }: Props) => {
-  console.log('CalenderBoard year : ', year);
-  console.log('CalenderBoard month : ', month);
-
-  //  const arr: JSX.Element[] = CalenderBoardFunction({ year, month, activities });
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const totalCells = firstDay + daysInMonth;
@@ -41,7 +37,6 @@ const CalenderBoard = ({ year, month, activities, onDayClick }: Props) => {
       <p className={dayOftheWeek.style}>THUR</p>
       <p className={dayOftheWeek.style}>FRI</p>
       <p className={dayOftheWeek.onlySat}>SAT</p>
-      {/* CalenderBoardFunction으로 onDayClick 핸들러를 그대로 전달합니다. */}
       <CalenderBoardFunction
         year={year}
         month={month}

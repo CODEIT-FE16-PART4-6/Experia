@@ -1,10 +1,10 @@
-import { REQUEST_URL } from '@/utils/api-public';
 import { ROUTES } from '@/constants';
+import { REQUEST_URL } from '@/utils/api-public';
 
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (value: unknown) => void;
-  reject: (reason?: any) => void;
+  resolve: (value: string | PromiseLike<string>) => void;
+  reject: (reason?: unknown) => void;
 }> = [];
 
 // 토큰 재발급 함수
@@ -54,41 +54,53 @@ const fetchClientData = async (endpoint: string, options: RequestInit = {}) => {
   }
 
   try {
-    const response = await fetch(`${REQUEST_URL}${endpoint}`, {
+    let response = await fetch(`${REQUEST_URL}${endpoint}`, {
       ...options,
       headers,
     });
 
+    // 401 에러 시 토큰 재발급
     if (response.status === 401) {
-      // 401 에러 시 토큰 재발급
       if (isRefreshing) {
         // 이미 재발급 중이면 대기
-        const token = await new Promise((resolve, reject) => {
+        accessToken = await new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         });
-        headers.set('Authorization', `Bearer ${token}`);
-        const retryResponse = await fetch(`${REQUEST_URL}${endpoint}`, { ...options, headers });
-        return await retryResponse.json();
       }
 
       isRefreshing = true;
       try {
         const newAccessToken = await refreshAccessToken();
-        processQueue(null, newAccessToken);
-        headers.set('Authorization', `Bearer ${newAccessToken}`);
-        const retryResponse = await fetch(`${REQUEST_URL}${endpoint}`, { ...options, headers });
-        return await retryResponse.json();
+        accessToken = newAccessToken; // retry fetch에 적용하기 위해 전역 변수 accessToken에 새 토큰 저장해서 전달
+        processQueue(null, accessToken);
       } catch (err) {
         processQueue(err as Error, null);
         throw err;
       } finally {
         isRefreshing = false;
       }
+
+      // 재시도
+      const retryHeaders = new Headers(options.headers);
+      retryHeaders.set('Authorization', `Bearer ${accessToken}`);
+      response = await fetch(`${REQUEST_URL}${endpoint}`, { ...options, headers: retryHeaders });
     }
 
+    // 401 외 일반 에러
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'API 호출 실패');
+      const contentType = response.headers.get('content-type');
+      let errorMessage = 'API 호출 실패';
+
+      if (contentType?.includes('application/json')) {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorMessage;
+      } else {
+        // JSON이 아닌 경우, response.text()로 받아서 메시지 확인 가능
+        const text = await response.text();
+        if (text.trim()) errorMessage = text;
+      }
+
+      throw new Error(errorMessage);
     }
 
     // 응답이 비어있거나 JSON이 아닌 경우 처리
@@ -121,12 +133,13 @@ const fetchClientData = async (endpoint: string, options: RequestInit = {}) => {
  * @param error 토큰 재발급 에러
  * @param token 토큰 재발급 성공 시 받아온 액세스 토큰
  */
-const processQueue = (error: Error | null, token: string | null = null) => {
+const processQueue = (err: Error | null, token: string | null = null) => {
   failedQueue.forEach(prom => {
-    if (error) {
-      prom.reject(error);
-    } else {
+    if (token) {
       prom.resolve(token); // 실패한 요청들을 새 토큰으로 재시도
+    } else {
+      console.log(err);
+      prom.reject(new Error('사용 가능한 토큰이 없습니다.'));
     }
   });
   failedQueue = [];

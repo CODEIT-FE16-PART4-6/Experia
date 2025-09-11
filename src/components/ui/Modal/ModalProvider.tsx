@@ -1,6 +1,8 @@
 'use client';
 import { useShallow } from 'zustand/shallow';
+
 import useModalStore from '@/stores/modalStore';
+
 import Modal from '.';
 
 const ModalProvider = () => {

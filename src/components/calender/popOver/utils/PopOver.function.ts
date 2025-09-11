@@ -1,7 +1,13 @@
-import { MyActivitiesStatus } from "@/types/schema/activitiesSchema";
-import { FindAllMyActivitiesOneDay, FindAllMyActivitiesOnePart } from "@/utils/api-public/api-my-activities.api";
+import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
+import {
+  FindAllMyActivitiesOneDay,
+  FindAllMyActivitiesOnePart,
+} from '@/utils/api-public/api-my-activities.api';
 
-const PopOverCurrentData = async (activityId: number, date: string): Promise<{
+const PopOverCurrentData = async (
+  activityId: number,
+  date: string,
+): Promise<{
   declined: number;
   confirmed: number;
   pending: number;
@@ -22,16 +28,23 @@ const PopOverCurrentData = async (activityId: number, date: string): Promise<{
       scheduleId: number;
       reviewSubmitted: boolean;
       teamId: string;
-    }[]
-  }
+    }[];
+  };
 }> => {
   const data1 = await FindAllMyActivitiesOneDay(activityId, date);
 
-  console.log("PopOver.function.ts data1 : ", data1)
+  if (!data1.body) {
+    return {
+      declined: 0,
+      confirmed: 0,
+      pending: 0,
+      todayData: {},
+    };
+  }
 
   const scheduleIds: number[] = data1.body.map(ele => ele.scheduleId);
 
-  let reservationStatus = [];
+  const reservationStatus = [];
   const myActivitiesStatusKeys = Object.keys(MyActivitiesStatus);
   for (let i = 0; i < scheduleIds.length; i++) {
     for (let j = 0; j < myActivitiesStatusKeys.length; j++) {
@@ -44,12 +57,13 @@ const PopOverCurrentData = async (activityId: number, date: string): Promise<{
         key,
       );
 
-      reservationStatus.push(...res.body.reservations);
+      if (res.body) {
+        reservationStatus.push(...res.body.reservations);
+      }
     }
   }
 
-
-  let todayData: {
+  const todayData: {
     [key: string]: {
       id: number;
       status: MyActivitiesStatus;
@@ -79,7 +93,6 @@ const PopOverCurrentData = async (activityId: number, date: string): Promise<{
     }
   }
 
-
   return {
     declined: data1.body.reduce(function (a, b) {
       return a + b.count.declined;
@@ -90,8 +103,8 @@ const PopOverCurrentData = async (activityId: number, date: string): Promise<{
     pending: data1.body.reduce(function (a, b) {
       return a + b.count.pending;
     }, 0),
-    todayData
-  }
-}
+    todayData,
+  };
+};
 
 export default PopOverCurrentData;

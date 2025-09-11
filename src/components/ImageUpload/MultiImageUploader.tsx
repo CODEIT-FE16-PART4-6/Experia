@@ -1,9 +1,10 @@
 import Image from 'next/image';
-
 import { ChangeEvent } from 'react';
 
-import ImageUploadButton from './ImageUploadButton';
 import useImageUpload from '@/hooks/useImageUpload';
+import ImagePreview from './ImagePreview';
+
+import ImageUploadButton from './ImageUploadButton';
 
 interface SubImage {
   id?: number;
@@ -52,14 +53,14 @@ const MultiImageUploader = ({ images, maxCount = 4, error, onChange }: MultiImag
     }
   };
 
-  const handleRemove = (imgIdx: number) => {
+  const handleRemove = (imgIdx?: number) => {
     const newImages = images?.filter((_, i) => i !== imgIdx) ?? [];
     onChange?.(newImages);
   };
 
   return (
     <>
-      <div className='flex flex-wrap gap-6'>
+      <div className='flex flex-wrap gap-y-2'>
         <ImageUploadButton
           onClick={handleImageUpload}
           isUploading={isUploading}
@@ -68,28 +69,16 @@ const MultiImageUploader = ({ images, maxCount = 4, error, onChange }: MultiImag
         <input type='file' className='hidden' ref={fileRef} onChange={handleImageUrl} />
 
         {(images ?? []).map((img, i) => (
-          <figure
-            key={i}
-            className='border-primary bg-primary-10 relative flex aspect-square w-[140px] items-center justify-center rounded-2xl border-2'
-          >
-            <Image
-              src={img.imageUrl}
-              alt={`상세 이미지 ${i + 1}`}
-              width={140}
-              height={140}
-              className='h-full w-full rounded-2xl object-cover'
-            />
-            <button
-              type='button'
-              className='absolute -top-2 -right-2 z-[1] flex h-6 w-6 items-center justify-center rounded-full bg-black p-2 text-lg text-white'
-              onClick={() => handleRemove(i)}
-            >
-              x
-            </button>
-          </figure>
+          <ImagePreview
+            key={`${img}-${i}`}
+            src={img.imageUrl}
+            alt={`상세 이미지 ${i + 1}`}
+            imgIdx={i}
+            onRemove={handleRemove}
+          />
         ))}
       </div>
-      <p className='text-gray-900'>{`* 이미지는 최대 ${maxCount}개까지 등록 가능합니다.`}</p>
+      <p className='text-md text-gray-900 md:text-base'>{`* 이미지는 최대 ${maxCount}개까지 등록 가능합니다.`}</p>
     </>
   );
 };

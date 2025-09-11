@@ -1,13 +1,14 @@
 'use client';
 
 import { useRef } from 'react';
-import SectionTitle from '@/components/ui/Section/SectionTitle';
+import { SubmitHandler } from 'react-hook-form';
+
 import MyInfoForm from '@/app/(global)/mypage/components/MyInfoForm';
 import Button from '@/components/Button';
-import fetchClientData from '@/utils/api-client/fetchClientData';
+import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { useUserStore } from '@/stores/userStore';
-import { SubmitHandler } from 'react-hook-form';
 import { MyInfoFormValues } from '@/types/schema/myInfoFormSchema';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
 const MyInfoClient = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -16,7 +17,11 @@ const MyInfoClient = () => {
   const handleUpdateMyInfo: SubmitHandler<MyInfoFormValues> = async data => {
     try {
       // 비밀번호가 입력되지 않은 경우 제외하고 전송
-      const updateData: any = {
+      const updateData: {
+        nickname: string;
+        email: string;
+        password?: string;
+      } = {
         nickname: data.nickname,
         email: data.email,
       };

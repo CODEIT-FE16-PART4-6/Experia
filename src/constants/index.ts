@@ -23,6 +23,14 @@ export const ITEM_PAGESIZE = {
 
 export const ITEM_DEFAULT_PAGESIZE = 12; // 목록 렌더링 갯수 기본값: 12개 (반응형 그리드 레이아웃에 맞춤)
 
+export const POPULAR_ACTIVITIES_VIEW_COUNT = {
+  lg: 4,
+  md: 3,
+  sm: 2,
+};
+
+export const POPULAR_ACTIVITIES_COUNT = 8;
+
 export const RESERVATION_STATUS = [
   {
     label: '예약 신청',
@@ -66,4 +74,18 @@ export const ACTIVITY_CATEGORIES = [
   { id: '6', value: '웰빙' },
 ];
 
+export const ACTIVITY_LIST_ORDER_OPTIONS = [
+  {
+    label: '가격 낮은 순',
+    value: 'price_asc',
+  },
+  {
+    label: '가격 높은 순',
+    value: 'price_desc',
+  },
+  {
+    label: '최신순',
+    value: 'latest',
+  },
+];
 export const NOTIFICATIONS_PER_PAGE = 2;

@@ -1,4 +1,3 @@
-import Button from '@/components/Button';
 import { ReactNode } from 'react';
 
 interface SectionTitleProps {

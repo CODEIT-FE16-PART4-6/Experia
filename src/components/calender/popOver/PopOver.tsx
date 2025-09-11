@@ -2,9 +2,11 @@
 
 import '@/app/globals.css';
 
+import React, { useEffect, useState } from 'react';
+
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 import { UpdateMyActivitiesReserveOneByReservationId } from '@/utils/api-public/api-my-activities.api';
-import React, { useEffect, useState } from 'react';
+
 import UpdateReserveStatus from './updateReserveStatus/UpdateReserveStatus';
 import PopOverCurrentData from './utils/PopOver.function';
 
