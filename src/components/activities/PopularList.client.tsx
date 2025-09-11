@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { BREAKPOINTS } from '@/constants';
 import LoadingSpinner from '../ui/LoadingSpinner';
-
+import PopularItem from './PopularItem';
 
 interface PopularListProps {
   data: InfiniteData<PopularActivities, string | null>;
