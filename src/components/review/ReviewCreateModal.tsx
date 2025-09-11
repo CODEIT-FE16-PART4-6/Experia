@@ -14,11 +14,8 @@ import { REQUEST_URL } from '@/utils/api-public';
 import Button from '../Button';
 import { StarRating } from '../StarRating';
 
-
-
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';
-
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjU3MiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzYwMTA0MSwiZXhwIjoxNzU3NjAyODQxLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.XVHolsyctiZ-Pv5cKl06cLZdWD_ycpCi9S3Gh3Kkgo0';
 const ReviewCreateModal = ({ data }: { data: ReservationType }) => {
   const { activity } = data;
   const router = useRouter();

@@ -15,15 +15,15 @@ const ReviewCreateModal = dynamic(() => import('@/components/review/ReviewCreate
 });
 
 const fetchReservations = async () => {
-  const response = await fetchClientData(
-    'https://sp-globalnomad-api.vercel.app/16-6/my-reservations',
-    {
-      method: 'GET', // 또는 POST, PUT, DELETE 등 필요에 따라
-      headers: {
-        'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
-      },
-    },
-  );
+  // const response = await fetchClientData(
+  //   'https://sp-globalnomad-api.vercel.app/16-6/my-reservations',
+  //   {
+  //     method: 'GET', // 또는 POST, PUT, DELETE 등 필요에 따라
+  //     headers: {
+  //       'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
+  //     },
+  //   },
+  // );
 
   const data = await fetchClientData('/my-reservations');
   const validatedData = ReservationResponseSchema.parse(data);
