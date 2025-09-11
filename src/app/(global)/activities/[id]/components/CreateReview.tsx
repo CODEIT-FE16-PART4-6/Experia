@@ -24,7 +24,7 @@ const fetchReservations = async () => {
       },
     },
   );
-  const data = await response.json();
+  const data = await fetchClientData('/my-reservations');
   const validatedData = ReservationResponseSchema.parse(data);
   return validatedData.reservations; //resevations 배열만 반환
 };
@@ -68,37 +68,27 @@ const CreateReview = () => {
     openModal(<ReviewCreateModal data={thisReview} />);
   };
 
+  let label = '후기 작성하기';
+  let disabled = false;
+
   if (error) {
     console.error('예약 정보 조회 실패:', error);
-    return (
-      <button
-        disabled
-        className='cursor-not-allowed rounded-[8px] bg-gray-400 px-[10px] py-[10px] text-[14px] font-bold text-white md:px-[20px] md:py-[12px] md:text-[16px] lg:px-[35px] lg:py-[15px]'
-      >
-        후기 작성하기
-      </button>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <button
-        disabled
-        className='cursor-not-allowed rounded-[8px] bg-gray-400 px-[10px] py-[10px] text-[14px] font-bold text-white md:px-[20px] md:py-[12px] md:text-[16px] lg:px-[35px] lg:py-[15px]'
-      >
-        ...
-      </button>
-    );
+    disabled = true;
+    label = '체험 후 작성';
+  } else if (isLoading) {
+    label = '...';
+  } else {
+    disabled = !reviewStatus;
   }
 
   return (
     <>
       <button
-        disabled={!reviewStatus}
+        disabled={disabled}
         onClick={handleToggleReviewComponent}
         className='rounded-[8px] bg-[#112211] px-[10px] py-[10px] text-[14px] font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-400 md:px-[20px] md:py-[12px] md:text-[16px] lg:px-[35px] lg:py-[15px]'
       >
-        후기 작성하기
+        {label}
       </button>
     </>
   );
