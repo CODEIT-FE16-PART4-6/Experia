@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
-
+import CreateReview from '../CreateReview';
 import { ReviewType } from '../postContentTypes';
 
 interface ReviewContentType {
@@ -61,9 +61,7 @@ const PostReview = ({ reviewData }: ReviewData) => {
             </div>
           </div>
           <div className='flex flex-col justify-center'>
-            <button className='rounded-[8px] bg-[#112211] px-[10px] py-[10px] text-[14px] font-bold text-white md:px-[20px] md:py-[12px] md:text-[16px] lg:px-[35px] lg:py-[15px]'>
-              후기 작성하기
-            </button>
+            <CreateReview />
           </div>
         </div>
       </div>
