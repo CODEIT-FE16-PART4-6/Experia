@@ -1,10 +1,11 @@
+import clsx from 'clsx';
+import Image from 'next/image';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useFormContext } from 'react-hook-form';
-import Image from 'next/image';
+
 import styles from '@/app/(global)/activities/[id]/components/reservation-block/Reservation.module.css';
-import clsx from 'clsx';
 
 interface Props {
   onAdd: (newItem: { date: string; startTime: string; endTime: string }) => void;
