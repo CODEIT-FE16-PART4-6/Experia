@@ -6,8 +6,8 @@ import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
-import useModalStore from '@/stores/modalStore';
 import fetchClientData from '@/utils/api-client/fetchClientData';
+import useModalStore from '@/stores/modalStore';
 
 const ReviewCreateModal = dynamic(() => import('@/components/review/ReviewCreateModal'), {
   ssr: false,
@@ -24,6 +24,7 @@ const fetchReservations = async () => {
       },
     },
   );
+
   const data = await fetchClientData('/my-reservations');
   const validatedData = ReservationResponseSchema.parse(data);
   return validatedData.reservations; //resevations 배열만 반환
