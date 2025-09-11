@@ -1,21 +1,2 @@
 #!/usr/bin/env sh
-# 현재 브랜치 이름 가져오기 (예: feat/P6-123 -> P6-123)
-BRANCH_NAME=$(git branch --show-current) # 현재 브랜치명을 가져옴
-BRANCH_NAME="${BRANCH_NAME##*/}" # / 부분을 기준으로 앞 부분을 제거
- 
-# 브랜치 이름에서 JIRA 이슈 키 추출 (예: feat/P6-123 -> P6-123)
-# 대소문자 구분없이 추출하고 대문자로 변환하기
-JIRA_ISSUE_KEY=$(echo "$BRANCH_NAME" | grep -oEi 'p6-[0-9]+' | tr 'a-z' 'A-Z')
-
-# 커밋 메시지 파일 경로
-COMMIT_MSG_FILE=$1
- 
-# 커밋 메시지에 이슈 키가 이미 포함되어 있는지 확인 (예: [P6-123] ...)
-BRANCH_IN_COMMIT=$(grep -c "\[$JIRA_ISSUE_KEY\]" "$COMMIT_MSG_FILE")
- 
-# 지라 이슈 키가 존재하고, 커밋 메시지에 아직 포함되지 않았다면 커밋 메시지 첫 줄 맨 앞에 "[이슈키] " 추가
-if [ -n "$JIRA_ISSUE_KEY" ] && [ "$BRANCH_IN_COMMIT" -eq 0 ]; then
-  sed -i.bak -e "1s/^/[$JIRA_ISSUE_KEY] /" "$COMMIT_MSG_FILE"
-fi
-
-
+. "$(dirname "$0")/h"
