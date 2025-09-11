@@ -24,7 +24,7 @@ interface ActivityFormProps {
 }
 
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU1NjYwNCwiZXhwIjoxNzU3NTU4NDA0LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.dKxbQAiLJ4zwQ8DozAcaVSLSSgPZF1pWWuWDd8kvpSM';
 
 const ActivityForm = ({ initialData }: ActivityFormProps) => {
   const router = useRouter();
@@ -167,8 +167,8 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className='relative flex flex-col gap-4 pb-[180px]'>
         {isSubmitting && (
-          <div className='absolute inset-0 z-50 flex items-center justify-center bg-white/75'>
-            <div className='flex flex-col items-center gap-2'>
+          <div className='absolute inset-0 z-50 flex justify-center bg-[#fafafa]/75'>
+            <div className='mt-[100px] flex flex-col items-center gap-2'>
               <div className='h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500' />
               <p className='text-sm text-gray-600'>업로드 중...</p>
             </div>
