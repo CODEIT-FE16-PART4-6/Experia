@@ -10,6 +10,7 @@ import {
 import clsx from 'clsx';
 import Image from 'next/image';
 import { Fragment } from 'react';
+import { cn } from '@/utils/cn';
 
 import { cn } from '@/utils/cn';
 

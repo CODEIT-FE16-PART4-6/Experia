@@ -1,11 +1,11 @@
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 
+import '@/app/globals.css';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { Providers } from '@/components/provider/Providers';
 import { pretendard } from '@/utils/fonts';
-import '@/app/globals.css';
 
 export const metadata: Metadata = {
   title: 'Create Next App',

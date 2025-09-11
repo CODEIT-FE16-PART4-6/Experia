@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Activity } from '@/types/schema/activitiesSchema';
 
 import { Activity } from '@/types/schema/activitiesSchema';
 
