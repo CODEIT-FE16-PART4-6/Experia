@@ -6,8 +6,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { BREAKPOINTS } from '@/constants';
-import LoadingSpinner from '../ui/LoadingSpinner';
+import PopularItem from './PopularItem';
 
 interface PopularListProps {
   data: InfiniteData<PopularActivities, string | null>;
