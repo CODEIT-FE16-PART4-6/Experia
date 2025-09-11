@@ -10,7 +10,7 @@ import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
 
 // import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
-import Calander from './Calander';
+import Calander from '@/app/(global)/activities/[id]/components/reservation-block/Calender';
 
 interface Props {
   data: ActivityDetail;

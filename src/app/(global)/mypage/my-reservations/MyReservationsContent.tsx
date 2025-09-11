@@ -10,7 +10,6 @@ import { ReservationType } from '@/types/schema/reservationSchema';
 
 import ActivityCard from '../components/ActivityCard';
 
-
 const fetchReservations = async () => {
   const response = await fetch(
     'https://sp-globalnomad-api.vercel.app/16-6/my-reservations?size=10',
@@ -19,7 +18,7 @@ const fetchReservations = async () => {
       headers: {
         //임시 토큰값
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjI4MzI1NSwiZXhwIjoxNzU3NDkyODU1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.7f4EC3wcK_Zzpys7mDlyXshKz5MX-2mdlZ12gOrVoJA',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU1MTE2MiwiZXhwIjoxNzU3NTUyOTYyLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gbV16jekDH2O3j00_DhppRdqaU0I9zLo8cA6uV5T928',
         'Content-Type': 'application/json',
       },
     },
