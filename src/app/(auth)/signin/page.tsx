@@ -4,12 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
-import { ROUTES } from '@/constants';
 import { useUserStore } from '@/stores/userStore';
 import { LoginRequestSchema, LoginRequest } from '@/types/schema/userSchema';
 import { REQUEST_URL } from '@/utils/api-public';
@@ -21,7 +20,9 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [callbackUrl, setCallbackUrl] = useState<string | null>(null);
   const setUser = useUserStore(state => state.setUser); // 전역 상태 관리 훅
+  const user = useUserStore(state => state.user); // 전역 상태 관리 훅
 
   const {
     register, // input폼 연결
@@ -45,7 +46,7 @@ const LoginPage = () => {
         body: JSON.stringify(data),
       });
 
-      const responseData = await response.json();
+      const { user, accessToken, refreshToken } = await response.json();
 
       // HTTP 상태 코드 체크
       if (!response.ok) {
@@ -57,15 +58,25 @@ const LoginPage = () => {
       }
 
       // 성공적으로 로그인 처리
-      localStorage.setItem('access_token', responseData.accessToken);
-      localStorage.setItem('refresh_token', responseData.refreshToken);
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('refresh_token', refreshToken);
 
       // 전역 상태에 유저 정보 저장
-      if (response.ok && responseData.user) {
-        setUser(responseData.user);
-      }
+      if (response.ok && user) {
+        setUser(user);
 
-      router.push(ROUTES.HOME);
+        // [P6-152] 페이지별 리디렉션: 쿠키에 토큰을 저장하기 위해 next 서버로 전송 (쿠키: middleware.ts에서 사용)
+        await fetch('/api/auth/set-cookies', {
+          method: 'POST',
+          body: JSON.stringify({ accessToken, refreshToken }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // 로그인 성공: callbackUrl 또는 메인 페이지로 리다이렉션 (요청 성공 시에만 실행되도록 if문 안으로 이동)
+        router.push(callbackUrl || '/');
+      }
     } catch (err: unknown) {
       console.error('로그인 중 오류 발생', err);
 
@@ -74,10 +85,23 @@ const LoginPage = () => {
       } else {
         setError('알 수 없는 오류가 발생했습니다.');
       }
-
+    } finally {
       setLoading(false); // 로딩 상태 해제
     }
   };
+
+  // 이미 로그인 되어있는 경우, 메인 페이지로 리다이렉션
+  useEffect(() => {
+    if (user) {
+      router.replace('/');
+    }
+  }, [user, router]);
+
+  // 이미 로그인 한 상태 + callbackUrl 있을 경우, callbackUrl 페이지로 리다이렉션
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setCallbackUrl(params.get('callbackUrl'));
+  }, []);
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-white'>
