@@ -1,17 +1,12 @@
 import SearchContainer from '@/components/activities/SearchContainer';
-import { ITEM_DEFAULT_PAGESIZE } from '@/constants';
+import { ITEM_DEFAULT_PAGESIZE, POPULAR_ACTIVITIES_COUNT } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
 
 const fetchActivities = async ({ page, size, sort }: { page: number; size: number, sort?: string }) => {
   const data = await fetchServerData<Activities>({
     path: '/activities',
-    query: {
-      method: 'cursor',
-      page,
-      size,
-      sort, // sort 매개변수를 받아서 사용
-    },
+    query: { method: 'cursor', page, size, sort, },
     renderType: 'ssr',
   });
   return data;
@@ -19,15 +14,24 @@ const fetchActivities = async ({ page, size, sort }: { page: number; size: numbe
 
 const MainPage = async () => {
   const initialPage = 1;
-  const initialData = await fetchActivities({
+
+  const allInitialData = await fetchActivities({
     page: initialPage,
     size: ITEM_DEFAULT_PAGESIZE,
-    sort: 'most_reviewed' // 서버로부터 댓글 많은 순 정렬 방식
+    sort: 'latest',
   });
+
+  const popularInitialData = await fetchActivities({
+    page: initialPage,
+    size: POPULAR_ACTIVITIES_COUNT,
+    sort: 'most_reviewed',
+  })
 
   return (
     <main>
-      <SearchContainer initialData={initialData} />
+      <SearchContainer
+        initialData={allInitialData}
+        popularInitialData={popularInitialData} />
     </main>
   );
 };
