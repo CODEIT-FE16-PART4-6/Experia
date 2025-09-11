@@ -9,6 +9,8 @@
     "lint": "next lint",
     "prepare": "husky",
     "test": "jest",
+    "test:server": "tsx src/test/run-server-test.ts",
+    "test:login": "tsx src/test/run-login-test.ts",
     "ai-review": "node scripts/ai-review.js",
     "ai-review:openai": "node scripts/ai-review-openai.js",
     "commit": "AI_REVIEW=true git commit",

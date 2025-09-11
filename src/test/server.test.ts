@@ -1,5 +1,5 @@
 // 서버 테스트 스크립트
-const testServer = async () => {
+const testServer = async (): Promise<void> => {
   const baseUrl = 'http://localhost:3001'; // 포트 3001로 설정
 
   console.log('🚀 서버 테스트 시작...\n');
@@ -9,7 +9,7 @@ const testServer = async () => {
     const response = await fetch(baseUrl);
     console.log('✅ 서버 실행 중:', response.status);
   } catch (error) {
-    console.log('❌ 서버 연결 실패:', error.message);
+    console.log('❌ 서버 연결 실패:', (error as Error).message);
     return;
   }
 
@@ -18,7 +18,7 @@ const testServer = async () => {
     const authResponse = await fetch(`${baseUrl}/signin`);
     console.log('✅ 로그인 페이지 접근:', authResponse.status);
   } catch (error) {
-    console.log('❌ 로그인 페이지 접근 실패:', error.message);
+    console.log('❌ 로그인 페이지 접근 실패:', (error as Error).message);
   }
 
   // 3. 보호된 페이지 접근 테스트 (리다이렉트 확인)
@@ -28,7 +28,7 @@ const testServer = async () => {
     });
     console.log('✅ 보호된 페이지 접근 (리다이렉트):', protectedResponse.status);
   } catch (error) {
-    console.log('❌ 보호된 페이지 접근 실패:', error.message);
+    console.log('❌ 보호된 페이지 접근 실패:', (error as Error).message);
   }
 
   // 4. API 엔드포인트 테스트
@@ -45,7 +45,7 @@ const testServer = async () => {
     });
     console.log('✅ 로그인 API 응답:', apiResponse.status);
   } catch (error) {
-    console.log('❌ 로그인 API 실패:', error.message);
+    console.log('❌ 로그인 API 실패:', (error as Error).message);
   }
 
   console.log('\n🎯 테스트 완료!');
@@ -56,4 +56,9 @@ const testServer = async () => {
   console.log('4. 리뷰 작성 기능 테스트');
 };
 
-testServer();
+// 직접 실행 시 테스트 실행
+if (require.main === module) {
+  testServer().catch(console.error);
+}
+
+export default testServer;

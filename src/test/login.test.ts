@@ -1,5 +1,9 @@
 // 로그인 테스트 스크립트
-const testLogin = async () => {
+interface LoginResponse {
+  success: boolean;
+}
+
+const testLogin = async (): Promise<void> => {
   const baseUrl = 'http://localhost:3001'; // 포트 3001로 변경
 
   console.log('🚀 로그인 테스트 시작...\n');
@@ -9,7 +13,7 @@ const testLogin = async () => {
     const response = await fetch(baseUrl);
     console.log('✅ 서버 실행 중 (포트 3001):', response.status);
   } catch (error) {
-    console.log('❌ 서버 연결 실패:', error.message);
+    console.log('❌ 서버 연결 실패:', (error as Error).message);
     return;
   }
 
@@ -30,7 +34,7 @@ const testLogin = async () => {
     console.log('✅ 로그인 API 응답:', loginResponse.status);
 
     if (loginResponse.ok) {
-      const result = await loginResponse.json();
+      const result: LoginResponse = await loginResponse.json();
       console.log('✅ 로그인 성공:', result);
 
       // 3. 보호된 페이지 접근 테스트 (로그인 후)
@@ -46,7 +50,7 @@ const testLogin = async () => {
           console.log('⚠️ 여전히 리다이렉트됨 - 쿠키 설정 확인 필요');
         }
       } catch (error) {
-        console.log('❌ 보호된 페이지 접근 실패:', error.message);
+        console.log('❌ 보호된 페이지 접근 실패:', (error as Error).message);
       }
     } else {
       console.log('❌ 로그인 실패:', loginResponse.status);
@@ -54,7 +58,7 @@ const testLogin = async () => {
       console.log('에러 내용:', errorText);
     }
   } catch (error) {
-    console.log('❌ 로그인 API 실패:', error.message);
+    console.log('❌ 로그인 API 실패:', (error as Error).message);
   }
 
   console.log('\n🎯 테스트 완료!');
@@ -64,4 +68,9 @@ const testLogin = async () => {
   console.log('3. 로그인 후 /mypage/my-activities 페이지 확인');
 };
 
-testLogin();
+// 직접 실행 시 테스트 실행
+if (require.main === module) {
+  testLogin().catch(console.error);
+}
+
+export default testLogin;
