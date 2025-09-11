@@ -1,7 +1,9 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm, FormProvider, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@/components/Button';
@@ -9,25 +11,24 @@ import DropdownSelect from '@/components/DropdownSelect';
 import ImageUploader from '@/components/ImageUpload/ImageUploader';
 import MultiImageUploader from '@/components/ImageUpload/MultiImageUploader';
 import InputField from '@/components/InputField';
+import AddressField from '@/components/form/AddressField';
 import FormLabel from '@/components/form/FormLabel';
 import TextAreaField from '@/components/form/TextAreaField';
-import AddressField from '@/components/form/AddressField';
 import DateTimeInputGroup from '@/components/ui/DateTimeInputGroup';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { ACTIVITY_CATEGORIES } from '@/constants';
 import { ActivityFormValueSchema, ActivityFormValues } from '@/types/schema/activitiesSchema';
-import { REQUEST_URL } from '@/utils/api-public';
-
+import fetchClientData from '@/utils/api-client/fetchClientData';
+import formatPrice from '@/utils/formatter/formatPrice';
+import parsePrice from '@/utils/formatter/parsePrice';
 
 interface ActivityFormProps {
   initialData?: ActivityFormValues;
 }
 
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';
-
 const ActivityForm = ({ initialData }: ActivityFormProps) => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const methods = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivityFormValueSchema),
@@ -106,125 +107,180 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
     };
   };
 
-  const onSubmit: SubmitHandler<ActivityFormValues> = async data => {
+  const onSubmit: SubmitHandler<ActivityFormValues> = async formData => {
+    const schedules = methods.getValues('schedules');
+    if (!schedules || schedules.length === 0) {
+      methods.setError('schedules', {
+        type: 'manual',
+        message: '시간대를 하나 이상 추가해주세요.',
+      });
+      return;
+    }
+    setIsSubmitting(true);
+
     try {
-      const url = isEdit
-        ? `${REQUEST_URL}/my-activities/${initialData?.id}`
-        : `${REQUEST_URL}/activities`;
+      const url = isEdit ? `/my-activities/${initialData?.id}` : `/activities`;
 
       const method = isEdit ? 'PATCH' : 'POST';
 
       const payload = isEdit
-        ? preparePatchPayload(data, initialData)
+        ? preparePatchPayload(formData, initialData)
         : {
-            title: data.title,
-            category: data.category,
-            description: data.description,
-            address: data.address,
-            price: data.price,
-            schedules: data.schedules,
-            bannerImageUrl: data.bannerImageUrl,
-            subImageUrls: (data.subImages ?? []).map(img => img.imageUrl),
+            title: formData.title,
+            category: formData.category,
+            description: formData.description,
+            address: formData.address,
+            price: formData.price,
+            schedules: formData.schedules,
+            bannerImageUrl: formData.bannerImageUrl,
+            subImageUrls: (formData.subImages ?? []).map(img => img.imageUrl),
           };
 
-      console.log(payload);
-
-      const res = await fetch(url, {
+      const data = await fetchClientData(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const error = await res.json();
-        const errorDefaultMsg = `체험 ${isEdit ? '수정' : '등록'}에 실패했습니다.`;
-
-        console.error('서버 에러:', error);
-        alert(error.message || errorDefaultMsg);
-        return;
-      }
-
-      const result = await res.json();
       const alertMsg = `체험이 ${isEdit ? '수정' : '등록'}되었습니다.`;
       alert(alertMsg);
 
       // 등록/수정 후 상세 페이지로 이동
-      router.push(`/activities/${result.id}`);
+
+      router.push(`/activities/${data.id}`);
     } catch (err) {
-      console.error('네트워크 에러:', err);
-      alert('서버와의 통신에 실패했습니다.');
+      const errorDefaultMsg = `체험 ${isEdit ? '수정' : '등록'}에 실패했습니다.`;
+
+      console.error('서버 에러:', err);
+      alert(err || errorDefaultMsg);
+      setIsSubmitting(false);
+      return;
     }
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pb-[180px]'>
+      <form onSubmit={handleSubmit(onSubmit)} className='relative flex flex-col gap-4 pb-[180px]'>
+        {isSubmitting && (
+          <div className='absolute inset-0 z-50 flex justify-center bg-[#fafafa]/75'>
+            <div className='mt-[100px] flex flex-col items-center gap-2'>
+              <div className='h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500' />
+              <p className='text-sm text-gray-600'>업로드 중...</p>
+            </div>
+          </div>
+        )}
         <SectionTitle
           title={isEdit ? '내 체험 수정' : '내 체험 등록'}
           action={
-            <Button variant='POSITIVE' size='md' type='submit'>
-              {isEdit ? '수정하기' : '등록하기'}
+            <Button variant='POSITIVE' size='md' type='submit' disabled={isSubmitting}>
+              {isSubmitting ? '업로드 중 . . .' : isEdit ? '수정하기' : '등록하기'}
             </Button>
           }
         />
 
-        <InputField placeholder='제목' className='w-full' {...register('title')} />
-        {errors && <p className='text-red-500'>{errors?.title?.message}</p>}
-
-        <Controller
-          name='category'
-          control={methods.control}
-          render={({ field }) => (
-            <DropdownSelect
-              items={ACTIVITY_CATEGORIES}
-              selectedItem={
-                ACTIVITY_CATEGORIES.find(category => category.value === field.value) ?? null
-              }
-              onChange={item => field.onChange(item?.value ?? '')}
-              placeholder='카테고리 선택'
-            />
-          )}
-        />
-        {errors && <p className='text-red-500'>{errors?.category?.message}</p>}
-
-        <TextAreaField placeholder='체험 설명' {...register('description')} />
-        {errors && <p className='text-red-500'>{errors?.description?.message}</p>}
-
-        <div className='flex flex-col gap-3 md:gap-4'>
-          <FormLabel inputId='price'>가격</FormLabel>
+        <div className='mb-4'>
+          <FormLabel inputId='title' className='mb-4'>
+            체험명
+          </FormLabel>
           <InputField
-            id='price'
-            type='number'
-            placeholder='가격'
+            placeholder='체험명'
             className='w-full'
-            {...register('price', {
-              valueAsNumber: true,
-            })}
+            {...register('title')}
+            error={errors?.title?.message}
           />
-          {errors && <p className='text-red-500'>{errors?.price?.message}</p>}
         </div>
 
-        <div className='flex flex-col gap-3 md:gap-4'>
-          <FormLabel inputId='address'>주소</FormLabel>
+        <div className='mb-4'>
+          <FormLabel inputId='category' className='mb-4'>
+            카테고리
+          </FormLabel>
+          <Controller
+            name='category'
+            control={methods.control}
+            render={({ field, fieldState }) => (
+              <DropdownSelect
+                items={ACTIVITY_CATEGORIES}
+                selectedItem={
+                  ACTIVITY_CATEGORIES.find(category => category.value === field.value) ?? null
+                }
+                placeholder='카테고리 선택'
+                error={fieldState.error?.message}
+                onChange={item => field.onChange(item?.value ?? '')}
+              />
+            )}
+          />
+        </div>
+
+        <div className='mb-4'>
+          <FormLabel inputId='description' className='mb-4'>
+            체험 설명
+          </FormLabel>
+          <TextAreaField
+            placeholder='체험 설명'
+            {...register('description')}
+            error={errors?.description?.message}
+          />
+        </div>
+
+        <div className='mb-4 flex flex-col gap-3 md:gap-4'>
+          <FormLabel inputId='price'>가격</FormLabel>
+          <Controller
+            name='price'
+            control={methods.control}
+            render={({ field, fieldState }) => (
+              <InputField
+                id='price'
+                type='text'
+                placeholder='가격'
+                className='w-full'
+                value={formatPrice(field.value)}
+                onChange={e => {
+                  const raw = parsePrice(e.target.value);
+                  field.onChange(raw); // form state에는 숫자 저장
+                }}
+                onBlur={field.onBlur}
+                error={fieldState.error?.message}
+              />
+            )}
+          />
+        </div>
+
+        <div className='mb-4 flex flex-col gap-3 md:gap-4'>
+          <div className='flex flex-col'>
+            <FormLabel inputId='address'>주소</FormLabel>
+            <div className='text-md flex items-start gap-1 text-gray-700'>
+              <Image
+                src='/icons/ic_info.svg'
+                alt='가이드'
+                width={16}
+                height={16}
+                className='mt-1'
+              />
+              <p>
+                <b>국가, 도시/지역구(행정구역), 도로명주소</b>를 입력해주세요. <br />
+                예) 서울시 송파구 송파동 32-1 / Skógarhlíð 10, 105 Reykjavík, 아이슬란드
+              </p>
+            </div>
+          </div>
+
           <Controller
             name='address'
             control={methods.control}
-            render={({ field }) => <AddressField {...field} />}
+            render={({ field, fieldState }) => (
+              <AddressField {...field} error={fieldState.error?.message} />
+            )}
           />
-          {errors && <p className='text-red-500'>{errors?.address?.message}</p>}
         </div>
 
-        <div className='flex flex-col gap-3 md:gap-4'>
+        <div className='mb-4 flex flex-col gap-3 md:gap-4'>
           <FormLabel inputId='date'>예약 가능한 시간대</FormLabel>
           <Controller
             name='schedules'
             control={methods.control}
             render={({ field }) => <DateTimeInputGroup {...field} />}
           />
-          {errors && <p className='text-red-500'>{errors?.schedules?.message}</p>}
         </div>
 
         <div className='flex flex-col gap-3 md:gap-4'>

@@ -1,16 +1,12 @@
 'use client';
-//img
-import Image from 'next/image';
 
-//comp
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { DropdownMeatball } from '@/components/DropdownMeatball';
 import DeleteModal from '@/components/activities/Modals/DeleteModal';
 import useModalStore from '@/stores/modalStore';
-
-//hooks
 
 interface PostType {
   id: number;
@@ -33,16 +29,14 @@ const PostHeader = ({ userId, id, tag, title, rating, reviewCount, address }: Po
     if (authStoreData) {
       try {
         const authStoreDataObj = JSON.parse(authStoreData);
-        console.log('로컬스토리지 my id : ', authStoreDataObj.state.user.id);
-        console.log('api 의 페이지 user ID', userId);
         if (authStoreDataObj.state.user.id === userId) {
           setIsMyPost(true);
         }
-      } catch (error) {
-        console.log('로컬 데이터(auth-store) 파싱도중 에러 발생');
+      } catch {
+        // 로컬 데이터 파싱 에러 무시
       }
     }
-  }, []); // 로컬 스토리지 => 클라이언트 사이드
+  }, [userId]);
 
   const handleDelete = () => {
     openModal(
@@ -51,16 +45,15 @@ const PostHeader = ({ userId, id, tag, title, rating, reviewCount, address }: Po
         activityId={id}
         onClose={closeModal}
         onDeleteSuccess={() => {
-          // 삭제 성공 시 홈 페이지로 이동
           router.replace('/');
         }}
       />,
     );
-  }; // 삭제하기 버튼 클릭시
+  };
 
   const handleEdit = () => {
     router.push(`/mypage/my-activities/edit-activity/${id}`);
-  }; // 수정하기 버튼 클릭시
+  };
 
   return (
     <div className='flex flex-row justify-between p-4 md:p-6 lg:mx-auto lg:w-[1200px]'>

@@ -3,9 +3,8 @@ import DatePicker from 'react-datepicker';
 
 //style
 import 'react-datepicker/dist/react-datepicker.css';
+import styles from '@/styles/datepicker.module.css';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
-
-import styles from './Reservation.module.css';
 
 //schema
 
@@ -29,7 +28,7 @@ const Calander = ({
   setSelectedScheduleId,
   setMySchedule,
 }: Props) => {
-  const [selectedButton, setSelectedButton] = useState(null);
+  const [selectedButton, setSelectedButton] = useState<number | null>(null);
 
   // 스케줄 있는 날짜들 Date 객체로 변환하여 저장
   const highlightDates = useMemo(() => {
@@ -41,7 +40,7 @@ const Calander = ({
   const convertToDate = (dateString: DateType): Date | null => {
     const date = new Date(dateString);
     return isNaN(date.getTime()) ? null : date;
-  }; //TODO [P6-124] 테스트 코드 작성
+  };
 
   // 선택된 날짜의 schedules 필터링
   const selectedDateSchedules = useMemo(() => {
@@ -104,7 +103,7 @@ const Calander = ({
   //스케줄 선택 핸들러(schedules.Id 저장)
   const handleSelectSchedule = (
     scheduleId: ScheduleIdType,
-    index: any,
+    index: number,
     scheduleStart: string,
     scheduleEnd: string,
   ) => {
@@ -145,7 +144,7 @@ const Calander = ({
       </p>
       {selectedDate ? (
         <div>
-          {selectedDateSchedules ? (
+          {selectedDateSchedules.length > 0 ? (
             <>
               <p className='text-nomad-black mt-4 mb-[14px] hidden text-[18px] font-bold sm:hidden md:block'>
                 예약 가능한 시간
@@ -166,7 +165,9 @@ const Calander = ({
               <hr className='mt-3 hidden border-gray-300 lg:block' />
             </>
           ) : (
-            <span>예약 가능한 시간이 없습니다.</span>
+            <p className='mt-6 mb-8 flex justify-center text-gray-600'>
+              예약 가능한 시간이 없습니다.
+            </p>
           )}
         </div>
       ) : (

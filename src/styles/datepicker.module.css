@@ -49,7 +49,8 @@
   border-radius: 0.5rem;
 }
 
-.datepicker :global(.react-datepicker__day--highlighted:hover) {
+.datepicker :global(.react-datepicker__day--highlighted:hover),
+.datepicker :global(.react-datepicker__day--today.react-datepicker__day--highlighted:hover) {
   background-color: rgb(34, 109, 88);
   color: #e1fff7;
   border-radius: 0.5rem;
@@ -110,8 +111,66 @@
   font-weight: bold;
 }
 
-.datepicker :global(.react-datepicker__day--today.react-datepicker__day--selected) {
+.datepicker :global(.react-datepicker__day--today.react-datepicker__day--selected),
+.datepicker :global(.react-datepicker__day--today.react-datepicker__day--selected:hover) {
   background-color: #0b3b2d;
   font-weight: bold;
   color: white;
+}
+
+.datepicker :global(.react-datepicker__day--today:hover) {
+  background-color: #eee;
+}
+
+/* react-datepicker - timepicker */
+.datepicker:global(.react-datepicker-wrapper) {
+  display: block !important;
+  width: 100%;
+}
+
+.datepicker:global(.react-datepicker-popper) {
+  z-index: 3 !important;
+  width: 100% !important;
+}
+
+.datepicker :global(.react-datepicker__triangle) {
+  background: #fff;
+}
+
+.datepicker :global(.react-datepicker__header--time--only) {
+  display: none;
+}
+
+.datepicker:global(.react-datepicker--time-only),
+.datepicker:global(.react-datepicker__time-container),
+.datepicker:global(.react-datepicker__time-box) {
+  width: 100%;
+}
+
+.datepicker :global(.react-datepicker__time-box) {
+  font-family: 'pretendard';
+  font-size: 16px;
+}
+
+.datepicker
+  :global(
+    .react-datepicker__time-container
+      .react-datepicker__time
+      .react-datepicker__time-box
+      ul.react-datepicker__time-list
+      li.react-datepicker__time-list-item
+  ) {
+  height: auto !important;
+  padding: 10px !important;
+}
+
+.datepicker
+  :global(
+    .react-datepicker__time-container
+      .react-datepicker__time
+      .react-datepicker__time-box
+      ul.react-datepicker__time-list
+      li.react-datepicker__time-list-item--selected
+  ) {
+  background-color: var(--color-primary);
 }

@@ -7,15 +7,6 @@ interface PageProps {
 }
 
 async function fetchActivities(id: string) {
-  //*** cache check
-
-  /*
-  let callCount = 0;
-  callCount++;
-  console.log(`API 호출 : ${callCount} 
-    ID:${id}`); //revalidate 준 만큼의 텀 이후에 이 로그가 다시 실행됨. (만약 새로고침 마다 발생 = 캐싱 안됨)
-  const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}`);
-*/
   const res = await fetch(`https://sp-globalnomad-api.vercel.app/16-6/activities/${id}`, {
     next: { revalidate: 300, tags: ['activity'] },
   });
@@ -24,7 +15,6 @@ async function fetchActivities(id: string) {
     throw new Error('Fetch 실패');
   }
   const data = await res.json();
-  //console.log('받아온 데이터:', data);
   return data;
 }
 
@@ -37,18 +27,9 @@ async function fetchReviews(id: string) {
     throw new Error('Fetch 실패');
   }
   const data = await res.json();
-  //console.log('받아온 데이터:', data);
   return data;
 }
 
-//****************캐시에 저장
-/*
-// fn, keyParts, option
-const initialGetActivity = unstable_cache(async (id: string) => fetchActivities(id), ['activity'], {
-  revalidate: 300, //5 minute
-  tags: ['activity'],
-});
-*/
 const initialGetActivity = cache(async (id: string) => {
   return fetchActivities(id);
 });
@@ -57,14 +38,11 @@ const initialGetReviews = cache(async (id: string) => {
   return fetchReviews(id);
 });
 
-//****************
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
-  console.log('id 출력:', id);
 
   const Postdata = await initialGetActivity(id);
-
   const reviewData = await initialGetReviews(id);
-  console.log(reviewData);
+
   return <Post postData={Postdata} reviewData={reviewData} />;
 }
