@@ -5,6 +5,7 @@ import { useInfiniteQuery, useMutation, useQueryClient, InfiniteData } from '@ta
 import clsx from 'clsx';
 import { Fragment, useRef, useState } from 'react';
 
+import NotificationItem from './NotificationItem';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -13,7 +14,6 @@ import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { Notifications, Notification } from '@/types/schema/notificationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 
-import NotificationItem from './NotificationItem';
 
 const fetchMyNotifications = async (pageParam: number | null = null) => {
   const cursorQuery = pageParam !== null ? `&cursorId=${pageParam}` : '';

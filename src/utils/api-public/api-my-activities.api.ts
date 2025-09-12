@@ -1,8 +1,8 @@
-import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 
 import { MyActivitiesDto } from './api';
 
 import { REQUEST_URL, tokenTmp } from '.';
+import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 
 const URL: string = `${REQUEST_URL}/my-activities`;
 

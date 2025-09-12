@@ -5,13 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 
+import UserDropdown from './UserDropdown';
 import NotificationPopover from '@/components/notification/NotificationPopover';
 import Avatar from '@/components/ui/Avatar';
 import { ROUTES } from '@/constants';
 import useScrollY from '@/hooks/useScrollY';
 import { useUserStore } from '@/stores/userStore';
 
-import UserDropdown from './UserDropdown';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);

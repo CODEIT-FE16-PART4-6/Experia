@@ -2,11 +2,11 @@
 
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import PopularList from './PopularList.client';
 import { BREAKPOINTS, POPULAR_ACTIVITIES_COUNT, POPULAR_ACTIVITIES_VIEW_COUNT } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import { Activities, PopularActivities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
-import PopularList from './PopularList.client';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return POPULAR_ACTIVITIES_VIEW_COUNT.lg;

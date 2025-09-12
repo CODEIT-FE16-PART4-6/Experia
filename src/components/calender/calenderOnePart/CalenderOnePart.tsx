@@ -1,8 +1,8 @@
 
+import CalenderOnePartStatus from './calenderOnePartStatus/CalenderOnePartStatus';
 import CalenderEllipseBlue from '@/assets/imgs/calenderEllipseBlue.svg';
 import CalenderEllipseGray from '@/assets/imgs/calenderEllipseGray.svg';
 
-import CalenderOnePartStatus from './calenderOnePartStatus/CalenderOnePartStatus';
 
 type Props = {
   day: string;

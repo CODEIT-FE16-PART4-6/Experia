@@ -3,9 +3,9 @@ import DatePicker from 'react-datepicker';
 
 //style
 import 'react-datepicker/dist/react-datepicker.css';
+import styles from './Reservation.module.css';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 
-import styles from './Reservation.module.css';
 
 //schema
 

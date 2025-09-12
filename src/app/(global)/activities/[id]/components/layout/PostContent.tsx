@@ -4,11 +4,11 @@
 import Image from 'next/image';
 
 //comp
+import PostReview from './PostReview';
 import PostMap from '@/app/(global)/activities/[id]/components/map-block/PostMapWrapper';
 //types
 import { ReviewType } from '@/app/(global)/activities/[id]/components/postContentTypes';
 
-import PostReview from './PostReview';
 
 interface ReviewContentType {
   totalCount: number;
