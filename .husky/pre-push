@@ -10,12 +10,13 @@ if ! npx tsc --noEmit; then
   exit 1
 fi
 
-# 전체 프로젝트 린트 검사 (경고만 확인)
+# 전체 프로젝트 린트 검사 (에러는 차단, 경고만 허용)
 echo "📝 전체 프로젝트 린트 검사..."
-if ! npm run lint 2>/dev/null; then
-  echo "⚠️  린트 경고가 있지만 푸시를 계속합니다."
-  echo "🔧 필요시 다음 명령어로 수정하세요:"
+if ! npm run lint; then
+  echo "❌ 린트 에러가 발견되어 푸시가 차단되었습니다."
+  echo "🔧 다음 명령어로 문제를 해결하세요:"
   echo "   npm run lint -- --fix"
+  exit 1
 fi
 
 # 개발용 의존성 정리 (프로덕션 환경과 동일하게)
