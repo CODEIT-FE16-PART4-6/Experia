@@ -3,10 +3,14 @@
 
 echo "🔍 Pre-commit 훅 실행 중..."
 
-# lint-staged 실행 (오류가 있어도 계속 진행)
+# lint-staged 실행 (오류 발생시 커밋 차단)
 echo "📝 코드 포맷팅 및 린트 검사..."
 if ! npx lint-staged; then
-  echo "⚠️  lint-staged에서 오류가 발생했지만 계속 진행합니다."
+  echo "❌ 린트 또는 포맷팅 오류가 발견되어 커밋이 차단되었습니다."
+  echo "🔧 다음 명령어로 문제를 해결하세요:"
+  echo "   npm run lint -- --fix"
+  echo "   npx prettier --write ."
+  exit 1
 fi
 
 # AI 리뷰 실행 (환경 변수가 설정된 경우에만)

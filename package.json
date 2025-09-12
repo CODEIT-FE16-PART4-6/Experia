@@ -8,9 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
+    "postinstall": "husky && chmod +x .husky/*",
     "test": "jest",
     "test:server": "npx tsx src/utils/test/run-server-test.ts",
     "test:login": "npx tsx src/utils/test/run-login-test.ts",
+    "analyze": "ANALYZE=true npm run build",
+    "analyze:server": "BUNDLE_ANALYZE=server npm run build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser npm run build",
     "ai-review": "node scripts/ai-review.js",
     "ai-review:openai": "node scripts/ai-review-openai.js",
     "commit": "AI_REVIEW=true git commit",
@@ -21,7 +25,9 @@
     "vercel:dev": "./scripts/vercel-deploy.sh development",
     "vercel:staging": "./scripts/vercel-deploy.sh staging",
     "vercel:prod": "./scripts/vercel-deploy.sh production",
-    "vercel:deploy": "./scripts/vercel-deploy.sh"
+    "vercel:deploy": "./scripts/vercel-deploy.sh",
+    "fix:hooks": "./scripts/fix-husky-hooks.sh",
+    "setup:openai": "./scripts/setup-openai.sh"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
