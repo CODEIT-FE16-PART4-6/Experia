@@ -26,6 +26,10 @@ ARG NEXT_PUBLIC_TEAM
 ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
 ENV NEXT_PUBLIC_TEAM=$NEXT_PUBLIC_TEAM
 
+# 린트 및 테스트 실행 (개발 의존성으로)
+RUN npm run lint
+RUN npm test
+
 # Next.js 빌드 실행
 RUN npm run build
 
