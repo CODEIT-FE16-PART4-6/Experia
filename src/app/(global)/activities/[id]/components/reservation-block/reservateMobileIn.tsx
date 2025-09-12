@@ -11,7 +11,6 @@ import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
 
-
 //util
 //shema
 interface Props {

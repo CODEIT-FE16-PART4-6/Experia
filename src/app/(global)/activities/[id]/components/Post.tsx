@@ -9,7 +9,6 @@ import ReservateIn from './reservation-block/reservateIn';
 import ReservateMobile from './reservation-block/reservateMobileIn';
 import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
 
-
 type Activity = z.infer<typeof ActivityDetail>;
 type ActivityReviewList = z.infer<typeof ActivityReview>;
 

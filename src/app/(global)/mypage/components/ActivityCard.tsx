@@ -11,7 +11,6 @@ import useModalStore from '@/stores/modalStore';
 import { ActivityType } from '@/types/schema/activitiesSchema';
 import { ReservationType } from '@/types/schema/reservationSchema';
 
-
 interface ActivityCardProps {
   data: ReservationType | ActivityType;
   type: 'reservation' | 'activity';

@@ -1,6 +1,6 @@
+import { Activity } from '@/types/schema/activitiesSchema';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Activity } from '@/types/schema/activitiesSchema';
 
 const PopularItem = ({ item, idx }: { item: Activity; idx: number }) => {
   return (

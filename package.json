@@ -2,6 +2,10 @@
   "name": "experia",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -27,7 +31,11 @@
     "vercel:prod": "./scripts/vercel-deploy.sh production",
     "vercel:deploy": "./scripts/vercel-deploy.sh",
     "fix:hooks": "./scripts/fix-husky-hooks.sh",
-    "setup:openai": "./scripts/setup-openai.sh"
+    "setup:openai": "./scripts/setup-openai.sh",
+    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",

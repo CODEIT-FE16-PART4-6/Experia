@@ -62,3 +62,10 @@ if (require.main === module) {
 }
 
 export default testServer;
+
+// Jest 테스트 함수
+describe('Server Tests', () => {
+  test('서버 연결 및 기본 기능 테스트', async () => {
+    await testServer();
+  }, 30000); // 30초 타임아웃
+});

@@ -24,12 +24,12 @@ export const ITEM_PAGESIZE = {
 export const ITEM_DEFAULT_PAGESIZE = 12; // 목록 렌더링 갯수 기본값: 12개 (반응형 그리드 레이아웃에 맞춤)
 
 export const POPULAR_ACTIVITIES_VIEW_COUNT = {
-  lg: 4,
-  md: 3,
-  sm: 2,
+  lg: 3,
+  md: 2,
+  sm: 1,
 };
 
-export const POPULAR_ACTIVITIES_COUNT = 8;
+export const POPULAR_ACTIVITIES_COUNT = 6;
 
 export const RESERVATION_STATUS = [
   {

@@ -1,9 +1,9 @@
-import { Suspense } from 'react';
 import SearchContainer from '@/components/activities/SearchContainer';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { ITEM_DEFAULT_PAGESIZE } from '@/constants';
+import { ITEM_DEFAULT_PAGESIZE, POPULAR_ACTIVITIES_COUNT } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
+import { Suspense } from 'react';
 
 const fetchActivities = async ({
   page,
@@ -30,10 +30,17 @@ const fetchActivities = async ({
 
 const MainPage = async () => {
   const initialPage = 1;
-  const initialData = await fetchActivities({
+
+  const allInitialData = await fetchActivities({
     page: initialPage,
     size: ITEM_DEFAULT_PAGESIZE,
-    sort: 'most_reviewed', // 서버로부터 댓글 많은 순 정렬 방식
+    sort: 'latest',
+  });
+
+  const popularInitialData = await fetchActivities({
+    page: initialPage,
+    size: POPULAR_ACTIVITIES_COUNT,
+    sort: 'most_reviewed',
   });
 
   return (
@@ -46,7 +53,7 @@ const MainPage = async () => {
           </div>
         }
       >
-        <SearchContainer initialData={initialData} />
+        <SearchContainer initialData={allInitialData} popularInitialData={popularInitialData} />
       </Suspense>
     </main>
   );
