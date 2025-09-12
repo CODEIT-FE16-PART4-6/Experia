@@ -5,6 +5,17 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+
+  // Next.js 15+ 최적화 설정
+  experimental: {
+    // React Compiler 비활성화 (안정성을 위해)
+    reactCompiler: false,
+    // 더 나은 번들링을 위한 설정
+    optimizePackageImports: ['@tanstack/react-query', 'zustand', 'clsx'],
+  },
+
+  // 캐싱 최적화
+  cacheHandler: undefined, // 기본 캐시 핸들러 사용
   webpack(config: WebpackConfig) {
     config.module?.rules?.push({
       test: /.svg$/,

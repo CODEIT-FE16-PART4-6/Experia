@@ -1,15 +1,16 @@
 'use client';
 
-import PopularPageClient from '@/components/activities/PopularPage.client';
-import { Suspense, useState } from 'react';
 import DropdownOptions from '@/components/DropdownOptions';
 import MainPageClient from '@/components/activities/MainPage.client';
+import PopularPageClient from '@/components/activities/PopularPage.client';
 import SearchBarClient from '@/components/activities/SearchBar.client';
 import CategoryMenu from '@/components/ui/CategoryMenu';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
 import { ACTIVITY_LIST_ORDER_OPTIONS } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 type Props = {
   initialData: Activities;
@@ -18,13 +19,37 @@ type Props = {
 };
 
 const SearchContainer = ({ initialData, popularInitialData, initialKeyword = '' }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [keyword, setKeyword] = useState(initialKeyword);
   const [category, setCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<string>('latest');
 
+  // URL 파라미터에서 검색어 읽기
+  useEffect(() => {
+    const urlKeyword = searchParams.get('q');
+    if (urlKeyword !== null) {
+      setKeyword(urlKeyword);
+    } else {
+      setKeyword('');
+    }
+  }, [searchParams]);
+
+  // 검색어 변경 시 URL 업데이트
+  const handleSearch = (newKeyword: string) => {
+    setKeyword(newKeyword);
+    const params = new URLSearchParams(searchParams);
+    if (newKeyword.trim()) {
+      params.set('q', newKeyword.trim());
+    } else {
+      params.delete('q');
+    }
+    router.push(`/?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <>
-      <SearchBarClient onSearch={setKeyword} initialQuery={keyword} />
+      <SearchBarClient onSearch={handleSearch} initialQuery={keyword} />
 
       <section className='mx-auto mt-[34px] max-w-[1200px]'>
         {!keyword && (

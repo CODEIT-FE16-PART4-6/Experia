@@ -20,8 +20,14 @@ const fetchActivities = async ({
   return data;
 };
 
-const MainPage = async () => {
+type Props = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+const MainPage = async ({ searchParams }: Props) => {
   const initialPage = 1;
+  const resolvedSearchParams = await searchParams;
+  const initialKeyword = resolvedSearchParams.q || '';
 
   const allInitialData = await fetchActivities({
     page: initialPage,
@@ -37,7 +43,11 @@ const MainPage = async () => {
 
   return (
     <main>
-      <SearchContainer initialData={allInitialData} popularInitialData={popularInitialData} />
+      <SearchContainer
+        initialData={allInitialData}
+        popularInitialData={popularInitialData}
+        initialKeyword={initialKeyword}
+      />
     </main>
   );
 };
