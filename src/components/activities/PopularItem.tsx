@@ -3,7 +3,7 @@ import formatRating from '@/utils/formatter/formatRating';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const PopularItem = ({ item }: { item: Activity }) => {
+const PopularItem = ({ item, idx }: { item: Activity; idx: number }) => {
   return (
     <li className='max-w-none text-black lg:max-w-[390px]'>
       <Link href={`/activities/${item.id}`} className='group relative block'>
@@ -14,6 +14,8 @@ const PopularItem = ({ item }: { item: Activity }) => {
             width={280}
             height={280}
             className='h-full w-full object-cover'
+            priority={idx <= 2}
+            loading={idx <= 2 ? 'eager' : 'lazy'}
           />
 
           {/* hover 시 썸네일 dimmed 처리 */}
