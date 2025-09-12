@@ -40,10 +40,14 @@ const eslintConfig = [
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off', // non-null assertion 허용
 
-      // Import/Export 규칙 - 머지 충돌 방지를 위해 완전 제거
+      // Import/Export 규칙 - 머지 충돌 방지를 위해 완전 제거하되 절대경로는 강제
       'import/order': 'off', // import 순서 규칙 완전 제거
       'import/no-unresolved': 'error', // 해결되지 않는 import는 여전히 에러
       'import/no-duplicates': 'off', // 중복 import도 허용 (머지 충돌 방지)
+      'import/no-relative-packages': 'error', // 상대 경로로 패키지 import 금지
+      
+      // 절대 경로 사용 강제 규칙 - 상대 경로 import 금지
+      'import/no-relative-parent-imports': 'error', // 상대 경로로 부모 디렉토리 import 금지
 
       // Prettier 통합 - 머지 충돌 방지를 위해 완화
       'prettier/prettier': 'off', // Prettier 규칙 완전 제거 (머지 충돌 방지)
