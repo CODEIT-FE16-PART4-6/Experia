@@ -1,11 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
 //style
-import 'react-datepicker/dist/react-datepicker.css';
 import styles from '@/styles/datepicker.module.css';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
-
+import 'react-datepicker/dist/react-datepicker.css';
 
 //schema
 
