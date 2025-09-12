@@ -49,7 +49,7 @@ const eslintConfig = [
       // 절대 경로 사용 강제 규칙 - 실제 상대 경로만 금지
       'import/no-relative-parent-imports': 'off', // 절대 경로와 혼동되어 비활성화
 
-      // 커스텀 규칙: 모든 상대 경로 차단
+      // 커스텀 규칙: 부모 디렉토리로의 상대 경로만 차단
       'no-restricted-imports': [
         'error',
         {
@@ -58,11 +58,6 @@ const eslintConfig = [
               group: ['../*'],
               message:
                 '부모 디렉토리로의 상대 경로(../) 사용을 금지합니다. 절대 경로(@/)를 사용하세요.',
-            },
-            {
-              group: ['./*'],
-              message:
-                '같은 디렉토리 내 상대 경로(./) 사용을 금지합니다. 절대 경로(@/)를 사용하세요.',
             },
           ],
         },
