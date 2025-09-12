@@ -1,12 +1,6 @@
 import type { NextConfig } from 'next';
 import type { Configuration as WebpackConfig } from 'webpack';
 
-// 번들 분석기 설정
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
-
 const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -37,4 +31,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;

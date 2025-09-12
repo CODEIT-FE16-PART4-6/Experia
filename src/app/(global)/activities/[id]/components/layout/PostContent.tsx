@@ -9,7 +9,6 @@ import PostMap from '@/app/(global)/activities/[id]/components/map-block/PostMap
 //types
 import { ReviewType } from '@/app/(global)/activities/[id]/components/postContentTypes';
 
-
 interface ReviewContentType {
   totalCount: number;
   averageRating: number;

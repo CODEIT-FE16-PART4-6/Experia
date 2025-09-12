@@ -1,7 +1,7 @@
 'use client';
 
+import PopularPageClient from '@/components/activities/PopularPage.client';
 import { Suspense, useState } from 'react';
-import PopularPageClient from './PopularPage.client';
 import DropdownOptions from '@/components/DropdownOptions';
 import MainPageClient from '@/components/activities/MainPage.client';
 import SearchBarClient from '@/components/activities/SearchBar.client';
@@ -13,10 +13,11 @@ import { Activities } from '@/types/schema/activitiesSchema';
 
 type Props = {
   initialData: Activities;
+  popularInitialData: Activities;
   initialKeyword?: string;
 };
 
-export default function SearchContainer({ initialData, initialKeyword = '' }: Props) {
+const SearchContainer = ({ initialData, popularInitialData, initialKeyword = '' }: Props) => {
   const [keyword, setKeyword] = useState(initialKeyword);
   const [category, setCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<string>('latest');
@@ -28,31 +29,33 @@ export default function SearchContainer({ initialData, initialKeyword = '' }: Pr
       <section className='mx-auto mt-[34px] max-w-[1200px]'>
         {!keyword && (
           <>
+            <SectionTitle title='🔥 인기 체험' />
             <Suspense fallback={<ActivityListSkeleton />}>
-              <SectionTitle title='🔥 인기 체험' />
-              <PopularPageClient initialData={initialData} />
+              <PopularPageClient initialData={popularInitialData} />
             </Suspense>
           </>
         )}
 
         {!keyword && <SectionTitle title='🌏 모든 체험' />}
 
-        <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-4'>
-          {/* 카테고리 필터 */}
-          <div className='hide-scrollbar flex flex-1 touch-pan-x flex-nowrap items-center gap-2 overflow-x-auto'>
-            <CategoryMenu selected={category} onChange={setCategory} />
-          </div>
+        {!keyword && (
+          <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-4 lg:px-0'>
+            {/* 카테고리 필터 */}
+            <div className='hide-scrollbar flex flex-1 touch-pan-x flex-nowrap items-center gap-2 overflow-x-auto'>
+              <CategoryMenu selected={category} onChange={setCategory} />
+            </div>
 
-          {/* 정렬 드롭다운 */}
-          <div className='ml-4 shrink-0'>
-            <DropdownOptions
-              items={ACTIVITY_LIST_ORDER_OPTIONS}
-              type='order'
-              placeholderLabel='최신순'
-              onChange={setSort}
-            />
+            {/* 정렬 드롭다운 */}
+            <div className='ml-4 shrink-0'>
+              <DropdownOptions
+                items={ACTIVITY_LIST_ORDER_OPTIONS}
+                type='order'
+                placeholderLabel='최신순'
+                onChange={setSort}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         <Suspense fallback={<ActivityListSkeleton />}>
           <MainPageClient
@@ -65,4 +68,6 @@ export default function SearchContainer({ initialData, initialKeyword = '' }: Pr
       </section>
     </>
   );
-}
+};
+
+export default SearchContainer;

@@ -5,7 +5,6 @@ import type { InfiniteData } from '@tanstack/react-query';
 import ActivityItem from './ActivityItem';
 import { Activity } from '@/types/schema/activitiesSchema';
 
-
 interface ActivitiesResponse {
   activities: Activity[];
 }

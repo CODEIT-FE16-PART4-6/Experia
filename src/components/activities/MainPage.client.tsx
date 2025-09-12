@@ -72,7 +72,7 @@ const MainPageClient = ({ initialData, keyword, category, sort }: Props) => {
 
   return (
     <>
-      <section className="mx-auto max-w-[1200px] mt-[34px] px-4 lg:px-0">
+      <section className='mx-auto mt-[34px] max-w-[1200px] px-4 lg:px-0'>
         {keyword && (
           <div className='mb-4'>
             <p className='pb-2 text-2xl text-black md:text-3xl'>
