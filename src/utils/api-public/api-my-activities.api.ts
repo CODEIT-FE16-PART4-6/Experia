@@ -18,7 +18,6 @@ const getErrorMessage = (error: unknown): string => {
   }
   return 'API 호출 실패';
 };
-
 export async function FindAllMyActivities(
   activityId: number,
   year: number,
@@ -34,7 +33,6 @@ export async function FindAllMyActivities(
         },
       },
     );
-
     return {
       status: 200,
       body: response as MyActivitiesDto[],
@@ -75,7 +73,6 @@ export async function FindAllMyActivitiesOneDay(
         },
       },
     );
-
     return {
       status: 200,
       body: response as {
@@ -212,7 +209,6 @@ export async function UpdateMyActivitiesReserveOneByReservationId(
         }),
       },
     );
-
     return {
       status: 200,
       body: response as {
