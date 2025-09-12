@@ -40,26 +40,32 @@ const eslintConfig = [
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off', // non-null assertion 허용
 
-      // Import/Export 규칙 - 머지 충돌 방지를 위해 완전 제거하되 절대경로는 강제
-      'import/order': 'off', // import 순서 규칙 완전 제거
+      // Import/Export 규칙 - 자동 정리로 통일하되 차단도 적용
+      'import/order': 'error', // import 순서 규칙 활성화 (자동 정리 + 차단)
       'import/no-unresolved': 'error', // 해결되지 않는 import는 여전히 에러
       'import/no-duplicates': 'error', // 중복 import 금지 (빌드 문제 방지)
       'import/no-relative-packages': 'error', // 상대 경로로 패키지 import 금지
-      
+
       // 절대 경로 사용 강제 규칙 - 실제 상대 경로만 금지
       'import/no-relative-parent-imports': 'off', // 절대 경로와 혼동되어 비활성화
-      
-      // 커스텀 규칙: 부모 디렉토리로의 상대 경로(../)만 차단
+
+      // 커스텀 규칙: 모든 상대 경로 차단
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
               group: ['../*'],
-              message: '부모 디렉토리로의 상대 경로(../) 사용을 금지합니다. 절대 경로(@/)를 사용하세요.'
-            }
-          ]
-        }
+              message:
+                '부모 디렉토리로의 상대 경로(../) 사용을 금지합니다. 절대 경로(@/)를 사용하세요.',
+            },
+            {
+              group: ['./*'],
+              message:
+                '같은 디렉토리 내 상대 경로(./) 사용을 금지합니다. 절대 경로(@/)를 사용하세요.',
+            },
+          ],
+        },
       ],
 
       // Prettier 통합 - 머지 충돌 방지를 위해 완화
