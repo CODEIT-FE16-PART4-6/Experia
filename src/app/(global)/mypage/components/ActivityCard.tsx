@@ -37,7 +37,7 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
     const reservation = data as ReservationType;
 
     return (
-      <div className='flex h-auto w-full flex-wrap overflow-hidden rounded-2xl shadow-lg sm:h-[156px] sm:flex-nowrap lg:h-[204px]'>
+      <div className='flex h-auto w-full flex-wrap overflow-hidden rounded-2xl bg-white shadow-lg sm:h-[156px] sm:flex-nowrap lg:h-[204px]'>
         <figure className='relative aspect-square h-auto w-full shrink-0 sm:h-[156px] sm:w-[156px] lg:h-[204px] lg:w-[204px]'>
           <Image
             src={reservation.activity.bannerImageUrl}
