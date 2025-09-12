@@ -3,7 +3,7 @@ import { DialogTitle } from '@headlessui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm, Controller } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import TextAreaField from '@/components/form/TextAreaField';
 import useModalStore from '@/stores/modalStore';
