@@ -103,7 +103,7 @@ const PopOver = ({ activityId, date }: Props) => {
     };
 
     fetchData();
-  }, [activityId, date, update]);
+  }, [activityId, date, update, onClickConfirm, onClickDeclined, status]);
 
   const onClickStatus = (statusSet: MyActivitiesStatus) => {
     setStatus(statusSet);

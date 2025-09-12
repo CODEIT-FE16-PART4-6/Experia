@@ -5,16 +5,14 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 
-import Button from '@/components/Button';
-import { StarRating } from '@/components/StarRating';
 import TextAreaField from '@/components/form/TextAreaField';
 import useModalStore from '@/stores/modalStore';
 import { ReservationType } from '@/types/schema/reservationSchema';
 import { ReviewPostReq, ReviewPostReqSchema } from '@/types/schema/reviewSchema';
-import { REQUEST_URL } from '@/utils/api-public';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjcwMjA3NSwiZXhwIjoxNzU3OTExNjc1LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.gQpOm9em8mJEAgO3LYli_aOfi1LmUHtFDTQck_jCVdY';
+import Button from '@/components/Button';
+import { StarRating } from '@/components/StarRating';
 
 const ReviewCreateModal = ({ data }: { data: ReservationType }) => {
   const { activity } = data;
@@ -36,40 +34,21 @@ const ReviewCreateModal = ({ data }: { data: ReservationType }) => {
 
   const onSubmit: SubmitHandler<ReviewPostReq> = async formData => {
     try {
-      const res = await fetch(`${REQUEST_URL}/my-reservations/${data.id}/reviews`, {
+      await fetchClientData(`/my-reservations/${data.id}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        const error = await res.json();
-        const errorDefaultMsg = '리뷰 등록에 실패했습니다.';
-
-        if (res.status === 409) {
-          alert('이미 리뷰를 작성한 체험입니다.');
-          return;
-        }
-
-        console.error('서버 에러:', error);
-        alert(error.message || errorDefaultMsg);
-        return;
-      }
-
-      const result = await res.json();
-
-      const alertMsg = '리뷰가 등록되었습니다.';
-      alert(alertMsg);
-
-      // 등록 후 모달 닫고 상세 페이지로 이동
+      alert('리뷰가 등록되었습니다.');
       closeAll();
-      router.push(`/activities/${result.activityId}`);
-    } catch (err) {
-      console.error('네트워크 에러:', err);
-      alert('서버와의 통신에 실패했습니다.');
+      router.push(`/activities/${activity.id}`);
+    } catch (error) {
+      console.error('리뷰 등록 에러:', error);
+      const errorMessage = error instanceof Error ? error.message : '리뷰 등록에 실패했습니다.';
+      alert(errorMessage);
     }
   };
 

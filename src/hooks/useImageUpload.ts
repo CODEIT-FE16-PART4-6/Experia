@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState } from 'react';
 
-import { REQUEST_URL } from '@/utils/api-public';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
 interface UploadedImage {
   profileImageUrl?: string;
@@ -8,8 +8,6 @@ interface UploadedImage {
 }
 
 const MAX_SIZE = 1024 * 1024 * 5; // 5MB
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQ1NSwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NjczMDU0MywiZXhwIjoxNzU3OTQwMTQzLCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.w-c24X9Jxf-2tWdpsIZ0SyE-RslOB6HqCpkkr6KXIzw';
 
 const useImageUpload = (endpoint: string) => {
   const [isUploading, setIsUploading] = useState(false);
@@ -19,8 +17,6 @@ const useImageUpload = (endpoint: string) => {
   // 이미지 업로드 함수
   const fetchImage = async (file: File): Promise<UploadedImage | undefined> => {
     try {
-      const URL = `${REQUEST_URL}${endpoint}`;
-
       // 한글 파일명 오류 방지 인코딩
       const timestamp = Date.now();
       const ext = file.name.split('.').pop();
@@ -33,21 +29,12 @@ const useImageUpload = (endpoint: string) => {
       const formData = new FormData();
       formData.append('image', encodingFile);
 
-      const res = await fetch(URL, {
+      const data = await fetchClientData(endpoint, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         body: formData,
       });
 
-      if (!res.ok) {
-        throw new Error('이미지 업로드에 실패했습니다.');
-      }
-
-      const data = await res.json();
-
-      return data;
+      return data as UploadedImage;
     } catch (error) {
       setPreviewImage(null); // 업로드 실패시 프리뷰용 파일 객체 제거
       throw error;
