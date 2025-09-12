@@ -1,15 +1,12 @@
 'use client';
 
-import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import Image from 'next/image';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, Fragment } from 'react';
-
-import RefreshIcon from '@/assets/icons/ic_refresh.svg';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Fragment, useState } from 'react';
 
 import Button from './Button';
-
-
+import RefreshIcon from '@/assets/icons/ic_refresh.svg';
 
 interface DropdownOptionsItem {
   label: string;

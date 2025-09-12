@@ -3,8 +3,8 @@
 import {
   Listbox,
   ListboxButton,
-  ListboxOptions,
   ListboxOption,
+  ListboxOptions,
   Transition,
 } from '@headlessui/react';
 import clsx from 'clsx';

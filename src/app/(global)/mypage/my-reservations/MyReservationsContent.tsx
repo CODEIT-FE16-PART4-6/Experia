@@ -2,22 +2,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 
+import ActivityCard from '@/app/(global)/mypage/components/ActivityCard';
 import DropdownOptions from '@/components/DropdownOptions';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { RESERVATION_STATUS } from '@/constants';
-import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
-import { ReservationType } from '@/types/schema/reservationSchema';
+import { ReservationResponseSchema, ReservationType } from '@/types/schema/reservationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 
-import ActivityCard from '../components/ActivityCard';
-
 const fetchReservations = async () => {
-  const response = await fetchClientData('/my-reservations?size=10', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await fetchClientData('/my-reservations?size=10');
   const validatedData = ReservationResponseSchema.parse(response);
   return validatedData.reservations; //reservations 배열만 반환
 };

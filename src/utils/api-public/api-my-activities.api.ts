@@ -1,7 +1,7 @@
+import { MyActivitiesDto } from './api';
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 
-import fetchClientData from '../api-client/fetchClientData';
-import { MyActivitiesDto } from './api';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
 // 타입 안전한 에러 처리 헬퍼 함수
 const getErrorStatus = (error: unknown): number => {

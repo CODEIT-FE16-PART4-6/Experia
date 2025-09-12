@@ -1,20 +1,14 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 
+import ActivityCard from '@/app/(global)/mypage/components/ActivityCard';
 import { LinkButton } from '@/components/ui/LinkButton';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 
-import ActivityCard from '../components/ActivityCard';
-
 const fetchMyActivities = async () => {
-  const response = await fetchClientData('/my-activities?size=20', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await fetchClientData('/my-activities?size=20');
   const validatedData = Activities.parse(response);
   return validatedData.activities;
 };

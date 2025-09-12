@@ -3,14 +3,15 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+import Calender from './Calender';
+
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
-import 'react-datepicker/dist/react-datepicker.css';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
+import 'react-datepicker/dist/react-datepicker.css';
 
 // import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
-import Calander from '@/app/(global)/activities/[id]/components/reservation-block/Calender';
 
 interface Props {
   data: ActivityDetail;
@@ -61,19 +62,8 @@ const Reservation = ({ data }: Props) => {
       if (response.status === 201) {
         alert('예약이 완료되었습니다.');
       }
-    } catch (error: unknown) {
+    } catch (error) {
       console.error('예약 생성 실패:', error);
-
-      // 409 에러인 경우 (이미 확정 예약이 있는 경우)
-      if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response?: { status?: number } };
-        if (axiosError.response?.status === 409) {
-          alert('해당 날짜에 이미 확정 예약이 있는 체험을 예약할 수 없습니다.');
-          return;
-        }
-      }
-
-      // 그 외의 에러인 경우
       alert('예약 생성에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -101,7 +91,7 @@ const Reservation = ({ data }: Props) => {
         {mySchedule ? mySchedule : ''}
       </div>
       <div className='md:hidden lg:block'>
-        <Calander {...calendarProps} />
+        <Calender {...calendarProps} />
       </div>
       <button
         className='text-nomad-black mb-[27px] font-semibold md:block lg:hidden'
@@ -126,7 +116,7 @@ const Reservation = ({ data }: Props) => {
               />
             </button>
           </div>
-          <Calander {...calendarProps} />
+          <Calender {...calendarProps} />
           <Button
             onClick={() => {
               setWhiteBox(false);

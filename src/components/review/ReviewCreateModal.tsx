@@ -3,7 +3,7 @@ import { DialogTitle } from '@headlessui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm, Controller } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import TextAreaField from '@/components/form/TextAreaField';
 import useModalStore from '@/stores/modalStore';
@@ -11,8 +11,8 @@ import { ReservationType } from '@/types/schema/reservationSchema';
 import { ReviewPostReq, ReviewPostReqSchema } from '@/types/schema/reviewSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 
-import Button from '../Button';
-import { StarRating } from '../StarRating';
+import Button from '@/components/Button';
+import { StarRating } from '@/components/StarRating';
 
 const ReviewCreateModal = ({ data }: { data: ReservationType }) => {
   const { activity } = data;

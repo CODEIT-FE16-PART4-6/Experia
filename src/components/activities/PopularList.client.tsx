@@ -1,14 +1,15 @@
 'use client';
 
-import { PopularActivities } from '@/types/schema/activitiesSchema';
 import { InfiniteData } from '@tanstack/react-query';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import PopularItem from './PopularItem';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { BREAKPOINTS } from '@/constants';
-import PopularItem from './PopularItem';
+import { PopularActivities } from '@/types/schema/activitiesSchema';
 
 interface PopularListProps {
   data: InfiniteData<PopularActivities, string | null>;

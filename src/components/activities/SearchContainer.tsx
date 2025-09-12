@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import PopularPageClient from './PopularPage.client';
 import DropdownOptions from '@/components/DropdownOptions';
 import MainPageClient from '@/components/activities/MainPage.client';
 import SearchBarClient from '@/components/activities/SearchBar.client';
@@ -9,7 +10,6 @@ import SectionTitle from '@/components/ui/Section/SectionTitle';
 import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
 import { ACTIVITY_LIST_ORDER_OPTIONS } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
-import PopularPageClient from './PopularPage.client';
 
 type Props = {
   initialData: Activities;

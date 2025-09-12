@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Pre-push 훅 실행 중..."
+
+# TypeScript 타입 체크
+echo "🔍 TypeScript 타입 체크..."
+if ! npx tsc --noEmit; then
+  echo "❌ TypeScript 타입 오류가 발견되어 푸시가 차단되었습니다."
+  exit 1
+fi
+
+# 전체 프로젝트 린트 검사 (에러는 차단, 경고만 허용)
+echo "📝 전체 프로젝트 린트 검사..."
+if ! npm run lint; then
+  echo "❌ 린트 에러가 발견되어 푸시가 차단되었습니다."
+  echo "🔧 다음 명령어로 문제를 해결하세요:"
+  echo "   npm run lint -- --fix"
+  exit 1
+fi
+
+# 개발용 의존성 정리 (프로덕션 환경과 동일하게)
+echo "🧹 개발용 의존성 정리 중..."
+npm prune --omit=dev
+
+# 빌드 테스트 (프로덕션 환경과 동일한 의존성으로 빌드)
+echo "🏗️  프로덕션 빌드 테스트..."
+if ! npm run build; then
+  echo "❌ 프로덕션 빌드 실패로 인해 푸시가 차단되었습니다."
+  echo "🔧 개발용 의존성을 다시 설치하려면: npm install"
+  exit 1
+fi
+
+# 개발용 의존성 복원
+echo "🔄 개발용 의존성 복원 중..."
+npm install
+
+echo "✅ Pre-push 훅 완료 - 모든 검사 통과"
