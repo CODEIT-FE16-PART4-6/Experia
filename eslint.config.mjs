@@ -29,7 +29,7 @@ const eslintConfig = [
       'no-debugger': 'error', // debugger 사용 금지
       'prefer-const': 'warn', // let 대신 const 권장 (강제 아님)
       'no-var': 'error', // var 사용 금지
-      
+
       // TypeScript 규칙 - 핵심만
       '@typescript-eslint/no-unused-vars': [
         'warn', // 경고로 완화
@@ -39,32 +39,15 @@ const eslintConfig = [
       '@typescript-eslint/prefer-optional-chain': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off', // non-null assertion 허용
-      
-      // Import/Export 규칙 - 완화
-      'import/order': [
-        'warn', // 경고로 완화
-        {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-            'unknown',
-          ],
-          alphabetize: {
-            order: 'asc',
-          },
-          'newlines-between': 'ignore', // 빈 줄 강제 해제
-        },
-      ],
+
+      // Import/Export 규칙 - 머지 충돌 방지를 위해 완전 제거
+      'import/order': 'off', // import 순서 규칙 완전 제거
       'import/no-unresolved': 'error', // 해결되지 않는 import는 여전히 에러
-      'import/no-duplicates': 'warn', // 중복 import 경고
-      
-      // Prettier 통합
-      'prettier/prettier': 'warn', // Prettier 규칙 위반시 경고
-      
+      'import/no-duplicates': 'off', // 중복 import도 허용 (머지 충돌 방지)
+
+      // Prettier 통합 - 머지 충돌 방지를 위해 완화
+      'prettier/prettier': 'off', // Prettier 규칙 완전 제거 (머지 충돌 방지)
+
       // React 규칙 - 완화
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',

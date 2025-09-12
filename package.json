@@ -82,16 +82,15 @@
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "typescript": "5.9.2",
     "webpack": "^5.101.3"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix --quiet"
     ],
     "**/*.{json,css,scss,md,yml,yaml}": [
-      "prettier --write"
+      "prettier --write --ignore-unknown"
     ]
   },
   "jira-prepare-commit-msg": {
