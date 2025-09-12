@@ -2,8 +2,8 @@
 
 import type { InfiniteData } from '@tanstack/react-query';
 
-import ActivityItem from './ActivityItem';
 import { Activity } from '@/types/schema/activitiesSchema';
+import ActivityItem from './ActivityItem';
 
 interface ActivitiesResponse {
   activities: Activity[];
@@ -15,7 +15,7 @@ export interface ActivityListProps {
 
 const ActivityList = ({ data }: ActivityListProps) => {
   return (
-    <ul className='mb-12 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4'>
+    <ul className='mb-12 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 md:gap-y-10 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-12'>
       {data.pages.map(page =>
         page.activities.map(activity => <ActivityItem key={activity.id} item={activity} />),
       )}

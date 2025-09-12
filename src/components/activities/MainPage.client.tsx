@@ -1,14 +1,14 @@
 'use client';
 
-import { useSuspenseInfiniteQuery, InfiniteData } from '@tanstack/react-query';
-import { useEffect, useState, useRef } from 'react';
-import ActivityList from './ActivityList.client';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { BREAKPOINTS, ITEM_DEFAULT_PAGESIZE, ITEM_PAGESIZE } from '@/constants';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
+import { InfiniteData, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import ActivityList from './ActivityList.client';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return ITEM_PAGESIZE.lg;
@@ -75,11 +75,11 @@ const MainPageClient = ({ initialData, keyword, category, sort }: Props) => {
 
   return (
     <>
-      <section className='mx-auto mt-[34px] max-w-[1200px] px-4 lg:px-0'>
+      <section className='mx-auto mt-[34px] max-w-[1200px]'>
         {keyword && (
           <div className='mb-4'>
             <p className='pb-2 text-2xl text-black md:text-3xl'>
-              <strong className='text-nomad-black font-bold'>{keyword}</strong>으로 검색한
+              <strong className='text-nomad-black font-bold'>{keyword}</strong>(으)로 검색한
               결과입니다.
             </p>
             <p className='text-base text-black'>총 {totalCount}개의 결과</p>
