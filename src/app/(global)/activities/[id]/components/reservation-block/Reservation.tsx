@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-import Calander from './Calander';
+import Calender from './Calender';
 
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
@@ -91,7 +91,7 @@ const Reservation = ({ data }: Props) => {
         {mySchedule ? mySchedule : ''}
       </div>
       <div className='md:hidden lg:block'>
-        <Calander {...calendarProps} />
+        <Calender {...calendarProps} />
       </div>
       <button
         className='text-nomad-black mb-[27px] font-semibold md:block lg:hidden'
@@ -116,7 +116,7 @@ const Reservation = ({ data }: Props) => {
               />
             </button>
           </div>
-          <Calander {...calendarProps} />
+          <Calender {...calendarProps} />
           <Button
             onClick={() => {
               setWhiteBox(false);
