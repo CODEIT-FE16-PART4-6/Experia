@@ -74,3 +74,10 @@ if (require.main === module) {
 }
 
 export default testLogin;
+
+// Jest 테스트 함수
+describe('Login Tests', () => {
+  test('로그인 기능 테스트', async () => {
+    await testLogin();
+  }, 30000); // 30초 타임아웃
+});
