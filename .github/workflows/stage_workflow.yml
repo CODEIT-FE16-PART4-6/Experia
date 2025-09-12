@@ -47,7 +47,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm ci --only=production=false
+          npm ci --omit=dev=false
 
       - name: Run linting
         run: |
