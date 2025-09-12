@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # 모든 의존성 설치 (devDependencies 포함)
-RUN npm ci --only=production=false
+RUN npm ci
 
 # 소스 코드 복사
 COPY . .
@@ -46,15 +46,15 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # 운영용 의존성만 설치 (devDependencies 제외)
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # 빌드된 파일들을 builder stage에서 복사
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.ts ./
 
-# 불필요한 파일들 정리
-RUN npm prune --omit=dev
+# 캐시 정리
+RUN npm cache clean --force
 
 # 포트 노출
 EXPOSE 3000
