@@ -5,12 +5,12 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 //comp
+import Calander from './Calander';
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
 
-import Calander from './Calander';
 
 //util
 //shema
@@ -20,7 +20,6 @@ interface Props {
 
 const ReservateMobile = ({ data }: Props) => {
   // ActivityDetail 타입에서 date 타입 추출
-  type DateType = ActivityDetail['schedules'][number]['date'];
   // ActivityDetail 타입에서 scheduleId 타입 추출
   type ScheduleIdType = ActivityDetail['schedules'][number]['id'];
   //선택된 날짜의 schedules 필터링

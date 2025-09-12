@@ -4,11 +4,11 @@ import '@/app/globals.css';
 
 import React, { useEffect, useState } from 'react';
 
+import UpdateReserveStatus from './updateReserveStatus/UpdateReserveStatus';
+import PopOverCurrentData from './utils/PopOver.function';
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 import { UpdateMyActivitiesReserveOneByReservationId } from '@/utils/api-public/api-my-activities.api';
 
-import UpdateReserveStatus from './updateReserveStatus/UpdateReserveStatus';
-import PopOverCurrentData from './utils/PopOver.function';
 
 type Props = {
   activityId: number;
@@ -103,7 +103,7 @@ const PopOver = ({ activityId, date }: Props) => {
     };
 
     fetchData();
-  }, [activityId, date, update]);
+  }, [activityId, date, update, onClickConfirm, onClickDeclined, status]);
 
   const onClickStatus = (statusSet: MyActivitiesStatus) => {
     setStatus(statusSet);

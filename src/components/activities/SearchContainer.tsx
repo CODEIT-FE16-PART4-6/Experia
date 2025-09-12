@@ -26,7 +26,7 @@ const SearchContainer = ({ initialData, popularInitialData, initialKeyword = '' 
     <>
       <SearchBarClient onSearch={setKeyword} initialQuery={keyword} />
 
-      <section className='mx-auto max-w-[1200px] mt-[34px]'>
+      <section className='mx-auto mt-[34px] max-w-[1200px]'>
         {!keyword && (
           <>
             <SectionTitle title='🔥 인기 체험' />

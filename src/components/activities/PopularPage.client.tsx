@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { BREAKPOINTS, POPULAR_ACTIVITIES_COUNT, POPULAR_ACTIVITIES_VIEW_COUNT } from "@/constants";
 import useWindowWidth from '@/hooks/useWindowWidth';
@@ -12,7 +12,7 @@ const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return POPULAR_ACTIVITIES_VIEW_COUNT.lg;
   if (width >= BREAKPOINTS.md) return POPULAR_ACTIVITIES_VIEW_COUNT.md;
   return POPULAR_ACTIVITIES_VIEW_COUNT.sm;
-}
+};
 
 const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
   const innerWidth = useWindowWidth();
@@ -43,14 +43,13 @@ const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
       }),
     initialPageParam: null,
     initialData: { pages: [initialData], pageParams: [null] },
-    getNextPageParam: lastPage =>
-      lastPage?.activities.length > 0 ? lastPage.cursorId : undefined,
-  })
+    getNextPageParam: lastPage => (lastPage?.activities.length > 0 ? lastPage.cursorId : undefined),
+  });
 
   if (isError) return <div>목록 불러오기에 실패했습니다.</div>;
 
   return (
-    <div className='px-4 lg:px-0 mb-10 md:mb-14 lg:mb-15'>
+    <div className='mb-10 px-4 md:mb-14 lg:mb-15 lg:px-0'>
       <PopularList
         data={data}
         fetchNextPage={fetchNextPage}
@@ -58,7 +57,7 @@ const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
         isFetchingNextPage={isFetchingNextPage}
       />
     </div>
-  )
-}
+  );
+};
 
 export default PopularPageClient;

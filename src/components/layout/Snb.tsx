@@ -4,16 +4,17 @@ import { Input } from '@headlessui/react';
 import Image from 'next/image';
 import { useCallback, useState, useEffect } from 'react';
 
+import SnbList from './Snb/SnbList';
 import InfoIcon from '@/assets/icons/ic_mypage1.svg';
 import MyReservationIcon from '@/assets/icons/ic_mypage2.svg';
 import MyActivityIcon from '@/assets/icons/ic_mypage3.svg';
 import ReservationIcon from '@/assets/icons/ic_mypage4.svg';
+import defaultProfileImage from '@/assets/imgs/defaultProfile/default.png';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { PATHS } from '@/constants';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useUserStore } from '@/stores/userStore';
 
-import SnbList from './Snb/SnbList';
 
 const SNB_LIST = [
   {
@@ -37,7 +38,6 @@ const SNB_LIST = [
     icon: ReservationIcon,
   },
 ];
-const defaultProfileImage = require('@/assets/imgs/defaultProfile/default.png');
 
 const Snb = () => {
   const user = useUserStore(state => state.user);
@@ -76,7 +76,6 @@ const Snb = () => {
   }, [user?.profileImageUrl]);
 
   const handleButtonClick = () => {
-    console.log('버튼 클릭');
     fileRef.current?.click();
   };
 

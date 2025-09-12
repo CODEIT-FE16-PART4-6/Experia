@@ -8,7 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
+    "postinstall": "husky && chmod +x .husky/*",
     "test": "jest",
+    "test:server": "npx tsx src/utils/test/run-server-test.ts",
+    "test:login": "npx tsx src/utils/test/run-login-test.ts",
+    "analyze": "ANALYZE=true npm run build",
+    "analyze:server": "BUNDLE_ANALYZE=server npm run build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser npm run build",
     "ai-review": "node scripts/ai-review.js",
     "ai-review:openai": "node scripts/ai-review-openai.js",
     "commit": "AI_REVIEW=true git commit",
@@ -19,7 +25,9 @@
     "vercel:dev": "./scripts/vercel-deploy.sh development",
     "vercel:staging": "./scripts/vercel-deploy.sh staging",
     "vercel:prod": "./scripts/vercel-deploy.sh production",
-    "vercel:deploy": "./scripts/vercel-deploy.sh"
+    "vercel:deploy": "./scripts/vercel-deploy.sh",
+    "fix:hooks": "./scripts/fix-husky-hooks.sh",
+    "setup:openai": "./scripts/setup-openai.sh"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
@@ -27,6 +35,7 @@
     "@tanstack/react-query": "^5.85.5",
     "@tanstack/react-query-devtools": "^5.85.5",
     "@types/react-datepicker": "^6.2.0",
+    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.11.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -49,6 +58,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.5.3",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.8.0",
@@ -72,16 +82,15 @@
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "typescript": "5.9.2",
     "webpack": "^5.101.3"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix --quiet"
     ],
     "**/*.{json,css,scss,md,yml,yaml}": [
-      "prettier --write"
+      "prettier --write --ignore-unknown"
     ]
   },
   "jira-prepare-commit-msg": {

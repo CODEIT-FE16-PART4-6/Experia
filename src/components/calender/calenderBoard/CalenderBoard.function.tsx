@@ -1,8 +1,7 @@
 import { JSX } from 'react';
 
+import CalenderOnePartComponent from '@/components/calender/calenderOnePart/CalenderOnePart';
 import { MyActivitiesDto } from '@/utils/api-public/api';
-
-import CalenderOnePartComponent from '../calenderOnePart/CalenderOnePart';
 
 type Props = {
   year: number;
@@ -13,28 +12,15 @@ type Props = {
 };
 
 const CalenderBoardFunction = ({ year, month, activities, onDayClick }: Props) => {
-  // // 해당 월의 총 일수를 구한다.
-  // const date: Date = new Date(year, month);
-  // console.log(date);
-
-  // // 해당 월의 1일이 몇요일인지 구한다.
-  // const day: number = date.getDay();
-  // console.log('day : ', day);
-
-  // // 해당 월이 총 몇일 있는지 확인하기
   const countDays: number = new Date(year, month + 1, 0).getDate();
-  console.log('countDays : ', countDays);
 
   const arr: JSX.Element[] = [];
-  // CalenderOnePartComponent를 배열로 입력
-  // 빈 컴포넌트 먼저 추가
   const firstDay = new Date(year, month, 1).getDay();
   const totalCells = firstDay + countDays;
   const totalRows = Math.ceil(totalCells / 7);
   let cellIndex = 0;
   if (firstDay > 0) {
     for (let i = 0; i < firstDay; i++) {
-      //*****
       const col = cellIndex % 7;
       const row = Math.floor(cellIndex / 7);
       const isLastCol = col === 6;
@@ -42,7 +28,6 @@ const CalenderBoardFunction = ({ year, month, activities, onDayClick }: Props) =
       const isFirstRow = row === 0;
       const isLastRowAb = row === totalRows - 2;
 
-      //******
       arr.push(
         <CalenderOnePartComponent
           key={`empty-${i}`}
@@ -71,10 +56,8 @@ const CalenderBoardFunction = ({ year, month, activities, onDayClick }: Props) =
     let exist: boolean = false;
     for (let j = 0; j < activities.length; j++) {
       const oneDay: number = Number(activities[j].date.split('-')[2]);
-      // console.log('oneDay : ', activities[j]);
       if (i == oneDay) {
         arr.push(
-          // 각 날짜 컴포넌트에 고유한 key와 클릭 이벤트를 처리할 onClick 핸들러를 전달합니다.
           <CalenderOnePartComponent
             key={`activity-${i}`}
             onClick={() =>
@@ -102,7 +85,6 @@ const CalenderBoardFunction = ({ year, month, activities, onDayClick }: Props) =
 
     if (!exist) {
       arr.push(
-        // 예약이 없는 날짜에도 클릭 이벤트를 처리하기 위해 key와 onClick 핸들러를 전달합니다.
         <CalenderOnePartComponent
           key={`day-${i}`}
           onClick={() => onDayClick(i, 0, 0, 0)}

@@ -1,0 +1,6 @@
+[core]
+    hooksPath = .husky
+    autocrlf = input
+
+[init]
+    templateDir = .git-template
