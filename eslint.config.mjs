@@ -45,9 +45,26 @@ const eslintConfig = [
       'import/no-unresolved': 'error', // 해결되지 않는 import는 여전히 에러
       'import/no-duplicates': 'error', // 중복 import 금지 (빌드 문제 방지)
       'import/no-relative-packages': 'error', // 상대 경로로 패키지 import 금지
-
-      // 절대 경로 사용 강제 규칙 - 상대 경로 import 금지
-      'import/no-relative-parent-imports': 'error', // 상대 경로로 부모 디렉토리 import 금지
+      
+      // 절대 경로 사용 강제 규칙 - 실제 상대 경로만 금지
+      'import/no-relative-parent-imports': 'off', // 절대 경로와 혼동되어 비활성화
+      
+      // 커스텀 규칙: 실제 상대 경로(../)만 차단
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['../*'],
+              message: '상대 경로(../) 사용을 금지합니다. 절대 경로(@/)를 사용하세요.'
+            },
+            {
+              group: ['./*'],
+              message: '상대 경로(./) 사용을 금지합니다. 절대 경로(@/)를 사용하세요.'
+            }
+          ]
+        }
+      ],
 
       // Prettier 통합 - 머지 충돌 방지를 위해 완화
       'prettier/prettier': 'off', // Prettier 규칙 완전 제거 (머지 충돌 방지)
