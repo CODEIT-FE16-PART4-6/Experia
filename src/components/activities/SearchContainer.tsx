@@ -36,7 +36,7 @@ const SearchContainer = ({ initialData, popularInitialData, initialKeyword = '' 
           </>
         )}
 
-        {!keyword && (<SectionTitle title='🌏 모든 체험' />)}
+        {!keyword && <SectionTitle title='🌏 모든 체험' />}
 
         {!keyword && (
           <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-4 lg:px-0'>
@@ -68,6 +68,6 @@ const SearchContainer = ({ initialData, popularInitialData, initialKeyword = '' 
       </section>
     </>
   );
-}
+};
 
 export default SearchContainer;

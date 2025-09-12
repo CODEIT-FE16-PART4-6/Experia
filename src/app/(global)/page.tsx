@@ -14,7 +14,7 @@ const fetchActivities = async ({
 }) => {
   const data = await fetchServerData<Activities>({
     path: '/activities',
-    query: { method: 'cursor', page, size, sort, },
+    query: { method: 'cursor', page, size, sort },
     renderType: 'ssr',
   });
   return data;
@@ -27,18 +27,17 @@ const MainPage = async () => {
     page: initialPage,
     size: ITEM_DEFAULT_PAGESIZE,
     sort: 'latest',
+  });
 
   const popularInitialData = await fetchActivities({
     page: initialPage,
     size: POPULAR_ACTIVITIES_COUNT,
     sort: 'most_reviewed',
-  })
+  });
 
   return (
     <main>
-      <SearchContainer
-        initialData={allInitialData}
-        popularInitialData={popularInitialData} />
+      <SearchContainer initialData={allInitialData} popularInitialData={popularInitialData} />
     </main>
   );
 };
