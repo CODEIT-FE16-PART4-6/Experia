@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import UserDropdown from './UserDropdown';
 import NotificationPopover from '@/components/notification/NotificationPopover';
@@ -11,7 +11,6 @@ import Avatar from '@/components/ui/Avatar';
 import { ROUTES } from '@/constants';
 import useScrollY from '@/hooks/useScrollY';
 import { useUserStore } from '@/stores/userStore';
-
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,7 +41,7 @@ const Header = () => {
   }, [DropdownOpen]);
 
   useEffect(() => {
-    scrollY > 100 ? setIsScrolled(true) : setIsScrolled(false);
+    setIsScrolled(scrollY > 100);
   }, [scrollY]);
 
   return (
