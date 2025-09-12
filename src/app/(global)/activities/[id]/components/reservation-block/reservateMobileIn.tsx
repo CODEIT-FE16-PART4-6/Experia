@@ -5,12 +5,11 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 //comp
-import Calander from './Calander';
+import Calender from './Calender';
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
-
 
 //util
 //shema
@@ -112,7 +111,7 @@ const ReservateMobile = ({ data }: Props) => {
               />
             </button>
           </div>
-          <Calander
+          <Calender
             data={data}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}

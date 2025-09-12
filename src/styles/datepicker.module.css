@@ -49,7 +49,8 @@
   border-radius: 0.5rem;
 }
 
-.datepicker :global(.react-datepicker__day--highlighted:hover) {
+.datepicker :global(.react-datepicker__day--highlighted:hover),
+.datepicker :global(.react-datepicker__day--today.react-datepicker__day--highlighted:hover) {
   background-color: rgb(34, 109, 88);
   color: #e1fff7;
   border-radius: 0.5rem;
@@ -110,10 +111,15 @@
   font-weight: bold;
 }
 
-.datepicker :global(.react-datepicker__day--today.react-datepicker__day--selected) {
+.datepicker :global(.react-datepicker__day--today.react-datepicker__day--selected),
+.datepicker :global(.react-datepicker__day--today.react-datepicker__day--selected:hover) {
   background-color: #0b3b2d;
   font-weight: bold;
   color: white;
+}
+
+.datepicker :global(.react-datepicker__day--today:hover) {
+  background-color: #eee;
 }
 
 /* react-datepicker - timepicker */
