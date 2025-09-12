@@ -8,6 +8,7 @@ import SearchBarClient from '@/components/activities/SearchBar.client';
 import CategoryMenu from '@/components/ui/CategoryMenu';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
+import PopularListSkeleton from '@/components/ui/Skeleton/PopularListSkeleton';
 import { ACTIVITY_LIST_ORDER_OPTIONS } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
 
@@ -26,13 +27,11 @@ export default function SearchContainer({ initialData, initialKeyword = '' }: Pr
       <SearchBarClient onSearch={setKeyword} initialQuery={keyword} />
 
       <section className='mx-auto mt-[34px] max-w-[1200px]'>
+        <SectionTitle title='🔥 인기 체험' />
         {!keyword && (
-          <>
-            <Suspense fallback={<ActivityListSkeleton />}>
-              <SectionTitle title='🔥 인기 체험' />
-              <PopularPageClient initialData={initialData} />
-            </Suspense>
-          </>
+          <Suspense fallback={<PopularListSkeleton />}>
+            <PopularPageClient initialData={initialData} />
+          </Suspense>
         )}
 
         {!keyword && <SectionTitle title='🌏 모든 체험' />}
