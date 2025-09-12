@@ -14,7 +14,6 @@ import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { Notification, Notifications } from '@/types/schema/notificationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
 
-
 const fetchMyNotifications = async (pageParam: number | null = null) => {
   const cursorQuery = pageParam !== null ? `&cursorId=${pageParam}` : '';
   const data =
