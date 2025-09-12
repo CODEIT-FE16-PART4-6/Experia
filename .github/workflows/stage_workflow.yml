@@ -1,15 +1,5 @@
 # 워크플로우의 이름을 정의합니다. GitHub Actions 로그와 UI에서 이 이름이 표시됩니다.
-name: NestJS application test
-
-# 필요한 Repository secrets
-# DOCKER_USERNAME : 도커허브 계정 = alexchoi1
-# DOCKER_PASSWORD : 도커 허브의 토큰값
-# GHCR_PAT : GitHub 토큰값
-# GIT_REPOSITORY_NAME : 도커허브에 저장된 Repository이름 = uniroom_front
-# NESTJS_STATUS : 백엔드 서버의 타입(테스트, 프러덕션 등등)
-# PG_HOST : PostgresSQL의 주소
-# SALT : 토큰생성시 필요
-# WEBHOOK : Google Chat에 푸시
+name: Build and Deploy to Vercel
 
 on:
   # dev 브랜치 푸시 시 빌드 테스트만 실행 (Vercel 자동배포와 분리)
@@ -65,91 +55,15 @@ jobs:
         run: |
           npm run build
 
-  build:
+  deploy:
     # test 작업이 성공한 후에만 실행
     needs: test
-    # 워크플로우가 실행될 가상 환경을 지정합니다. 여기서는 Ubuntu 22.04를 사용합니다.
     runs-on: ubuntu-22.04
-    # 워크플로우에서 실행할 단계들을 정의합니다.
     steps:
-      - uses: actions/checkout@v2
-      # Docker Buildx를 설정하는 단계
-      - name: Set up docker buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      # Docker 빌드 레이어를 캐시하여 빌드 시간을 단축하는 단계
-      - name: Cache docker layers
-        uses: actions/cache@v4
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      # Docker 이미지를 저장할 경로를 환경 변수에 설정하는 단계
-      # 에러부분 GIT_REPOSITORY_NAME 추가
-      - name: Set Docker image
-        run: echo "DOCKER_IMAGE=${{secrets.DOCKER_USERNAME}}/${{secrets.GIT_REPOSITORY_NAME}}" >> $GITHUB_ENV
-
-      # Docker Hub에 로그인하는 단계
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Docker 이미지를 빌드하고 레지스트리에 푸시하는 단계
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v5
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: ${{ env.DOCKER_IMAGE }}:latest
-          build-args: |
-            NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
-            NEXT_PUBLIC_TEAM=${{ secrets.NEXT_PUBLIC_TEAM }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64
-
-  deploy:
-    # 이 Job이 'build' Job이 완료된 후에 실행되도록 설정
-    needs: build
-    # Job 이름 정의
-    name: Deploy
-    # 이 Job을 실행할 환경 설정 (self-hosted 러너와 특정 레이블 사용.)
-    runs-on: [codeit-16-6-final-project-frontend]
-    steps:
-      # 기존 Docker 컨테이너를 중지하고 삭제한 후, 새로운 이미지를 기반으로 컨테이너를 실행하는 단계
-      - name: Docker run. Stop codeit-16-6-final-project-frontend
-        run: docker stop codeit-16-6-final-project-frontend || true
-
-      - name: Docker run. Remove codeit-16-6-final-project-frontend container
-        run: docker rm codeit-16-6-final-project-frontend || true
-
-      # Remove Docker All Images
-      - name: Remove Docker images
-        run: docker rmi $(docker images -a -q) || true
-
-      # Docker 이미지를 저장할 경로를 환경 변수에 설정하는 단계
-      - name: Set Docker image
-        run: echo "DOCKER_IMAGE=${{secrets.DOCKER_USERNAME}}/${{secrets.GIT_REPOSITORY_NAME}}" >> $GITHUB_ENV
-
-      # Docker Hub에 로그인하는 단계
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Docker Hub에서 이미지 pull
-      - name: Pull Docker image
-        run: docker pull ${{ env.DOCKER_IMAGE }}:latest
-
-      - name: Docker run. Remove image
-        run: docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
-
-      - name: Docker run. Run codeit-16-6-final-project-frontend container
-        run: docker run -d -p 7100:3000 --name codeit-16-6-final-project-frontend --restart always --log-opt max-size=10m --log-opt max-file=3 --memory=1g --cpus=1.0 ${{ env.DOCKER_IMAGE }}:latest
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          vercel-args: '--prod'
