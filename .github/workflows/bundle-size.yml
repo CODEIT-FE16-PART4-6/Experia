@@ -17,20 +17,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Prune dev dependencies
-        run: npm prune --omit=dev
-
       - name: Build project
         run: npm run build
-
-      - name: Install bundle analyzer
-        run: npm install --save-dev @next/bundle-analyzer
+        env:
+          ANALYZE: true
 
       - name: Analyze bundle size
         run: |
@@ -66,8 +62,6 @@ jobs:
           }" > bundle-analysis.json
 
           cat bundle-analysis.json
-        env:
-          ANALYZE: true
 
       - name: Upload bundle analysis
         uses: actions/upload-artifact@v4
