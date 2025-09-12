@@ -1,8 +1,6 @@
-
 import CalenderOnePartStatus from './calenderOnePartStatus/CalenderOnePartStatus';
 import CalenderEllipseBlue from '@/assets/imgs/calenderEllipseBlue.svg';
 import CalenderEllipseGray from '@/assets/imgs/calenderEllipseGray.svg';
-
 
 type Props = {
   day: string;
@@ -49,7 +47,8 @@ export default function CalenderOnePartComponent({
       // 전달받은 onClick 함수를 div의 클릭 이벤트에 연결합니다.
       onClick={onClick}
       // onClick prop이 있을 경우, 사용자에게 클릭 가능함을 시각적으로 알리기 위해 cursor-pointer 클래스를 추가합니다.
-      className={`${!isLastCol ? '-mr-px' : ''} ${!isLastRow ? '-mb-px' : ''} ${!isFirstRow ? 'border-t' : ''} flex h-[154px] flex-col justify-between border-r border-l border-[#e8e8e8] ${isLastRowAb ? 'border-b' : ''} ${isLastRow ? 'border-b' : ''} ${isLastRow ? 'border-t-[0px]' : ''} ${onClick ? 'cursor-pointer' : ''}`}>
+      className={`${!isLastCol ? '-mr-px' : ''} ${!isLastRow ? '-mb-px' : ''} ${!isFirstRow ? 'border-t' : ''} flex h-[154px] flex-col justify-between border-r border-l border-[#e8e8e8] ${isLastRowAb ? 'border-b' : ''} ${isLastRow ? 'border-b' : ''} ${isLastRow ? 'border-t-[0px]' : ''} ${onClick ? 'cursor-pointer' : ''}`}
+    >
       <div className='flex px-3 py-3 text-[21px]'>
         <p>{`${day}`}</p>
         <div className='mt-1 ml-1'>

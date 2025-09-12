@@ -15,7 +15,6 @@ import { PATHS } from '@/constants';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useUserStore } from '@/stores/userStore';
 
-
 const SNB_LIST = [
   {
     label: '내 정보',

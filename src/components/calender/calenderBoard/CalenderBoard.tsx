@@ -1,7 +1,6 @@
 import CalenderBoardFunction from './CalenderBoard.function';
 import { MyActivitiesDto } from '@/utils/api-public/api';
 
-
 type Props = {
   year: number;
   month: number;

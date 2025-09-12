@@ -1,6 +1,6 @@
 'use client';
 //hooks
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -15,15 +15,12 @@ const ReviewCreateModal = dynamic(() => import('@/components/review/ReviewCreate
 });
 
 const fetchReservations = async () => {
-  const response = await fetchClientData(
-    'https://sp-globalnomad-api.vercel.app/16-6/my-reservations',
-    {
-      method: 'GET', // 또는 POST, PUT, DELETE 등 필요에 따라
-      headers: {
-        'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
-      },
+  await fetchClientData('https://sp-globalnomad-api.vercel.app/16-6/my-reservations', {
+    method: 'GET', // 또는 POST, PUT, DELETE 등 필요에 따라
+    headers: {
+      'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
     },
-  );
+  });
 
   const data = await fetchClientData('/my-reservations');
   const validatedData = ReservationResponseSchema.parse(data);
@@ -31,9 +28,7 @@ const fetchReservations = async () => {
 };
 
 const CreateReview = () => {
-  const closeModal = useModalStore(state => state.closeModal);
   const openModal = useModalStore(state => state.openModal);
-  const [toggleReviewCreate, setToggleReviewCreate] = useState(false);
 
   const params = useParams();
   const id = Number(params.id);
