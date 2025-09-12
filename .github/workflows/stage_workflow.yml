@@ -1,5 +1,5 @@
 # 워크플로우의 이름을 정의합니다. GitHub Actions 로그와 UI에서 이 이름이 표시됩니다.
-name: Build and Deploy to Vercel
+name: Build and Test
 
 on:
   # dev 브랜치 푸시 시 빌드 테스트만 실행 (Vercel 자동배포와 분리)
@@ -55,15 +55,15 @@ jobs:
         run: |
           npm run build
 
-  deploy:
-    # test 작업이 성공한 후에만 실행
-    needs: test
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID }}
-          vercel-project-id: ${{ secrets.PROJECT_ID }}
-          vercel-args: '--prod'
+  # deploy:
+  #   # test 작업이 성공한 후에만 실행
+  #   needs: test
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Deploy to Vercel
+  #       uses: amondnet/vercel-action@v25
+  #       with:
+  #         vercel-token: ${{ secrets.VERCEL_TOKEN }}
+  #         vercel-org-id: ${{ secrets.ORG_ID }}
+  #         vercel-project-id: ${{ secrets.PROJECT_ID }}
+  #         vercel-args: '--prod'
