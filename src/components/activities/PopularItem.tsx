@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Activity } from '@/types/schema/activitiesSchema';
 
-
 const PopularItem = ({ item }: { item: Activity }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 

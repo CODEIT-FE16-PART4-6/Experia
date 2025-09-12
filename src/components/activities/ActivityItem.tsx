@@ -30,9 +30,11 @@ const ActivityItem = ({ item }: { item: Activity }) => {
           <span className='text-gray-700'>(리뷰 {item.reviewCount}개)</span>
         </span>
 
-        <h4 className='mt-2 mb-0.5 md:mt-2.5 md:mb-1 text-lg md:text-2xl font-semibold overflow-hidden overflow-ellipsis whitespace-nowrap'>{item.title}</h4>
+        <h4 className='mt-2 mb-0.5 overflow-hidden text-lg font-semibold overflow-ellipsis whitespace-nowrap md:mt-2.5 md:mb-1 md:text-2xl'>
+          {item.title}
+        </h4>
 
-        <h5 className='flex items-center text-xl md:text-2xl font-bold'>
+        <h5 className='flex items-center text-xl font-bold md:text-2xl'>
           ₩ {item.price.toLocaleString()}
           <span className='ml-1 text-xl font-normal text-gray-900'>/ 인</span>
         </h5>

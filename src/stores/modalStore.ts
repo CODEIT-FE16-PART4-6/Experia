@@ -22,7 +22,10 @@ const useModalStore = create<ModalState>(set => ({
     set(state => ({
       // crypto.randomUUID()가 일부 브라우저 및 SSR(서버사이드 렌더링) 환경에서 호환성 문제가 발생할 수 있어,
       // 보다 범용적인 Date.now()와 Math.random()의 조합으로 고유 ID를 생성하도록 수정했습니다.
-      modals: [...state.modals, { id: `modal-${Date.now()}-${Math.random()}`, content, closing: false }],
+      modals: [
+        ...state.modals,
+        { id: `modal-${Date.now()}-${Math.random()}`, content, closing: false },
+      ],
     }));
   },
   closeModal: () => {

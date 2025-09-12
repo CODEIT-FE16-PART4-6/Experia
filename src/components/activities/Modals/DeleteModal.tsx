@@ -45,13 +45,20 @@ const DeleteModal = ({ title, onClose, activityId, onDeleteSuccess }: titleType)
             체험 포스터를 <span className='text-[#df4040] underline'>삭제</span>하시겠습니까?
           </div>
         </div>
-        <div className='flex gap-3'>
-          <Button className='w-65' onClick={handleDelete} disabled={isDeleting}>
+        <div className={`flex gap-3 ${isDeleting ? 'justify-center' : ''}`}>
+          <Button className='w-65 disabled:hidden' onClick={handleDelete} disabled={isDeleting}>
             {isDeleting ? '삭제 중...' : '예'}
           </Button>
-          <Button className='w-65' onClick={onClose} disabled={isDeleting}>
+          <Button className='w-65 disabled:hidden' onClick={onClose} disabled={isDeleting}>
             아니오
           </Button>
+          <div
+            className={
+              isDeleting ? 'block flex justify-center text-center text-gray-500' : 'hidden'
+            }
+          >
+            삭제 중입니다...
+          </div>
         </div>
       </div>
     </div>

@@ -3,7 +3,15 @@ import { ITEM_DEFAULT_PAGESIZE, POPULAR_ACTIVITIES_COUNT } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
 
-const fetchActivities = async ({ page, size, sort }: { page: number; size: number, sort?: string }) => {
+const fetchActivities = async ({
+  page,
+  size,
+  sort,
+}: {
+  page: number;
+  size: number;
+  sort?: string;
+}) => {
   const data = await fetchServerData<Activities>({
     path: '/activities',
     query: { method: 'cursor', page, size, sort, },
@@ -19,7 +27,6 @@ const MainPage = async () => {
     page: initialPage,
     size: ITEM_DEFAULT_PAGESIZE,
     sort: 'latest',
-  });
 
   const popularInitialData = await fetchActivities({
     page: initialPage,

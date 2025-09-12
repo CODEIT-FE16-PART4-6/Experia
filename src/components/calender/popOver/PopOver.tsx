@@ -9,7 +9,6 @@ import PopOverCurrentData from './utils/PopOver.function';
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 import { UpdateMyActivitiesReserveOneByReservationId } from '@/utils/api-public/api-my-activities.api';
 
-
 type Props = {
   activityId: number;
   date: string;

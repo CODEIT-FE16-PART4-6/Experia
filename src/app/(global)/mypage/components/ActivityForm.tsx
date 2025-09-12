@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm, FormProvider, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@/components/Button';
@@ -27,6 +28,7 @@ interface ActivityFormProps {
 
 const ActivityForm = ({ initialData }: ActivityFormProps) => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const methods = useForm<ActivityFormValues>({
     resolver: zodResolver(ActivityFormValueSchema),
@@ -114,6 +116,7 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
       });
       return;
     }
+    setIsSubmitting(true);
 
     try {
       const url = isEdit ? `/my-activities/${initialData?.id}` : `/activities`;
@@ -145,21 +148,34 @@ const ActivityForm = ({ initialData }: ActivityFormProps) => {
       alert(alertMsg);
 
       // 등록/수정 후 상세 페이지로 이동
+
       router.push(`/activities/${data.id}`);
     } catch (err) {
-      console.error('네트워크 에러:', err);
-      alert('서버와의 통신에 실패했습니다.');
+      const errorDefaultMsg = `체험 ${isEdit ? '수정' : '등록'}에 실패했습니다.`;
+
+      console.error('서버 에러:', err);
+      alert(err || errorDefaultMsg);
+      setIsSubmitting(false);
+      return;
     }
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pb-[180px]'>
+      <form onSubmit={handleSubmit(onSubmit)} className='relative flex flex-col gap-4 pb-[180px]'>
+        {isSubmitting && (
+          <div className='absolute inset-0 z-50 flex justify-center bg-[#fafafa]/75'>
+            <div className='mt-[100px] flex flex-col items-center gap-2'>
+              <div className='h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500' />
+              <p className='text-sm text-gray-600'>업로드 중...</p>
+            </div>
+          </div>
+        )}
         <SectionTitle
           title={isEdit ? '내 체험 수정' : '내 체험 등록'}
           action={
-            <Button variant='POSITIVE' size='md' type='submit'>
-              {isEdit ? '수정하기' : '등록하기'}
+            <Button variant='POSITIVE' size='md' type='submit' disabled={isSubmitting}>
+              {isSubmitting ? '업로드 중 . . .' : isEdit ? '수정하기' : '등록하기'}
             </Button>
           }
         />
