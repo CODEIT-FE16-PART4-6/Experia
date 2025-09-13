@@ -2,9 +2,8 @@
 
 import { Input } from '@headlessui/react';
 import Image from 'next/image';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import SnbList from './Snb/SnbList';
 import InfoIcon from '@/assets/icons/ic_mypage1.svg';
 import MyReservationIcon from '@/assets/icons/ic_mypage2.svg';
 import MyActivityIcon from '@/assets/icons/ic_mypage3.svg';
@@ -14,6 +13,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { PATHS } from '@/constants';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useUserStore } from '@/stores/userStore';
+import SnbList from './Snb/SnbList';
 
 const SNB_LIST = [
   {
@@ -44,7 +44,9 @@ const Snb = () => {
   const [profileImageUrl, setProfileImageUrl] = useState(
     user?.profileImageUrl || defaultProfileImage,
   );
-  const { handleChangeImage, fileRef, isUploading } = useImageUpload('/users/me/image');
+  const teamId = process.env.NEXT_PUBLIC_TEAM_ID;
+  const profileImageEndpoint = teamId ? `/${teamId}/users/me/image` : '/users/me/image';
+  const { handleChangeImage, fileRef, isUploading } = useImageUpload(profileImageEndpoint);
 
   const handleImageUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
