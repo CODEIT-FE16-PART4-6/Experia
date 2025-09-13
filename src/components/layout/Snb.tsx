@@ -13,6 +13,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { PATHS } from '@/constants';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useUserStore } from '@/stores/userStore';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 import SnbList from './Snb/SnbList';
 
 const SNB_LIST = [
@@ -40,7 +41,7 @@ const SNB_LIST = [
 
 const Snb = () => {
   const user = useUserStore(state => state.user);
-  const updateProfileImage = useUserStore(state => state.updateProfileImage);
+  const setUser = useUserStore(state => state.setUser);
   const [profileImageUrl, setProfileImageUrl] = useState(
     user?.profileImageUrl || defaultProfileImage,
   );
@@ -53,10 +54,20 @@ const Snb = () => {
       try {
         const res = await handleChangeImage(e);
         if (res && res.profileImageUrl) {
-          // 로컬 상태 업데이트
-          setProfileImageUrl(res.profileImageUrl);
-          // 전역 상태 업데이트
-          updateProfileImage(res.profileImageUrl);
+          // PATCH API로 사용자 정보 업데이트
+          const userUpdateEndpoint = teamId ? `/${teamId}/users/me` : '/users/me';
+          const updatedUser = await fetchClientData(userUpdateEndpoint, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              profileImageUrl: res.profileImageUrl,
+            }),
+          });
+
+          // 전역 상태를 서버의 최신 정보로 업데이트
+          setUser(updatedUser);
           alert('프로필 사진이 성공적으로 변경되었습니다.');
         }
       } catch (error) {
@@ -64,7 +75,7 @@ const Snb = () => {
         alert('프로필 사진 업로드에 실패했습니다.');
       }
     },
-    [handleChangeImage, updateProfileImage],
+    [handleChangeImage, setUser, teamId],
   );
 
   // user 상태가 변경될 때 프로필 이미지 업데이트
