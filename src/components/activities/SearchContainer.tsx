@@ -1,15 +1,16 @@
 'use client';
 
-import PopularPageClient from '@/components/activities/PopularPage.client';
-import { Suspense, useState } from 'react';
 import DropdownOptions from '@/components/DropdownOptions';
 import MainPageClient from '@/components/activities/MainPage.client';
+import PopularPageClient from '@/components/activities/PopularPage.client';
 import SearchBarClient from '@/components/activities/SearchBar.client';
 import CategoryMenu from '@/components/ui/CategoryMenu';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton';
+import PopularListSkeleton from '@/components/ui/Skeleton/PopularListSkeleton';
 import { ACTIVITY_LIST_ORDER_OPTIONS } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
+import { Suspense, useState } from 'react';
 
 type Props = {
   initialData: Activities;
@@ -26,20 +27,20 @@ const SearchContainer = ({ initialData, popularInitialData, initialKeyword = '' 
     <>
       <SearchBarClient onSearch={setKeyword} initialQuery={keyword} />
 
-      <section className='mx-auto mt-[34px] max-w-[1200px]'>
+      <section className='mx-4 mt-[78px] max-w-[1200px] md:mx-6 lg:mx-auto'>
         {!keyword && (
           <>
-            <SectionTitle title='🔥 인기 체험' />
-            <Suspense fallback={<ActivityListSkeleton />}>
+            <SectionTitle title='🔥 인기 체험' className='mb-6 md:mb-8 lg:mb-8' />
+            <Suspense fallback={<PopularListSkeleton />}>
               <PopularPageClient initialData={popularInitialData} />
             </Suspense>
           </>
         )}
 
-        {!keyword && <SectionTitle title='🌏 모든 체험' />}
+        {!keyword && <SectionTitle title='🌏 모든 체험' className='mb-6 md:mb-8 lg:mb-8' />}
 
         {!keyword && (
-          <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-4 lg:px-0'>
+          <div className='mx-auto mt-4 flex max-w-[1200px] flex-wrap items-center justify-between gap-2 lg:px-0'>
             {/* 카테고리 필터 */}
             <div className='hide-scrollbar flex flex-1 touch-pan-x flex-nowrap items-center gap-2 overflow-x-auto'>
               <CategoryMenu selected={category} onChange={setCategory} />
