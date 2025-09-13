@@ -6,10 +6,11 @@ import { LinkButton } from '@/components/ui/LinkButton';
 import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { Activities, ActivityType } from '@/types/schema/activitiesSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
+import { validateApiResponse } from '@/utils/api-validation';
 
 const fetchMyActivities = async () => {
   const response = await fetchClientData('/my-activities?size=20');
-  const validatedData = Activities.parse(response);
+  const validatedData = validateApiResponse(response, Activities);
   return validatedData.activities;
 };
 

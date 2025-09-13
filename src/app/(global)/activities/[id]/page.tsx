@@ -1,5 +1,7 @@
 import { cache } from 'react';
 
+import { ActivityDetail, ActivityReview } from '@/types/schema/activitiesSchema';
+import { validateApiResponse } from '@/utils/api-validation';
 import Post from './components/Post';
 
 interface PageProps {
@@ -14,8 +16,10 @@ async function fetchActivities(id: string) {
   if (!res.ok) {
     throw new Error('Fetch 실패');
   }
-  const data = await res.json();
-  return data;
+  const rawData = await res.json();
+
+  // 🔥 Zod 검증 추가
+  return validateApiResponse(rawData, ActivityDetail);
 }
 
 async function fetchReviews(id: string) {
@@ -26,8 +30,10 @@ async function fetchReviews(id: string) {
   if (!res.ok) {
     throw new Error('Fetch 실패');
   }
-  const data = await res.json();
-  return data;
+  const rawData = await res.json();
+
+  // 🔥 Zod 검증 추가
+  return validateApiResponse(rawData, ActivityReview);
 }
 
 const initialGetActivity = cache(async (id: string) => {

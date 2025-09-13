@@ -8,10 +8,11 @@ import SectionTitle from '@/components/ui/Section/SectionTitle';
 import { RESERVATION_STATUS } from '@/constants';
 import { ReservationResponseSchema, ReservationType } from '@/types/schema/reservationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
+import { validateApiResponse } from '@/utils/api-validation';
 
 const fetchReservations = async () => {
   const response = await fetchClientData('/my-reservations?size=10');
-  const validatedData = ReservationResponseSchema.parse(response);
+  const validatedData = validateApiResponse(response, ReservationResponseSchema);
   return validatedData.reservations; //reservations 배열만 반환
 };
 

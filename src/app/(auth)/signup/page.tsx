@@ -11,7 +11,13 @@ import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import { ROUTES } from '@/constants';
 import { useUserStore } from '@/stores/userStore';
-import { SignupRequest, SignupRequestSchema } from '@/types/schema/userSchema';
+import {
+  LoginResponseSchema,
+  SignupRequest,
+  SignupRequestSchema,
+  SignupResponseSchema,
+} from '@/types/schema/userSchema';
+import { validateApiResponse } from '@/utils/api-validation';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -41,14 +47,21 @@ const SignupPage = () => {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      const signupResult = await response.json();
 
       // HTTP 상태 코드 체크
       if (!response.ok) {
         if (response.status === 409) {
           throw new Error('중복된 이메일입니다.');
         }
-        throw new Error(result.message || '회원가입 실패');
+        throw new Error(signupResult.message || '회원가입 실패');
+      }
+
+      // 🔥 회원가입 응답 검증 (선택적 - 서버가 토큰을 반환하지 않는 경우)
+      try {
+        validateApiResponse(signupResult, SignupResponseSchema);
+      } catch (validationError) {
+        console.warn('회원가입 응답 검증 실패 (계속 진행):', validationError);
       }
 
       // 로그인 API 호출
@@ -58,7 +71,14 @@ const SignupPage = () => {
         body: JSON.stringify({ email: data.email, password: data.password }),
       });
 
-      const loginResult = await loginResponse.json();
+      const loginRawData = await loginResponse.json();
+
+      if (!loginResponse.ok) {
+        throw new Error('자동 로그인 실패: 서버 응답 오류입니다.');
+      }
+
+      // 🔥 로그인 응답 검증
+      const loginResult = validateApiResponse(loginRawData, LoginResponseSchema);
 
       if (!loginResult.accessToken || !loginResult.refreshToken) {
         throw new Error('자동 로그인 실패: 토큰을 받지 못했습니다.');

@@ -1,13 +1,14 @@
 'use client';
 //hooks
-import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
+import { useMemo } from 'react';
 
+import useModalStore from '@/stores/modalStore';
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
-import useModalStore from '@/stores/modalStore';
+import { validateApiResponse } from '@/utils/api-validation';
 
 const ReviewCreateModal = dynamic(() => import('@/components/review/ReviewCreateModal'), {
   ssr: false,
@@ -23,7 +24,7 @@ const fetchReservations = async () => {
   });
 
   const data = await fetchClientData('/my-reservations');
-  const validatedData = ReservationResponseSchema.parse(data);
+  const validatedData = validateApiResponse(data, ReservationResponseSchema);
   return validatedData.reservations; //resevations 배열만 반환
 };
 

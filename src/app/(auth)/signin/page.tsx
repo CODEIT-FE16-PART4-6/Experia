@@ -4,14 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import InputField from '@/components/InputField';
 import { useUserStore } from '@/stores/userStore';
-import { LoginRequestSchema, LoginRequest } from '@/types/schema/userSchema';
+import { LoginRequest, LoginRequestSchema, LoginResponseSchema } from '@/types/schema/userSchema';
 import { REQUEST_URL } from '@/utils/api-public';
+import { validateApiResponse } from '@/utils/api-validation';
 
 // 리액트 훅 폼과 zod를 연결해주는 라이브러리
 
@@ -46,7 +47,7 @@ const LoginPage = () => {
         body: JSON.stringify(data),
       });
 
-      const { user, accessToken, refreshToken } = await response.json();
+      const rawData = await response.json();
 
       // HTTP 상태 코드 체크
       if (!response.ok) {
@@ -56,6 +57,10 @@ const LoginPage = () => {
           throw new Error('로그인 실패: 서버 응답 오류입니다.');
         }
       }
+
+      // 🔥 Zod 검증 추가
+      const validatedData = validateApiResponse(rawData, LoginResponseSchema);
+      const { user, accessToken, refreshToken } = validatedData;
 
       // 성공적으로 로그인 처리
       localStorage.setItem('access_token', accessToken);
