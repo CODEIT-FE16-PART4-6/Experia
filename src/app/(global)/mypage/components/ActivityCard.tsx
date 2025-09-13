@@ -10,6 +10,7 @@ import ReviewCreateModal from '@/components/review/ReviewCreateModal';
 import useModalStore from '@/stores/modalStore';
 import { ActivityType } from '@/types/schema/activitiesSchema';
 import { ReservationType } from '@/types/schema/reservationSchema';
+import formatPrice from '@/utils/formatter/formatPrice';
 
 interface ActivityCardProps {
   data: ReservationType | ActivityType;
@@ -47,12 +48,12 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
           />
         </figure>
 
-        <div className='w-full p-3 lg:p-5'>
-          <div className='flex flex-col lg:gap-2'>
+        <div className='flex w-full min-w-0 flex-col items-start justify-between overflow-hidden p-3 lg:p-5'>
+          <div className='flex w-full min-w-0 flex-col lg:gap-2'>
             <span className='text-md font-bold lg:text-base'>
               {RESERVATION_STATUS[reservation.status]}
             </span>
-            <h5 className='text-md w-[95%] truncate font-bold md:text-lg lg:text-xl'>
+            <h5 className='my-1 w-[95%] truncate text-lg font-bold md:my-0 lg:text-xl'>
               {reservation.activity.title}
             </h5>
             <span className='md:text-md text-xs text-gray-800 lg:text-lg'>
@@ -61,10 +62,8 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
             </span>
           </div>
 
-          <div className='mt-2 flex items-center justify-between md:mt-3.5'>
-            <h4 className='text-base font-medium md:text-xl lg:text-2xl'>
-              ₩{reservation.totalPrice}
-            </h4>
+          <div className='mt-6 flex w-full items-center justify-between md:mt-3.5'>
+            <h4 className='text-2xl font-bold'>₩ {formatPrice(reservation.totalPrice)}</h4>
 
             {reservation.status === 'pending' && (
               <Button size='sm' className='w-auto sm:px-2 sm:py-1 md:px-6 md:py-2 lg:px-[42px]'>
