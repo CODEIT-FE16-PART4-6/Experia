@@ -113,6 +113,10 @@ const MyReservationsContent = () => {
         )}
 
         {isFetchingMore && <LoadingSpinner />}
+
+        {!isPending && !hasNextPage && (
+          <p className='text-md py-10 text-center text-gray-500'>모든 예약 내역을 불러왔습니다.</p>
+        )}
       </div>
     </div>
   );

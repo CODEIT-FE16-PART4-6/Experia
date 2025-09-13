@@ -96,6 +96,12 @@ const MyActivitiesClient = () => {
         )}
 
         {isFetchingMore && <LoadingSpinner />}
+
+        {!isPending && !hasNextPage && (
+          <p className='text-md py-10 text-center text-gray-500'>
+            모든 내 체험 목록을 불러왔습니다.
+          </p>
+        )}
       </div>
     </div>
   );
