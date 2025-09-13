@@ -26,7 +26,7 @@ const PostReview = ({ reviewData }: ReviewData) => {
               {reviewData.averageRating}
             </p>
             <div className='flex flex-col justify-center gap-2'>
-              <p className='text-nomad-black text-[18px]'>
+              <p className='text-nomad-black text-[18px] font-bold'>
                 {reviewData.averageRating >= 4
                   ? '매우 만족'
                   : reviewData.averageRating >= 3

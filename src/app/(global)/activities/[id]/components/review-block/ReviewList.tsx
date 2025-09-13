@@ -41,12 +41,13 @@ const ReviewList = ({ reviewData }: ReviewData) => {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } = useInfiniteQuery({
     queryKey: ['activity_reviews', id],
-    queryFn: ({ pageParam = 1 }) => fetchItems(pageParam, id),
+    queryFn: ({ pageParam }) => fetchItems(pageParam, id as string),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const loaded = allPages.flatMap(p => p.reviews).length;
       return loaded < lastPage.totalCount ? allPages.length + 1 : undefined;
     },
-    initialData: {
+    placeholderData: {
       pages: [reviewData],
       pageParams: [1],
     },
