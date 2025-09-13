@@ -34,14 +34,17 @@ const MyActivitiesPage = () => {
         title='내 체험 관리'
         action={<LinkButton href='/mypage/my-activities/add-activity'>체험 등록하기</LinkButton>}
       />
-      {activities.map(activity => (
-        <ActivityCard
-          key={activity.id}
-          type='activity'
-          data={activity as ActivityType}
-          onDeleteSuccess={handleDeleteSuccess}
-        />
-      ))}
+
+      <div className='flex flex-col gap-6 md:gap-4'>
+        {activities.map(activity => (
+          <ActivityCard
+            key={activity.id}
+            type='activity'
+            data={activity as ActivityType}
+            onDeleteSuccess={handleDeleteSuccess}
+          />
+        ))}
+      </div>
     </div>
   );
 };
