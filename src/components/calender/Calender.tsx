@@ -2,17 +2,16 @@
 
 import { useEffect, useState } from 'react';
 
-import useModalStore from '@/stores/modalStore';
-import { MyActivitiesDto } from '@/utils/api-public/api';
-import {
-  FindAllMyActivities,
-  FindAllMyActivitiesData,
-} from '@/utils/api-public/api-my-activities.api';
-
 import CalenderBoard from './calenderBoard/CalenderBoard';
 import CalenderArrow from './calenderSelect/calenderArrow/CalenderArrow';
 import PopOver from './popOver/PopOver';
 import SelectMyActivity from './selectMyActivity/SelectMyActivity';
+import {
+  FindAllMyActivities,
+  FindAllMyActivitiesData,
+} from '@/utils/api-public/api-my-activities.api';
+import { MyActivitiesDto } from '@/utils/api-public/api';
+import useModalStore from '@/stores/modalStore';
 
 const today: Date = new Date();
 

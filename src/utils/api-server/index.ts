@@ -1,6 +1,6 @@
 import { FetchOptions } from '@/types/fetchOptions';
 
-import { REQUEST_URL } from '../api-public';
+import { REQUEST_URL } from '@/utils/api-public';
 
 /**
  * 'GET' 요청 전용 fetch

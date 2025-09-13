@@ -8,8 +8,8 @@ export async function POST(request: Request) {
   // 쿠키에 토큰 저장
   cookieStore.set('accessToken', accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // 배포 환경에서만 true, 개발 환경에서는 false (개발 환경은 https가 아니므로 쿠키가 전송될 수 없음)
-    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax', // strict에서 lax로 변경하여 더 유연하게
     maxAge: 60 * 60,
     path: '/',
   });
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   cookieStore.set('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'lax', // strict에서 lax로 변경하여 더 유연하게
     maxAge: 60 * 60 * 24 * 7,
     path: '/',
   });

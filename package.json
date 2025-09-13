@@ -2,13 +2,23 @@
   "name": "experia",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
+    "postinstall": "husky && chmod +x .husky/*",
     "test": "jest",
+    "test:server": "npx tsx src/utils/test/run-server-test.ts",
+    "test:login": "npx tsx src/utils/test/run-login-test.ts",
+    "analyze": "ANALYZE=true npm run build",
+    "analyze:server": "BUNDLE_ANALYZE=server npm run build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser npm run build",
     "ai-review": "node scripts/ai-review.js",
     "ai-review:openai": "node scripts/ai-review-openai.js",
     "commit": "AI_REVIEW=true git commit",
@@ -19,7 +29,13 @@
     "vercel:dev": "./scripts/vercel-deploy.sh development",
     "vercel:staging": "./scripts/vercel-deploy.sh staging",
     "vercel:prod": "./scripts/vercel-deploy.sh production",
-    "vercel:deploy": "./scripts/vercel-deploy.sh"
+    "vercel:deploy": "./scripts/vercel-deploy.sh",
+    "fix:hooks": "./scripts/fix-husky-hooks.sh",
+    "setup:openai": "./scripts/setup-openai.sh",
+    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
@@ -32,7 +48,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "leaflet": "^1.9.4",
-    "next": "15.4.6",
+    "next": "15.5.3",
     "nth-check": "^2.1.1",
     "photoswipe": "^5.4.4",
     "prettier": "^3.6.2",
@@ -61,6 +77,7 @@
     "@types/webpack": "^5.28.5",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.40.0",
+    "babel-plugin-react-compiler": "19.1.0-rc.3",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "eslint-config-prettier": "^10.1.8",
@@ -73,16 +90,15 @@
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "typescript": "5.9.2",
     "webpack": "^5.101.3"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix --quiet"
     ],
     "**/*.{json,css,scss,md,yml,yaml}": [
-      "prettier --write"
+      "prettier --write --ignore-unknown"
     ]
   },
   "jira-prepare-commit-msg": {

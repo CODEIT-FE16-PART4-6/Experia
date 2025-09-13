@@ -2,8 +2,8 @@
 
 import clsx from 'clsx';
 import Image from 'next/image';
-import { useState } from 'react';
 import 'photoswipe/style.css';
+import { useState } from 'react';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 
 import ImageArrowLeft from '@/assets/imgs/activityPage/imageArrowLeft.svg';

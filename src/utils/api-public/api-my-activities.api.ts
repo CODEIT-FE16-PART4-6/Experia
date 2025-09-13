@@ -1,45 +1,48 @@
+import { MyActivitiesDto } from './api';
 import { MyActivitiesStatus } from '@/types/schema/activitiesSchema';
 
-import { MyActivitiesDto } from './api';
+import fetchClientData from '@/utils/api-client/fetchClientData';
 
-import { REQUEST_URL, tokenTmp } from '.';
+// 타입 안전한 에러 처리 헬퍼 함수
+const getErrorStatus = (error: unknown): number => {
+  if (error && typeof error === 'object' && 'status' in error) {
+    const statusValue = (error as { status: unknown }).status;
+    return typeof statusValue === 'number' ? statusValue : 500;
+  }
+  return 500;
+};
 
-const URL: string = `${REQUEST_URL}/my-activities`;
-
-const token: string = tokenTmp;
-
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return 'API 호출 실패';
+};
 export async function FindAllMyActivities(
   activityId: number,
   year: number,
   month: number,
 ): Promise<{ status: number; body: MyActivitiesDto[] | { message: string } | null }> {
-  const response = await fetch(
-    `${URL}/${activityId}/reservation-dashboard?year=${year}&month=${String(month).padStart(2, '0')}`,
-    {
-      method: 'get',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }),
-    },
-  ).catch(err => {
-    return err;
-  });
-
-  const status: number = response.status;
-
-  let body: MyActivitiesDto[] | { message: string } | null = null;
-
-  if (!response.ok) {
-    body = await response.json();
-  } else {
-    body = (await response.json()) as unknown as MyActivitiesDto[];
+  try {
+    const response = await fetchClientData(
+      `/my-activities/${activityId}/reservation-dashboard?year=${year}&month=${String(month).padStart(2, '0')}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return {
+      status: 200,
+      body: response as MyActivitiesDto[],
+    };
+  } catch (error: unknown) {
+    return {
+      status: getErrorStatus(error),
+      body: { message: getErrorMessage(error) },
+    };
   }
-
-  return {
-    status,
-    body,
-  };
 }
 
 export async function FindAllMyActivitiesOneDay(
@@ -60,20 +63,19 @@ export async function FindAllMyActivitiesOneDay(
       }[]
     | null;
 }> {
-  const response1 = await fetch(`${URL}/${activityId}/reserved-schedule?date=${date}`, {
-    method: 'GET',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    }),
-  }).catch(err => {
-    return err;
-  });
-
-  const status: number = response1.status;
-
-  let body:
-    | {
+  try {
+    const response = await fetchClientData(
+      `/my-activities/${activityId}/reserved-schedule?date=${date}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return {
+      status: 200,
+      body: response as {
         scheduleId: number;
         startTime: string;
         endTime: string;
@@ -82,19 +84,14 @@ export async function FindAllMyActivitiesOneDay(
           confirmed: number;
           pending: number;
         };
-      }[]
-    | null = null;
-
-  if (!response1.ok) {
-    body = await response1.json();
-  } else {
-    body = await response1.json();
+      }[],
+    };
+  } catch (error: unknown) {
+    return {
+      status: getErrorStatus(error),
+      body: null,
+    };
   }
-
-  return {
-    status,
-    body,
-  };
 }
 
 export async function FindAllMyActivitiesOnePart(
@@ -129,55 +126,49 @@ export async function FindAllMyActivitiesOnePart(
     cursorId: number;
   } | null;
 }> {
-  const response1 = await fetch(
-    `${URL}/${activityId}/reservations?${!coursorId ? '' : 'coursorId=' + coursorId}&size=${size}&scheduleId=${scheduleId}&status=${statusType}`,
-    {
-      method: 'get',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }),
-    },
-  ).catch(err => {
-    return err;
-  });
-
-  const status: number = response1.status;
-
-  let body: {
-    reservations: [
+  try {
+    const response = await fetchClientData(
+      `/my-activities/${activityId}/reservations?${!coursorId ? '' : 'coursorId=' + coursorId}&size=${size}&scheduleId=${scheduleId}&status=${statusType}`,
       {
-        id: number;
-        status: MyActivitiesStatus;
-        totalPrice: number;
-        headCount: number;
-        nickname: string;
-        userId: number;
-        date: string;
-        startTime: string;
-        endTime: string;
-        createdAt: string;
-        updatedAt: string;
-        activityId: number;
-        scheduleId: number;
-        reviewSubmitted: boolean;
-        teamId: string;
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    ];
-    totalCount: number;
-    cursorId: number;
-  } | null = null;
+    );
 
-  if (!response1.ok) {
-    body = await response1.json();
-  } else {
-    body = await response1.json();
+    return {
+      status: 200,
+      body: response as {
+        reservations: [
+          {
+            id: number;
+            status: MyActivitiesStatus;
+            totalPrice: number;
+            headCount: number;
+            nickname: string;
+            userId: number;
+            date: string;
+            startTime: string;
+            endTime: string;
+            createdAt: string;
+            updatedAt: string;
+            activityId: number;
+            scheduleId: number;
+            reviewSubmitted: boolean;
+            teamId: string;
+          },
+        ];
+        totalCount: number;
+        cursorId: number;
+      },
+    };
+  } catch (error: unknown) {
+    return {
+      status: getErrorStatus(error),
+      body: null,
+    };
   }
-
-  return {
-    status,
-    body,
-  };
 }
 
 export async function UpdateMyActivitiesReserveOneByReservationId(
@@ -204,50 +195,46 @@ export async function UpdateMyActivitiesReserveOneByReservationId(
     teamId: string;
   } | null;
 }> {
-  const response1 = await fetch(`${URL}/${activityId}/reservations/${reservationId}`, {
-    method: 'PATCH',
-    headers: new Headers({
-      accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    }),
-    body: JSON.stringify({
-      status: myActivitiesStatus,
-    }),
-  }).catch(err => {
-    return err;
-  });
-
-  const status: number = response1.status;
-
-  let body: {
-    id: number;
-    status: MyActivitiesStatus;
-    totalPrice: number;
-    headCount: number;
-    nickname: string;
-    userId: number;
-    date: string;
-    startTime: string;
-    endTime: string;
-    createdAt: string;
-    updatedAt: string;
-    activityId: number;
-    scheduleId: number;
-    reviewSubmitted: boolean;
-    teamId: string;
-  } | null = null;
-
-  if (!response1.ok) {
-    body = await response1.json();
-  } else {
-    body = await response1.json();
+  try {
+    const response = await fetchClientData(
+      `/my-activities/${activityId}/reservations/${reservationId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: myActivitiesStatus,
+        }),
+      },
+    );
+    return {
+      status: 200,
+      body: response as {
+        id: number;
+        status: MyActivitiesStatus;
+        totalPrice: number;
+        headCount: number;
+        nickname: string;
+        userId: number;
+        date: string;
+        startTime: string;
+        endTime: string;
+        createdAt: string;
+        updatedAt: string;
+        activityId: number;
+        scheduleId: number;
+        reviewSubmitted: boolean;
+        teamId: string;
+      },
+    };
+  } catch (error: unknown) {
+    return {
+      status: getErrorStatus(error),
+      body: null,
+    };
   }
-
-  return {
-    status,
-    body,
-  };
 }
 
 export async function FindAllMyActivitiesData(
@@ -276,47 +263,44 @@ export async function FindAllMyActivitiesData(
     cursorId?: number;
   } | null;
 }> {
-  const response1 = await fetch(`${URL}?size=${size}${cursorId ? '&cursorId=' + cursorId : ''}`, {
-    method: 'get',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    }),
-  }).catch(err => {
-    return err;
-  });
-
-  const status: number = response1.status;
-
-  let body: {
-    activities: [
+  try {
+    const response = await fetchClientData(
+      `/my-activities?size=${size}${cursorId ? '&cursorId=' + cursorId : ''}`,
       {
-        id: number;
-        userId: number;
-        title: string;
-        description: string;
-        category: string;
-        price: number;
-        address: string;
-        bannerImageUrl: string;
-        rating: number;
-        reviewCount: number;
-        createdAt: string;
-        updatedAt: string;
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    ];
-    totalCount: number;
-    cursorId?: number;
-  } | null = null;
+    );
 
-  if (!response1.ok) {
-    body = await response1.json();
-  } else {
-    body = await response1.json();
+    return {
+      status: 200,
+      body: response as {
+        activities: [
+          {
+            id: number;
+            userId: number;
+            title: string;
+            description: string;
+            category: string;
+            price: number;
+            address: string;
+            bannerImageUrl: string;
+            rating: number;
+            reviewCount: number;
+            createdAt: string;
+            updatedAt: string;
+          },
+        ];
+        totalCount: number;
+        cursorId?: number;
+      },
+    };
+  } catch (error: unknown) {
+    return {
+      status: getErrorStatus(error),
+      body: null,
+    };
   }
-
-  return {
-    status,
-    body,
-  };
 }

@@ -5,21 +5,20 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 //comp
+import Calender from './Calender';
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
 
-import Calander from './Calender';
-
 //util
+//shema
 interface Props {
   data: ActivityDetail;
 }
 
 const ReservateMobile = ({ data }: Props) => {
   // ActivityDetail 타입에서 date 타입 추출
-
   // ActivityDetail 타입에서 scheduleId 타입 추출
   type ScheduleIdType = ActivityDetail['schedules'][number]['id'];
   //선택된 날짜의 schedules 필터링
@@ -112,7 +111,7 @@ const ReservateMobile = ({ data }: Props) => {
               />
             </button>
           </div>
-          <Calander
+          <Calender
             data={data}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}

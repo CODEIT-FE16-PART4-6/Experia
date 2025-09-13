@@ -3,12 +3,13 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-import Calander from '@/app/(global)/activities/[id]/components/reservation-block/Calender';
+import Calender from '@/app/(global)/activities/[id]/components/reservation-block/Calender';
+
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
-import 'react-datepicker/dist/react-datepicker.css';
 import { ReservationRequest } from '@/types/schema/reservationSchema';
 import apiAuth from '@/utils/axios/apiAuth';
+import 'react-datepicker/dist/react-datepicker.css';
 
 // import { ko } from 'date-fns/locale'; // 시안에는 영어라서 뺌.
 
@@ -108,7 +109,7 @@ const Reservation = ({ data }: Props) => {
         {mySchedule ? mySchedule : ''}
       </div>
       <div className='md:hidden lg:block'>
-        <Calander {...calendarProps} />
+        <Calender {...calendarProps} />
       </div>
       <button
         className='text-nomad-black mb-[27px] font-semibold md:block lg:hidden'
@@ -133,7 +134,7 @@ const Reservation = ({ data }: Props) => {
               />
             </button>
           </div>
-          <Calander {...calendarProps} />
+          <Calender {...calendarProps} />
           <Button
             onClick={() => {
               setWhiteBox(false);

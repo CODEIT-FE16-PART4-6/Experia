@@ -1,10 +1,9 @@
-import Image from 'next/image';
+import clsx from 'clsx';
 import { ChangeEvent } from 'react';
 
-import clsx from 'clsx';
+import ImagePreview from './ImagePreview';
 import ImageUploadButton from './ImageUploadButton';
 import useImageUpload from '@/hooks/useImageUpload';
-import ImagePreview from './ImagePreview';
 
 interface ImageUploaderProps {
   value: string | null;

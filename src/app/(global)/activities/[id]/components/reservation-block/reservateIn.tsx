@@ -1,7 +1,6 @@
 'use client';
-import { ActivityDetail } from '@/types/schema/activitiesSchema';
-
 import Reservation from './Reservation';
+import { ActivityDetail } from '@/types/schema/activitiesSchema';
 
 interface Props {
   data: ActivityDetail;

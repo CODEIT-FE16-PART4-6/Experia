@@ -1,15 +1,12 @@
 'use client';
 
-import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import Image from 'next/image';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, Fragment } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Fragment, useState } from 'react';
 
 import RefreshIcon from '@/assets/icons/ic_refresh.svg';
-
 import Button from './Button';
-
-
 
 interface DropdownOptionsItem {
   label: string;
@@ -64,7 +61,7 @@ const DropdownOptions = ({ items, placeholderLabel, type, onChange }: DropdownOp
         </Button>
       )}
 
-      <Menu as='div' className='relative w-[120px] lg:w-[160px]'>
+      <Menu as='div' className='relative w-auto min-w-[120px] lg:min-w-[160px]'>
         {/* 트리거 버튼 */}
         <MenuButton as='div' className='cursor-pointer'>
           <Button
@@ -78,6 +75,7 @@ const DropdownOptions = ({ items, placeholderLabel, type, onChange }: DropdownOp
               alt='드롭다운 열기/닫기'
               width={22}
               height={22}
+              className='ml-1 aspect-square h-5 w-5 md:h-[22px]'
             />
           </Button>
         </MenuButton>

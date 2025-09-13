@@ -4,7 +4,7 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } f
 
 import { ROUTES } from '@/constants';
 
-import { REQUEST_URL } from '../api-public';
+import { REQUEST_URL } from '@/utils/api-public';
 
 let isRefreshing = false; // 토큰 재발급 진행중 여부
 

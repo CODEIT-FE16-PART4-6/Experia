@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
+import { ReviewType } from '@/app/(global)/activities/[id]/components/postContentTypes';
 import CreateReview from '@/app/(global)/activities/[id]/components/review-block/CreateReview';
 import ReviewList from '@/app/(global)/activities/[id]/components/review-block/ReviewList';
-import { ReviewType } from '../postContentTypes';
 
 interface ReviewContentType {
   totalCount: number;
@@ -60,7 +60,6 @@ const PostReview = ({ reviewData }: ReviewData) => {
       <div className='mb-10 pr-[24px] pl-[24px] lg:pr-0 lg:pl-0'>
         <ReviewList reviewData={reviewData} />
       </div>
-      {/* 페이지네이션 컴포넌트 위치 */}
     </div>
   );
 };

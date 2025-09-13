@@ -1,9 +1,8 @@
 'use client';
 import { useShallow } from 'zustand/shallow';
 
-import useModalStore from '@/stores/modalStore';
-
 import Modal from '.';
+import useModalStore from '@/stores/modalStore';
 
 const ModalProvider = () => {
   const { modals, closeModal } = useModalStore(
