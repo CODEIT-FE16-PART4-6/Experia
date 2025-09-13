@@ -10,6 +10,8 @@ import ReviewCreateModal from '@/components/review/ReviewCreateModal';
 import useModalStore from '@/stores/modalStore';
 import { ActivityType } from '@/types/schema/activitiesSchema';
 import { ReservationType } from '@/types/schema/reservationSchema';
+import formatPrice from '@/utils/formatter/formatPrice';
+import formatRating from '@/utils/formatter/formatRating';
 
 interface ActivityCardProps {
   data: ReservationType | ActivityType;
@@ -37,7 +39,7 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
     const reservation = data as ReservationType;
 
     return (
-      <div className='flex h-auto w-full flex-wrap overflow-hidden rounded-2xl shadow-lg sm:h-[156px] sm:flex-nowrap lg:h-[204px]'>
+      <div className='flex h-auto w-full flex-wrap overflow-hidden rounded-2xl bg-white shadow-lg sm:h-[156px] sm:flex-nowrap lg:h-[204px]'>
         <figure className='relative aspect-square h-auto w-full shrink-0 sm:h-[156px] sm:w-[156px] lg:h-[204px] lg:w-[204px]'>
           <Image
             src={reservation.activity.bannerImageUrl}
@@ -47,12 +49,12 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
           />
         </figure>
 
-        <div className='w-full p-3 lg:p-5'>
-          <div className='flex flex-col lg:gap-2'>
+        <div className='flex w-full min-w-0 flex-col items-start justify-between overflow-hidden p-4 lg:p-6'>
+          <div className='flex w-full min-w-0 flex-col lg:gap-2'>
             <span className='text-md font-bold lg:text-base'>
               {RESERVATION_STATUS[reservation.status]}
             </span>
-            <h5 className='text-md w-[95%] truncate font-bold md:text-lg lg:text-xl'>
+            <h5 className='my-1 w-[95%] truncate text-lg font-bold md:my-0 lg:text-xl'>
               {reservation.activity.title}
             </h5>
             <span className='md:text-md text-xs text-gray-800 lg:text-lg'>
@@ -61,10 +63,8 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
             </span>
           </div>
 
-          <div className='mt-2 flex items-center justify-between md:mt-3.5'>
-            <h4 className='text-base font-medium md:text-xl lg:text-2xl'>
-              ₩{reservation.totalPrice}
-            </h4>
+          <div className='mt-6 flex w-full items-center justify-between md:mt-3.5'>
+            <h4 className='text-2xl font-bold'>₩ {formatPrice(reservation.totalPrice)}</h4>
 
             {reservation.status === 'pending' && (
               <Button size='sm' className='w-auto sm:px-2 sm:py-1 md:px-6 md:py-2 lg:px-[42px]'>
@@ -108,33 +108,37 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
       <div className='relative'>
         <Link
           href={`/mypage/my-activities/edit-activity/${data.id}`}
-          className='flex h-[128px] w-full overflow-hidden rounded-2xl shadow-lg md:h-[156px] lg:h-[204px]'
+          className='flex w-full flex-wrap overflow-hidden rounded-2xl shadow-lg sm:flex-nowrap'
         >
-          <div className='relative h-[128px] w-[128px] md:h-[156px] md:w-[156px] lg:h-[204px] lg:w-[204px]'>
-            <figure>
-              <Image
-                src={activity.bannerImageUrl}
-                alt='액티비티 배너 사진'
-                fill
-                className='object-cover'
-              />
-            </figure>
-          </div>
-          <div className='flex flex-col justify-between px-6 py-[14px]'>
-            <div>
-              <div className='flex'>
+          <figure className='relative aspect-square h-auto w-full shrink-0 sm:h-[156px] sm:w-[156px] lg:h-[204px] lg:w-[204px]'>
+            <Image
+              src={activity.bannerImageUrl}
+              alt='액티비티 배너 사진'
+              fill
+              className='object-cover'
+            />
+          </figure>
+
+          <div className='flex w-full min-w-0 flex-col justify-between overflow-hidden p-4 lg:p-6'>
+            <div className='flex flex-col gap-0 md:gap-2'>
+              <div className='flex items-center gap-1'>
                 <StarIcon />
-                <div>{activity.rating}</div>
-                <div>({activity.reviewCount})</div>
+                <span>{formatRating(activity.rating)}</span>
+                <span className='text-gray-500'>({activity.reviewCount})</span>
               </div>
-              <div>{activity.title}</div>
+              <h5 className='my-1 w-[85%] truncate text-lg font-bold md:my-0 lg:text-xl'>
+                {activity.title}
+              </h5>
             </div>
-            <div className='flex justify-between'>
-              <div>₩ {activity.price}/인</div>
-            </div>
+
+            <h3 className='mt-6 flex items-center gap-2 text-2xl font-bold md:mt-0'>
+              ₩ {formatPrice(activity.price)}{' '}
+              <span className='text-lg font-normal text-gray-500'>/ 인</span>
+            </h3>
           </div>
         </Link>
-        <div className='absolute right-[24px] bottom-[14px]'>
+
+        <div className='absolute top-[24px] right-[20px]'>
           <DropdownMeatball onEdit={handleEdit} onDelete={handleDelete} />
         </div>
       </div>

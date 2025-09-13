@@ -5,7 +5,6 @@ import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@ta
 import clsx from 'clsx';
 import { Fragment, useRef, useState } from 'react';
 
-import NotificationItem from './NotificationItem';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -13,6 +12,7 @@ import { NOTIFICATIONS_PER_PAGE } from '@/constants';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { Notification, Notifications } from '@/types/schema/notificationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
+import NotificationItem from './NotificationItem';
 
 const fetchMyNotifications = async (pageParam: number | null = null) => {
   const cursorQuery = pageParam !== null ? `&cursorId=${pageParam}` : '';
@@ -54,7 +54,8 @@ const NotificationPopover = () => {
         method: 'DELETE',
       });
 
-      if (res && res.status === 204) {
+      // 삭제 성공: 빈 응답(null) 처리
+      if (res === null) {
         return;
       }
 

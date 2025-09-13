@@ -23,8 +23,8 @@ const DeleteModal = ({ title, onClose, activityId, onDeleteSuccess }: titleType)
       });
       onDeleteSuccess?.();
       onClose();
-    } catch {
-      alert('에러가 발생했습니다.');
+    } catch (err) {
+      alert(err);
     }
   };
 
