@@ -84,6 +84,26 @@ const ReviewList = ({ reviewData }: ReviewData) => {
                 <p className='text-nomad-black text-[16px] font-bold'>
                   {reviewContent.user.nickname}
                 </p>
+                <div className='flex rounded-[13px] bg-[#ececec] px-[7px]'>
+                  {Array.from({ length: 5 }, (_, index) => {
+                    const currentStarIndex = index + 1;
+                    let starSrc = '/icons/ActivityPageImgs/ic_StarEmpty.svg';
+
+                    if (reviewContent.rating >= currentStarIndex) {
+                      starSrc = '/icons/ActivityPageImgs/ic_Star.svg';
+                    }
+
+                    return (
+                      <Image
+                        key={index}
+                        src={starSrc}
+                        alt={`${currentStarIndex}번째 별점`}
+                        width={13}
+                        height={13}
+                      />
+                    );
+                  })}
+                </div>
                 <p>|</p>
                 <p className='text-gray-600'>{formatDateFunction(reviewContent.updatedAt)}</p>
               </div>
