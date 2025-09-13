@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   },
 
   experimental: {
-    serverActions: {}, // ⚠️ Next.js 14부터 이 속성은 객체 타입으로 변경되었습니다.
+    serverActions: {},
   },
 
   images: {

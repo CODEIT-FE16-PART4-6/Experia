@@ -2,19 +2,16 @@
 
 //Leaflet은 window, document 객체 필요 = 클라이언트 컴포넌트 가 필연적@@
 
-//hooks
-import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-//Map
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import type { LatLngExpression } from 'leaflet';
 
-//icon(leaflet production)
 import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import getGeoCoordinate from '@/utils/getGeoCoordinate';

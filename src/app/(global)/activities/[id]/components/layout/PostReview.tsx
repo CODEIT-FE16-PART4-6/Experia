@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
-import CreateReview from '../CreateReview';
+import CreateReview from '@/app/(global)/activities/[id]/components/review-block/CreateReview';
+import ReviewList from '@/app/(global)/activities/[id]/components/review-block/ReviewList';
 import { ReviewType } from '../postContentTypes';
 
 interface ReviewContentType {
@@ -14,14 +14,6 @@ interface ReviewData {
 }
 
 const PostReview = ({ reviewData }: ReviewData) => {
-  const formatDateFunction = (date: string) => {
-    const updateTime = new Date(date);
-    const year = updateTime.getFullYear();
-    const month = String(updateTime.getMonth() + 1).padStart(2, '0');
-    const day = String(updateTime.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
-  };
-
   return (
     <div>
       <p className='text-nomad-black mb-[18px] pr-[24px] pl-[24px] text-[20px] font-bold lg:pr-0 lg:pl-0 lg:text-[18px]'>
@@ -66,38 +58,7 @@ const PostReview = ({ reviewData }: ReviewData) => {
         </div>
       </div>
       <div className='mb-10 pr-[24px] pl-[24px] lg:pr-0 lg:pl-0'>
-        <ol>
-          {reviewData.reviews.map((reviewContent, index) => (
-            <li key={reviewContent.id}>
-              {(index === 1 || index === 2) && <hr className='border-gray-400' />}
-              <div className='my-[25px] flex gap-4'>
-                <div className='over-hidden h-[45px] w-[45px]'>
-                  <Image
-                    alt='프로필 이미지'
-                    width={45}
-                    height={45}
-                    src={
-                      reviewContent.user.profileImageUrl
-                        ? reviewContent.user.profileImageUrl
-                        : defaultProfile
-                    }
-                    className='rounded-[30px]'
-                  />
-                </div>
-                <div className='flex flex-col gap-2'>
-                  <div className='flex gap-[4.5px]'>
-                    <p className='text-nomad-black text-[16px] font-bold'>
-                      {reviewContent.user.nickname}
-                    </p>
-                    <p>|</p>
-                    <p className='text-gray-600'>{formatDateFunction(reviewContent.updatedAt)}</p>
-                  </div>
-                  <p className='text-nomad-black break-words'>{reviewContent.content}</p>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <ReviewList reviewData={reviewData} />
       </div>
       {/* 페이지네이션 컴포넌트 위치 */}
     </div>

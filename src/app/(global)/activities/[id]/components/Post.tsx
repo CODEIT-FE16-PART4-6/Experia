@@ -9,7 +9,6 @@ import PostImage from './layout/PostImage';
 import ReservateIn from './reservation-block/reservateIn';
 import ReservateMobile from './reservation-block/reservateMobileIn';
 
-
 type Activity = z.infer<typeof ActivityDetail>;
 type ActivityReviewList = z.infer<typeof ActivityReview>;
 
