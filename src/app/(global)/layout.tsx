@@ -8,11 +8,11 @@ import { Providers } from '@/components/provider/Providers';
 import { pretendard } from '@/utils/fonts';
 
 export const metadata: Metadata = {
-  title: 'Experia - Explore the Area',
+  title: 'Experia - Explorer the Area',
   description:
     '세계 곳곳의 문화·예술, 미식, 스포츠, 투어, 웰빙까지 — 다양한 체험들을 둘러보고, 예약하고, 등록하세요!',
   openGraph: {
-    title: 'Experia - Explore the Area',
+    title: 'Experia - Explorer the Area',
     description: '세계 곳곳의 다양한 체험들을 구경하고, 예약하고, 등록하세요!',
     url: 'https://experia.click',
     siteName: 'Experia',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Experia - Explore the Area',
+    title: 'Experia - Explorer the Area',
     description: '전세계의 다양한 체험을 예약하고, 나만의 체험 등록까지!',
     images: ['/og-image.jpg'],
   },
