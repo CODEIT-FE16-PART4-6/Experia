@@ -1,12 +1,10 @@
 import { useMemo, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
-//style
-import styles from '@/styles/datepicker.module.css';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
 import 'react-datepicker/dist/react-datepicker.css';
 
-//schema
+import styles from '@/styles/datepicker.module.css';
 
 type DateType = ActivityDetail['schedules'][number]['date'];
 // ActivityDetail 타입에서 scheduleId 타입 추출
@@ -144,7 +142,7 @@ const Calander = ({
       </p>
       {selectedDate ? (
         <div>
-          {selectedDateSchedules ? (
+          {selectedDateSchedules.length > 0 ? (
             <>
               <p className='text-nomad-black mt-4 mb-[14px] hidden text-[18px] font-bold sm:hidden md:block'>
                 예약 가능한 시간
@@ -165,7 +163,9 @@ const Calander = ({
               <hr className='mt-3 hidden border-gray-300 lg:block' />
             </>
           ) : (
-            <span>예약 가능한 시간이 없습니다.</span>
+            <p className='mt-6 mb-8 flex justify-center text-gray-600'>
+              예약 가능한 시간이 없습니다.
+            </p>
           )}
         </div>
       ) : (

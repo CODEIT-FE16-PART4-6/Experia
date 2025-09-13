@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-import Calender from './Calender';
+import Calender from '@/app/(global)/activities/[id]/components/reservation-block/Calender';
 
 import Button from '@/components/Button';
 import { ActivityDetail } from '@/types/schema/activitiesSchema';
@@ -62,8 +62,26 @@ const Reservation = ({ data }: Props) => {
       if (response.status === 201) {
         alert('예약이 완료되었습니다.');
       }
-    } catch (error) {
+      if (response.status === 401) {
+        alert('로그인 후 이용해주세요.');
+        return;
+      }
+    } catch (error: unknown) {
       console.error('예약 생성 실패:', error);
+
+      // 409 에러인 경우 (이미 확정 예약이 있는 경우)
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { status?: number } };
+        if (axiosError.response?.status === 409) {
+          alert('해당 날짜에 이미 확정 예약이 있는 체험을 예약할 수 없습니다.');
+          return;
+        }
+        if (axiosError.response?.status === 401) {
+          alert('로그인 후 이용해주세요.');
+          return;
+        }
+      }
+      // 그 외의 에러인 경우
       alert('예약 생성에 실패했습니다. 다시 시도해주세요.');
     }
   };

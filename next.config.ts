@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     reactCompiler: false,
     // 더 나은 번들링을 위한 설정
     optimizePackageImports: ['@tanstack/react-query', 'zustand', 'clsx'],
+    serverActions: {},
   },
 
   // 캐싱 최적화

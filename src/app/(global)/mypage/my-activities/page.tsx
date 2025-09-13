@@ -13,6 +13,21 @@
 //   return validatedData.activities;
 // };
 
+// const fetchMyActivities = async () => {
+//   const response = await fetch('https://sp-globalnomad-api.vercel.app/16-6/my-activities?size=20', {
+//     method: 'GET',
+//     headers: {
+//       //임시 토큰값
+//       Authorization:
+//         'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjU3MiwidGVhbUlkIjoiMTYtNiIsImlhdCI6MTc1NzU4NjMwNiwiZXhwIjoxNzU3NTg4MTA2LCJpc3MiOiJzcC1nbG9iYWxub21hZCJ9.xWc0bPf-iC030XWf59k4w5o5tIuUZr1sgF2TQ07qAHA', //Bearer 뒤에 토큰 붙여서 전송
+//       'Content-Type': 'application/json', // 서버가 JSON 형식 데이터를 기대하는 경우
+//     },
+//   });
+//   const data = await response.json();
+//   const validatedData = Activities.parse(data);
+//   return validatedData.activities;
+// };
+
 // const MyActivitiesPage = () => {
 //   const { data, error, isLoading, refetch } = useQuery({
 //     queryKey: ['activityList'],
@@ -50,15 +65,10 @@
 // };
 
 // export default MyActivitiesPage;
-import { Suspense } from 'react';
 
 import MyActivitiesClient from './MyActivitiesClient';
 
 const MyActivitiesPage = () => {
-  return (
-    <Suspense fallback={<div>로딩중...</div>}>
-      <MyActivitiesClient />
-    </Suspense>
-  );
+  return <MyActivitiesClient />;
 };
 export default MyActivitiesPage;
