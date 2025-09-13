@@ -85,29 +85,6 @@ const MyActivitiesClient = () => {
         )}
       </div>
 
-      {/* <div className='flex flex-col gap-6 md:gap-4'>
-        {isPending && (
-          <div className='flex flex-col items-center justify-center gap-2 text-gray-500'>
-            <LoadingSpinner /> 목록을 불러오는 중입니다...
-          </div>
-        )}
-
-        {!isPending &&
-          filteredReservations.map(reservation => (
-            <ActivityCard
-              key={reservation.id}
-              type='reservation'
-              data={reservation as ReservationType}
-            />
-          ))}
-
-        {!isPending && filteredReservations.length === 0 && (
-          <div className='py-8 text-center text-gray-500'>
-            {selectedStatus ? '선택한 필터에 해당하는 예약이 없습니다.' : '예약 내역이 없습니다.'}
-          </div>
-        )}
-      </div> */}
-
       <div ref={loadMoreRef} className='min-h-10'>
         {error && (
           <p className='pb-16 text-center'>

@@ -132,7 +132,7 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
             </div>
 
             <h3 className='mt-6 flex items-center gap-2 text-2xl font-bold md:mt-0'>
-              ₩ {formatPrice(activity.price)}{' '}
+              ₩ {formatPrice(activity.price)}
               <span className='text-lg font-normal text-gray-500'>/ 인</span>
             </h3>
           </div>
