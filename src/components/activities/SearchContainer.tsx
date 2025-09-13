@@ -10,7 +10,8 @@ import ActivityListSkeleton from '@/components/ui/Skeleton/ActivityListSkeleton'
 import PopularListSkeleton from '@/components/ui/Skeleton/PopularListSkeleton';
 import { ACTIVITY_LIST_ORDER_OPTIONS } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
-import { Suspense, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 type Props = {
   initialData: Activities;
@@ -19,13 +20,37 @@ type Props = {
 };
 
 const SearchContainer = ({ initialData, popularInitialData, initialKeyword = '' }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [keyword, setKeyword] = useState(initialKeyword);
   const [category, setCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<string>('latest');
 
+  // URL 파라미터에서 검색어 읽기
+  useEffect(() => {
+    const urlKeyword = searchParams.get('q');
+    if (urlKeyword !== null) {
+      setKeyword(urlKeyword);
+    } else {
+      setKeyword('');
+    }
+  }, [searchParams]);
+
+  // 검색어 변경 시 URL 업데이트
+  const handleSearch = (newKeyword: string) => {
+    setKeyword(newKeyword);
+    const params = new URLSearchParams(searchParams);
+    if (newKeyword.trim()) {
+      params.set('q', newKeyword.trim());
+    } else {
+      params.delete('q');
+    }
+    router.push(`/?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <>
-      <SearchBarClient onSearch={setKeyword} initialQuery={keyword} />
+      <SearchBarClient onSearch={handleSearch} initialQuery={keyword} />
 
       <section className='mx-4 mt-[78px] max-w-[1200px] md:mx-6 lg:mx-auto'>
         {!keyword && (

@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🚀 Pre-push 훅 실행 중..."
 
 # TypeScript 타입 체크

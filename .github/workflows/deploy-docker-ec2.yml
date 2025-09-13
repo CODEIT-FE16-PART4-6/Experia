@@ -1,0 +1,43 @@
+name: Deploy Docker to EC2
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.18.0'
+          cache: 'npm'
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /path/to/your/app
+            git pull origin main
+
+            # Next.js 앱 실행 (PM2 사용)
+            npm ci --omit=dev
+            pm2 restart experia || pm2 start npm --name "experia" -- start
+
+            # 또는 Docker 사용하는 경우
+            # docker-compose down
+            # docker-compose up -d --build
