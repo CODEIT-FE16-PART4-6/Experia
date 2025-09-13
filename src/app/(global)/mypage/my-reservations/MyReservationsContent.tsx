@@ -36,20 +36,20 @@ const MyReservationsContent = () => {
   const selectedStatus = searchParams.get('option');
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } = useInfiniteQuery({
-    queryKey: ['reservationList', selectedStatus],
-    queryFn: ({ pageParam }) => {
-      return fetchReservations({
-        cursorId: pageParam ?? null,
-        status: selectedStatus ?? undefined,
-      });
-    },
-    initialPageParam: null as number | null,
-    getNextPageParam: lastPage => lastPage.cursorId ?? undefined,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error, isPending } =
+    useInfiniteQuery({
+      queryKey: ['reservationList', selectedStatus],
+      queryFn: ({ pageParam }) => {
+        return fetchReservations({
+          cursorId: pageParam ?? null,
+          status: selectedStatus ?? undefined,
+        });
+      },
+      initialPageParam: null as number | null,
+      getNextPageParam: lastPage => lastPage.cursorId ?? undefined,
+    });
 
   const allReservations = data?.pages.flatMap(page => page.reservations) ?? [];
-  const totalCount = allReservations.length;
   const isFetchingMore = hasNextPage && isFetchingNextPage;
 
   // 필터링된 예약 목록
@@ -65,9 +65,6 @@ const MyReservationsContent = () => {
 
   const filteredReservations = getFilteredReservations();
 
-  // if (isLoading) return <div>로딩중...</div>;
-  // if (error) return <div>오류 발생: {error.message}</div>;
-
   useIntersectionObserver({
     target: loadMoreRef,
     onIntersect: fetchNextPage,
@@ -75,22 +72,30 @@ const MyReservationsContent = () => {
   });
 
   return (
-    <section className='min-h-screen'>
+    <div className='min-h-screen'>
       <SectionTitle
         title='예약 내역'
         action={
           <DropdownOptions items={RESERVATION_STATUS} placeholderLabel='필터' type='filter' />
         }
       />
-      <div className='flex flex-col gap-4'>
-        {filteredReservations.map(reservation => (
-          <ActivityCard
-            key={reservation.id}
-            type='reservation'
-            data={reservation as ReservationType}
-          />
-        ))}
-        {filteredReservations.length === 0 && (
+      <div className='flex flex-col gap-6 md:gap-4'>
+        {isPending && (
+          <div className='flex flex-col items-center justify-center gap-2 text-gray-500'>
+            <LoadingSpinner /> 목록을 불러오는 중입니다...
+          </div>
+        )}
+
+        {!isPending &&
+          filteredReservations.map(reservation => (
+            <ActivityCard
+              key={reservation.id}
+              type='reservation'
+              data={reservation as ReservationType}
+            />
+          ))}
+
+        {!isPending && filteredReservations.length === 0 && (
           <div className='py-8 text-center text-gray-500'>
             {selectedStatus ? '선택한 필터에 해당하는 예약이 없습니다.' : '예약 내역이 없습니다.'}
           </div>
@@ -98,13 +103,7 @@ const MyReservationsContent = () => {
       </div>
 
       <div ref={loadMoreRef} className='min-h-10'>
-        {totalCount === 0 && (
-          <p className='py-55 text-center text-xl text-gray-600 md:text-2xl'>
-            검색 결과가 없습니다.
-          </p>
-        )}
-
-        {isError && (
+        {error && (
           <p className='pb-16 text-center'>
             목록 불러오기에 실패했습니다.
             <button className='ml-2 underline underline-offset-4' onClick={() => fetchNextPage()}>
@@ -115,7 +114,7 @@ const MyReservationsContent = () => {
 
         {isFetchingMore && <LoadingSpinner />}
       </div>
-    </section>
+    </div>
   );
 };
 
