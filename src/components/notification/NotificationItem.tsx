@@ -6,7 +6,7 @@ import formatRelativeTime from '@/utils/formatter/formatRelativeTime';
 
 interface Props {
   item: Notification;
-  isRead?: boolean;
+  isRead: string | boolean | null;
   onDelete: (id: number) => void;
 }
 

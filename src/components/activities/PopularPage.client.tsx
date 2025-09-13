@@ -1,12 +1,12 @@
 'use client';
 
+import PopularList from '@/components/activities/PopularList.client';
 import { BREAKPOINTS, POPULAR_ACTIVITIES_COUNT, POPULAR_ACTIVITIES_VIEW_COUNT } from '@/constants';
 import useWindowWidth from '@/hooks/useWindowWidth';
 import { Activities, PopularActivities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
 import { InfiniteData, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import PopularList from '@/components/activities/PopularList.client';
 
 const getPageSize = (width: number) => {
   if (width >= BREAKPOINTS.lg) return POPULAR_ACTIVITIES_VIEW_COUNT.lg;
@@ -51,7 +51,7 @@ const PopularPageClient = ({ initialData }: { initialData: Activities }) => {
   if (isError) return <div>목록 불러오기에 실패했습니다.</div>;
 
   return (
-    <div className='mb-10 px-4 md:mb-14 lg:mb-15 lg:px-0'>
+    <div className='mb-10 md:mb-[60px] lg:mb-[102px]'>
       <PopularList
         data={data}
         fetchNextPage={fetchNextPage}
