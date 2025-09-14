@@ -239,7 +239,7 @@ git push origin v1.0.0
 
 ### 현재 릴리스
 
-- **v1.0.0**: 초기 버전 릴리스 (2024.12.19)
+- **v1.0.0**: 초기 버전 릴리스 (2025.09.14)
 
 ## 🤝 팀 협업
 
@@ -275,7 +275,6 @@ npm run commit:interactive
 - [개발 환경 설정](./docs/development-setup.md)
 - [환경 변수 설정](./docs/environment-setup.md)
 - [OpenAI 설정](./docs/openai-setup.md)
-- [Vercel 배포](./docs/vercel-deployment.md)
 - [Zod 검증 개선](./docs/zod-validation-improvements.md)
 
 ## 🐛 이슈 및 버그 리포트
