@@ -93,34 +93,14 @@ npm run dev
 # 브라우저에서 http://localhost:3000 접속
 ```
 
-### 🚀 빠른 시작 (Quick Start)
-
-프로젝트를 바로 실행하고 싶다면 다음 명령어들을 순서대로 실행하세요:
-
-```bash
-# 1. 저장소 클론
-git clone https://github.com/ExplorerTheArea/Experia.git
-cd Experia
-
-# 2. 의존성 설치
-npm install
-
-# 3. 환경 변수 파일 생성 (기본값으로 설정됨)
-echo "NEXT_PUBLIC_BACKEND_URL=https://sp-globalnomad-api.vercel.app
-NEXT_PUBLIC_TEAM=16-6" > .env
-
-# 4. 개발 서버 시작
-npm run dev
-```
-
 이제 http://localhost:3000 에서 Experia를 확인할 수 있습니다! 🎉
 
 ### 🌐 라이브 데모
 
 프로젝트를 직접 체험해보세요:
 
-- **개발 환경**: [Vercel Dev](https://experia-dev.vercel.app) (dev 브랜치)
-- **프로덕션**: [Vercel Production](https://experia.vercel.app) (main 브랜치)
+- **개발 환경**: [Vercel Dev](https://experia-jet.vercel.app/) (dev 브랜치)
+- **프로덕션**: [AWS Production](https://experia.click/) (main 브랜치)
 
 > **💡 팁**: 로컬에서 실행하기 전에 라이브 데모를 먼저 확인해보세요!
 
@@ -207,31 +187,6 @@ src/
 - **Vercel**: 자동 배포
 - **JIRA 연동**: 이슈 자동 생성
 
-## 📊 배포
-
-### 환경별 배포
-
-```bash
-# 개발 환경
-npm run vercel:dev
-
-# 스테이징 환경
-npm run vercel:staging
-
-# 프로덕션 환경
-npm run vercel:prod
-```
-
-### Docker 배포
-
-```bash
-# Docker 이미지 빌드
-docker build -t experia .
-
-# 컨테이너 실행
-docker run -p 3000:3000 experia
-```
-
 ## 🧪 테스트
 
 ```bash
@@ -309,6 +264,13 @@ npm run commit:interactive
 ```
 
 ## 📚 문서
+
+### 📖 프로젝트 문서
+
+- [README-AI-REVIEW](./README-AI-REVIEW.md) - AI 코드 리뷰 시스템 가이드
+- [테스트 스크립트](./src/utils/test/README.md) - 서버 및 로그인 테스트 가이드
+
+### 🛠️ 개발 문서
 
 - [개발 환경 설정](./docs/development-setup.md)
 - [환경 변수 설정](./docs/environment-setup.md)
