@@ -68,7 +68,7 @@ cd Experia
 # 의존성 설치
 npm install
 
-# 환경 변수 설정
+# 환경 변수 설정 (기본값으로 설정됨)
 cp .exampleEnv .env
 ```
 
@@ -76,11 +76,13 @@ cp .exampleEnv .env
 
 ```bash
 # .env 파일 수정
-NEXT_PUBLIC_BACKEND_URL=백엔드 기본 URL
-NEXT_PUBLIC_TEAM=팀 코드
-NEXT_PUBLIC_KAKAO_APP_KEY=카카오 API키
-NEXT_PUBLIC_KAKAO_REDIRECT_URI=카카오 리다이렉트 URL
+NEXT_PUBLIC_BACKEND_URL=https://sp-globalnomad-api.vercel.app
+NEXT_PUBLIC_TEAM=16-6
+NEXT_PUBLIC_KAKAO_APP_KEY=카카오 API키 (선택사항)
+NEXT_PUBLIC_KAKAO_REDIRECT_URI=카카오 리다이렉트 URL (선택사항)
 ```
+
+> **💡 참고**: 백엔드 API는 공개되어 있어 바로 사용 가능합니다. 카카오 로그인 기능은 선택사항이므로 API 키 없이도 기본 기능을 사용할 수 있습니다.
 
 ### 개발 서버 실행
 
@@ -90,6 +92,37 @@ npm run dev
 
 # 브라우저에서 http://localhost:3000 접속
 ```
+
+### 🚀 빠른 시작 (Quick Start)
+
+프로젝트를 바로 실행하고 싶다면 다음 명령어들을 순서대로 실행하세요:
+
+```bash
+# 1. 저장소 클론
+git clone https://github.com/ExplorerTheArea/Experia.git
+cd Experia
+
+# 2. 의존성 설치
+npm install
+
+# 3. 환경 변수 파일 생성 (기본값으로 설정됨)
+echo "NEXT_PUBLIC_BACKEND_URL=https://sp-globalnomad-api.vercel.app
+NEXT_PUBLIC_TEAM=16-6" > .env
+
+# 4. 개발 서버 시작
+npm run dev
+```
+
+이제 http://localhost:3000 에서 Experia를 확인할 수 있습니다! 🎉
+
+### 🌐 라이브 데모
+
+프로젝트를 직접 체험해보세요:
+
+- **개발 환경**: [Vercel Dev](https://experia-dev.vercel.app) (dev 브랜치)
+- **프로덕션**: [Vercel Production](https://experia.vercel.app) (main 브랜치)
+
+> **💡 팁**: 로컬에서 실행하기 전에 라이브 데모를 먼저 확인해보세요!
 
 ## 📁 프로젝트 구조
 
@@ -293,7 +326,7 @@ npm run commit:interactive
 
 ## 👥 팀원
 
-- **김 이서** - Frontend Developer
+- **김이서** - Frontend Developer
 - **이상달** - Frontend Developer
 - **이형탁** - Frontend Developer
 - **최민준** - Frontend Developer

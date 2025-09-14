@@ -1,12 +1,12 @@
 'use client';
 
+import { ReviewType } from '@/app/(global)/activities/[id]/components/postContentTypes';
+import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useRef } from 'react';
-import defaultProfile from '@/assets/imgs/defaultProfile/default.png';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
-import { ReviewType } from '@/app/(global)/activities/[id]/components/postContentTypes';
 // import { resolveViewport } from 'next/dist/lib/metadata/resolve-metadata';
 
 interface ReviewContentType {
