@@ -56,33 +56,53 @@ jobs:
             pwd
             ls -la
 
-            # experia 디렉토리 확인 및 생성
-            if [ ! -d "experia" ]; then
-              echo "experia 디렉토리가 없습니다. 생성합니다."
+            # Experia 디렉토리 확인 (대소문자 구분)
+            if [ -d "Experia" ]; then
+              echo "Experia 디렉토리가 존재합니다."
+              cd Experia
+            elif [ -d "experia" ]; then
+              echo "experia 디렉토리가 존재합니다."
+              cd experia
+            else
+              echo "프로젝트 디렉토리가 없습니다. 생성합니다."
               mkdir -p experia
               cd experia
               git clone https://github.com/ExplorerTheArea/Experia.git .
-            else
-              echo "experia 디렉토리가 존재합니다."
-              cd experia
             fi
 
-            # Node.js 버전 확인
-            node --version || echo "Node.js가 설치되지 않았습니다."
-            npm --version || echo "npm이 설치되지 않았습니다."
+            # 현재 Node.js 상태 확인
+            echo "현재 Node.js 버전:"
+            node --version || echo "Node.js 명령어를 찾을 수 없습니다."
+            echo "현재 npm 상태:"
+            npm --version || echo "npm 명령어를 찾을 수 없습니다."
 
-            # Node.js 설치 (필요한 경우)
-            if ! command -v node &> /dev/null; then
-              echo "Node.js를 설치합니다."
-              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-            fi
+            # Node.js 및 npm 재설치 (기존 설치 제거 후)
+            echo "기존 Node.js 설치를 제거합니다."
+            sudo apt-get remove -y nodejs npm || true
+            sudo apt-get purge -y nodejs npm || true
 
-            # PM2 설치 (필요한 경우)
-            if ! command -v pm2 &> /dev/null; then
-              echo "PM2를 설치합니다."
-              sudo npm install -g pm2
-            fi
+            echo "Node.js 18.x를 설치합니다."
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get update
+            sudo apt-get install -y nodejs
+
+            # 설치 확인
+            echo "설치 후 Node.js 버전:"
+            node --version
+            echo "설치 후 npm 버전:"
+            npm --version
+
+            # npm 글로벌 경로 설정
+            npm config set prefix ~/.npm-global
+            echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+            source ~/.bashrc
+
+            # PM2 설치
+            echo "PM2를 설치합니다."
+            npm install -g pm2
+
+            # PM2 설치 확인
+            pm2 --version || echo "PM2 설치 실패"
 
             # Git 저장소 업데이트
             git pull origin main
