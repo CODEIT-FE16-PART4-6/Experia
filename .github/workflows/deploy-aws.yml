@@ -95,14 +95,19 @@ jobs:
             # npm 글로벌 경로 설정
             npm config set prefix ~/.npm-global
             echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
-            source ~/.bashrc
+            export PATH=~/.npm-global/bin:$PATH
 
             # PM2 설치
             echo "PM2를 설치합니다."
             npm install -g pm2
 
-            # PM2 설치 확인
-            pm2 --version || echo "PM2 설치 실패"
+            # PM2 설치 확인 및 경로 확인
+            echo "PM2 설치 확인:"
+            which pm2 || echo "PM2 경로를 찾을 수 없습니다."
+            pm2 --version || echo "PM2 명령어 실행 실패"
+
+            # PM2 경로를 직접 사용
+            ~/.npm-global/bin/pm2 --version || echo "직접 경로로 PM2 실행 실패"
 
             # Git 저장소 업데이트
             git pull origin main
@@ -113,6 +118,11 @@ jobs:
             # 애플리케이션 빌드
             npm run build
 
-            # PM2로 애플리케이션 실행
-            pm2 restart experia || pm2 start npm --name "experia" -- start
-            pm2 save
+            # PM2로 애플리케이션 실행 (직접 경로 사용)
+            echo "PM2로 애플리케이션 실행 중..."
+            ~/.npm-global/bin/pm2 restart experia || ~/.npm-global/bin/pm2 start npm --name "experia" -- start
+            ~/.npm-global/bin/pm2 save
+
+            # PM2 상태 확인
+            echo "PM2 프로세스 상태:"
+            ~/.npm-global/bin/pm2 status || echo "PM2 상태 확인 실패"
