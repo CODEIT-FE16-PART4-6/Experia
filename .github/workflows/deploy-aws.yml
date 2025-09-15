@@ -47,9 +47,52 @@ jobs:
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           port: ${{ secrets.AWS_EC2_PORT }}
           script: |
-            cd /home/ubuntu/experia
+            # 현재 디렉토리 확인
+            pwd
+            ls -la
+
+            # 홈 디렉토리로 이동
+            cd ~
+            pwd
+            ls -la
+
+            # experia 디렉토리 확인 및 생성
+            if [ ! -d "experia" ]; then
+              echo "experia 디렉토리가 없습니다. 생성합니다."
+              mkdir -p experia
+              cd experia
+              git clone https://github.com/ExplorerTheArea/Experia.git .
+            else
+              echo "experia 디렉토리가 존재합니다."
+              cd experia
+            fi
+
+            # Node.js 버전 확인
+            node --version || echo "Node.js가 설치되지 않았습니다."
+            npm --version || echo "npm이 설치되지 않았습니다."
+
+            # Node.js 설치 (필요한 경우)
+            if ! command -v node &> /dev/null; then
+              echo "Node.js를 설치합니다."
+              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            # PM2 설치 (필요한 경우)
+            if ! command -v pm2 &> /dev/null; then
+              echo "PM2를 설치합니다."
+              sudo npm install -g pm2
+            fi
+
+            # Git 저장소 업데이트
             git pull origin main
+
+            # 의존성 설치
             npm ci
+
+            # 애플리케이션 빌드
             npm run build
+
+            # PM2로 애플리케이션 실행
             pm2 restart experia || pm2 start npm --name "experia" -- start
             pm2 save
