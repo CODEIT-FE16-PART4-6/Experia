@@ -5,7 +5,6 @@ import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@ta
 import clsx from 'clsx';
 import { Fragment, useRef, useState } from 'react';
 
-import NotificationItem from './NotificationItem';
 import AlarmIcon from '@/assets/icons/AlarmIcon.svg';
 import NotiCloseIcon from '@/assets/icons/ic_closeBlack.svg';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -13,6 +12,7 @@ import { NOTIFICATIONS_PER_PAGE } from '@/constants';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { Notification, Notifications } from '@/types/schema/notificationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
+import NotificationItem from './NotificationItem';
 
 const fetchMyNotifications = async (pageParam: number | null = null) => {
   const cursorQuery = pageParam !== null ? `&cursorId=${pageParam}` : '';
@@ -54,7 +54,8 @@ const NotificationPopover = () => {
         method: 'DELETE',
       });
 
-      if (res && res.status === 204) {
+      // 삭제 성공: 빈 응답(null) 처리
+      if (res === null) {
         return;
       }
 
@@ -82,8 +83,7 @@ const NotificationPopover = () => {
 
   // 새 알림 여부 (로컬 스토리지의 알림 확인 시간, 새 알림 발행 시간 비교)
   const hasNewNotifications =
-    lastReadNotiAt === null ||
-    notifications.some(n => new Date(n.createdAt) > new Date(lastReadNotiAt));
+    lastReadNotiAt && notifications.some(n => new Date(n.createdAt) > new Date(lastReadNotiAt));
 
   // 알림 팝오버 닫으면 알림 전체 읽음 처리
   const handlePopoverClose = () => {
@@ -156,8 +156,7 @@ const NotificationPopover = () => {
                 >
                   {notifications.map((noti: Notification) => {
                     const isRead =
-                      lastReadNotiAt !== null &&
-                      new Date(noti.createdAt) <= new Date(lastReadNotiAt);
+                      lastReadNotiAt && new Date(noti.createdAt) <= new Date(lastReadNotiAt);
 
                     return (
                       <NotificationItem

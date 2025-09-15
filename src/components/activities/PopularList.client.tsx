@@ -41,9 +41,9 @@ const PopularList = ({
         }}
       >
         {data.pages.map(page =>
-          page.activities.map(activity => (
+          page.activities.map((activity, i) => (
             <SwiperSlide key={activity.id}>
-              <PopularItem item={activity} />
+              <PopularItem item={activity} idx={i} />
             </SwiperSlide>
           )),
         )}

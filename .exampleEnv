@@ -1,0 +1,14 @@
+# Experia 환경 변수 설정
+# 이 파일을 .env로 복사하여 사용하세요
+
+# 백엔드 API URL (공개 API)
+NEXT_PUBLIC_BACKEND_URL=https://sp-globalnomad-api.vercel.app
+
+# 팀 코드
+NEXT_PUBLIC_TEAM=16-6
+
+# 카카오 로그인 API 키 (선택사항 - 없어도 기본 기능 사용 가능)
+NEXT_PUBLIC_KAKAO_APP_KEY=
+
+# 카카오 리다이렉트 URI (선택사항)
+NEXT_PUBLIC_KAKAO_REDIRECT_URI=

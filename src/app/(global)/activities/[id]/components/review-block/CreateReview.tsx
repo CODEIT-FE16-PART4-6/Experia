@@ -1,13 +1,14 @@
 'use client';
-//hooks
-import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
 
+//hooks
+import { useQuery } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
+import { useMemo } from 'react';
+
+import useModalStore from '@/stores/modalStore';
 import { ReservationResponseSchema } from '@/types/schema/reservationSchema';
 import fetchClientData from '@/utils/api-client/fetchClientData';
-import useModalStore from '@/stores/modalStore';
 
 const ReviewCreateModal = dynamic(() => import('@/components/review/ReviewCreateModal'), {
   ssr: false,
@@ -28,6 +29,7 @@ const fetchReservations = async () => {
 };
 
 const CreateReview = () => {
+  // const [toggleReviewCreate, setToggleReviewCreate] = useState(false);
   const openModal = useModalStore(state => state.openModal);
 
   const params = useParams();

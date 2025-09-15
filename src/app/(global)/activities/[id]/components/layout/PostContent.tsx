@@ -34,6 +34,7 @@ const PostContent = ({ description, address, reviewData }: ContentProps & Review
       <hr className='mx-6 mb-4 border-gray-400 md:mx-[0px] md:my-10 lg:mx-[0px] lg:my-10'></hr>
       <div className='mt-[15px] mr-[24px] mb-[40px] ml-[24px] lg:mr-[0px] lg:ml-[0px]'>
         <div className='flex flex-col gap-[3px]'>
+          <div className='text-nomad-black mb-4 text-[20px] font-bold'>오시는 길</div>
           <div
             className='relative mb-2 h-[450px] overflow-hidden rounded-[20px] bg-[#b3b3b3] md:h-[276px] lg:h-[450px] lg:w-[790px]'
             style={{ boxShadow: '2.5px 2.5px 5px rgba(0, 0, 0, 0.2)' }}

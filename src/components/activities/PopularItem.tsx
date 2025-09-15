@@ -1,11 +1,9 @@
+import { Activity } from '@/types/schema/activitiesSchema';
+import formatRating from '@/utils/formatter/formatRating';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import { Activity } from '@/types/schema/activitiesSchema';
 
-const PopularItem = ({ item }: { item: Activity }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-
+const PopularItem = ({ item, idx }: { item: Activity; idx: number }) => {
   return (
     <li className='max-w-none text-black lg:max-w-[390px]'>
       <Link href={`/activities/${item.id}`} className='group relative block'>
@@ -15,10 +13,9 @@ const PopularItem = ({ item }: { item: Activity }) => {
             alt={item.description}
             width={280}
             height={280}
-            className={`h-full w-full object-cover ${
-              isLoaded ? 'blur-0 scale-100 opacity-100' : 'scale-105 opacity-60 blur-md'
-            }`}
-            onLoad={() => setIsLoaded(true)}
+            className='h-full w-full object-cover'
+            priority={idx <= 2}
+            loading={idx <= 2 ? 'eager' : 'lazy'}
           />
 
           {/* hover 시 썸네일 dimmed 처리 */}
@@ -28,7 +25,7 @@ const PopularItem = ({ item }: { item: Activity }) => {
           <div className='absolute inset-0 flex flex-col justify-end gap-1 bg-gradient-to-t from-black/60 to-transparent p-5'>
             <span className='text-md flex items-center gap-1 font-semibold text-white'>
               <Image src='/icons/ic_StarSmall.svg' alt='별점' width={18} height={18} />
-              {item.rating}
+              {formatRating(item.rating)}
               <span className='text-gray-200'>(리뷰 {item.reviewCount}개)</span>
             </span>
 

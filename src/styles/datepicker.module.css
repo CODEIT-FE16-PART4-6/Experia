@@ -51,7 +51,7 @@
 
 .datepicker :global(.react-datepicker__day--highlighted:hover),
 .datepicker :global(.react-datepicker__day--today.react-datepicker__day--highlighted:hover) {
-  background-color: rgb(34, 109, 88);
+  background-color: #226d58;
   color: #e1fff7;
   border-radius: 0.5rem;
 }

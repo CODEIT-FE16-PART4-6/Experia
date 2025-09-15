@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🔍 Pre-commit 훅 실행 중..."
 
 # lint-staged 실행 (에러는 차단, 경고만 허용)

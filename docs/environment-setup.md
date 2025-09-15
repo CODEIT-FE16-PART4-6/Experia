@@ -101,5 +101,4 @@ NODE_ENV = development
 ### 4. 자동 배포 설정
 
 - **dev 브랜치**: Push 시 자동 배포
-- **P6-158-vercel 브랜치**: Push 시 자동 배포
 - **main 브랜치**: GitHub Actions를 통한 AWS EC2 배포

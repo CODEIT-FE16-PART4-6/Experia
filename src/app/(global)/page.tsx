@@ -1,7 +1,9 @@
 import SearchContainer from '@/components/activities/SearchContainer';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { ITEM_DEFAULT_PAGESIZE, POPULAR_ACTIVITIES_COUNT } from '@/constants';
 import { Activities } from '@/types/schema/activitiesSchema';
 import { fetchServerData } from '@/utils/api-server';
+import { Suspense } from 'react';
 
 const fetchActivities = async ({
   page,
@@ -14,14 +16,26 @@ const fetchActivities = async ({
 }) => {
   const data = await fetchServerData<Activities>({
     path: '/activities',
-    query: { method: 'cursor', page, size, sort },
-    renderType: 'ssr',
+    query: {
+      method: 'cursor',
+      page,
+      size,
+      sort, // sort 매개변수를 받아서 사용
+    },
+    renderType: 'isr',
+    revalidate: 300,
   });
   return data;
 };
 
-const MainPage = async () => {
+type Props = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+const MainPage = async ({ searchParams }: Props) => {
   const initialPage = 1;
+  const resolvedSearchParams = await searchParams;
+  const initialKeyword = resolvedSearchParams.q || '';
 
   const allInitialData = await fetchActivities({
     page: initialPage,
@@ -37,7 +51,20 @@ const MainPage = async () => {
 
   return (
     <main>
-      <SearchContainer initialData={allInitialData} popularInitialData={popularInitialData} />
+      {/* 루트 페이지 isr 렌더링 -> 빌드 시점에 csr 전용 훅이 사용된다는 걸 next가 미리 인지할 수 있도록 Suspense 추가 */}
+      <Suspense
+        fallback={
+          <div className='flex h-screen w-full items-center justify-center'>
+            <LoadingSpinner />
+          </div>
+        }
+      >
+        <SearchContainer
+          initialData={allInitialData}
+          popularInitialData={popularInitialData}
+          initialKeyword={initialKeyword}
+        />
+      </Suspense>
     </main>
   );
 };

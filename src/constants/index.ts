@@ -88,4 +88,7 @@ export const ACTIVITY_LIST_ORDER_OPTIONS = [
     value: 'latest',
   },
 ];
+
 export const NOTIFICATIONS_PER_PAGE = 2;
+
+export const MYPAGE_CARDS_COUNT = 4;
