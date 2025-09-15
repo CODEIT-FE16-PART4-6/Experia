@@ -81,8 +81,8 @@ jobs:
             sudo apt-get remove -y nodejs npm || true
             sudo apt-get purge -y nodejs npm || true
 
-            echo "Node.js 18.x를 설치합니다."
-            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            echo "Node.js 22.x를 설치합니다."
+            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
             sudo apt-get update
             sudo apt-get install -y nodejs
 
