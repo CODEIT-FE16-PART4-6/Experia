@@ -36,7 +36,7 @@ const MyReservationsContent = () => {
   const selectedStatus = searchParams.get('option');
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error, isPending } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error, isPending, refetch } =
     useInfiniteQuery({
       queryKey: ['reservationList', selectedStatus],
       queryFn: ({ pageParam }) => {
@@ -65,6 +65,12 @@ const MyReservationsContent = () => {
 
   const filteredReservations = getFilteredReservations();
 
+  // 예약 취소 후 목록 새로고침
+  const handleReservationUpdate = () => {
+    // 현재 쿼리 다시 실행
+    refetch();
+  };
+
   useIntersectionObserver({
     target: loadMoreRef,
     onIntersect: fetchNextPage,
@@ -92,6 +98,7 @@ const MyReservationsContent = () => {
               key={reservation.id}
               type='reservation'
               data={reservation as ReservationType}
+              onDeleteSuccess={handleReservationUpdate}
             />
           ))}
 

@@ -73,6 +73,18 @@ const SignupPage = () => {
         setUser(loginResult.user);
       }
 
+      // 쿠키에 토큰 저장 (미들웨어에서 사용)
+      await fetch('/api/auth/set-cookies', {
+        method: 'POST',
+        body: JSON.stringify({
+          accessToken: loginResult.accessToken,
+          refreshToken: loginResult.refreshToken,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       router.push(ROUTES.HOME);
     } catch (err: unknown) {
       if (err instanceof Error) {
