@@ -106,3 +106,8 @@ temp/
 *.njsproj
 *.sln
 *.sw?
+
+# Performance measurement files
+*-performance.json
+current-performance.json
+production-performance.json
