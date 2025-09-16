@@ -39,6 +39,13 @@ jobs:
       - name: Build application
         run: npm run build
 
+      - name: Remove dev dependencies (CI optimization)
+        run: |
+          echo "CI 환경에서 개발 의존성을 제거합니다..."
+          npm prune --production
+          echo "프로덕션 의존성만 남았습니다."
+          npm list --depth=0 --production
+
       - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -47,9 +54,129 @@ jobs:
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           port: ${{ secrets.AWS_EC2_PORT }}
           script: |
-            cd /home/ubuntu/experia
+            # 현재 디렉토리 확인
+            pwd
+            ls -la
+
+            # 홈 디렉토리로 이동
+            cd ~
+            pwd
+            ls -la
+
+            # Experia 디렉토리 확인 (대소문자 구분)
+            if [ -d "Experia" ]; then
+              echo "Experia 디렉토리가 존재합니다."
+              cd Experia
+            elif [ -d "experia" ]; then
+              echo "experia 디렉토리가 존재합니다."
+              cd experia
+            else
+              echo "프로젝트 디렉토리가 없습니다. 생성합니다."
+              mkdir -p experia
+              cd experia
+              git clone https://github.com/ExplorerTheArea/Experia.git .
+            fi
+
+            # 현재 Node.js 상태 확인
+            echo "현재 Node.js 버전:"
+            node --version || echo "Node.js 명령어를 찾을 수 없습니다."
+            echo "현재 npm 상태:"
+            npm --version || echo "npm 명령어를 찾을 수 없습니다."
+
+            # Node.js 및 npm 재설치 (기존 설치 제거 후)
+            echo "기존 Node.js 설치를 제거합니다."
+            sudo apt-get remove -y nodejs npm || true
+            sudo apt-get purge -y nodejs npm || true
+
+            echo "Node.js 22.x를 설치합니다."
+            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+            sudo apt-get update
+            sudo apt-get install -y nodejs
+
+            # 설치 확인
+            echo "설치 후 Node.js 버전:"
+            node --version
+            echo "설치 후 npm 버전:"
+            npm --version
+
+            # npm 글로벌 경로 설정
+            npm config set prefix ~/.npm-global
+            echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+            export PATH=~/.npm-global/bin:$PATH
+
+            # PM2 설치
+            echo "PM2를 설치합니다."
+            npm install -g pm2
+
+            # PM2 설치 확인 및 경로 확인
+            echo "PM2 설치 확인:"
+            which pm2 || echo "PM2 경로를 찾을 수 없습니다."
+            pm2 --version || echo "PM2 명령어 실행 실패"
+
+            # PM2 경로를 직접 사용
+            ~/.npm-global/bin/pm2 --version || echo "직접 경로로 PM2 실행 실패"
+
+            # Git 저장소 업데이트
             git pull origin main
-            npm ci
+
+            # ===== 1단계: 프로덕션 의존성 설치 =====
+            echo "1단계: 프로덕션 의존성만 설치합니다..."
+            npm ci --only=production
+
+            # ===== 2단계: 빌드를 위한 개발 의존성 임시 설치 =====
+            echo "2단계: 빌드를 위해 개발 의존성을 임시로 설치합니다..."
+            npm install --only=dev
+
+            # ===== 3단계: 애플리케이션 빌드 =====
+            echo "3단계: 애플리케이션을 빌드합니다..."
             npm run build
-            pm2 restart experia || pm2 start npm --name "experia" -- start
-            pm2 save
+
+            # ===== 4단계: 개발 의존성 제거 전 용량 확인 =====
+            echo "4단계: 개발 의존성 제거 전 용량을 확인합니다..."
+            echo "=== 개발 의존성 포함 전체 용량 ==="
+            du -sh node_modules
+            echo "=== 전체 디스크 사용량 ==="
+            df -h
+            echo "=== 설치된 패키지 개수 ==="
+            npm list --depth=0 | wc -l
+
+            # ===== 5단계: 개발 의존성 제거 (프로덕션 최적화) =====
+            echo "5단계: 빌드 완료 후 개발 의존성을 제거합니다..."
+            npm prune --production
+
+            # ===== 6단계: 개발 의존성 제거 후 용량 확인 =====
+            echo "6단계: 개발 의존성 제거 후 용량을 확인합니다..."
+            echo "=== 프로덕션 의존성만 남은 용량 ==="
+            du -sh node_modules
+            echo "=== 전체 디스크 사용량 ==="
+            df -h
+            echo "=== 설치된 패키지 개수 ==="
+            npm list --depth=0 | wc -l
+
+            # ===== 7단계: 최종 의존성 확인 =====
+            echo "7단계: 최종 프로덕션 의존성 목록을 확인합니다..."
+            npm list --depth=0 --production
+
+            # ===== 8단계: 캐시 및 불필요한 파일 정리 =====
+            echo "8단계: 캐시 및 불필요한 파일들을 정리합니다..."
+            echo "=== 정리 전 용량 ==="
+            du -sh node_modules
+            df -h
+
+            npm cache clean --force
+            rm -rf .git
+            rm -rf node_modules/.cache
+            rm -rf .next/cache
+
+            echo "=== 정리 후 용량 ==="
+            du -sh node_modules
+            df -h
+
+            # ===== 9단계: PM2로 애플리케이션 실행 =====
+            echo "9단계: PM2로 애플리케이션을 실행합니다..."
+            ~/.npm-global/bin/pm2 restart experia || ~/.npm-global/bin/pm2 start npm --name "experia" -- start
+            ~/.npm-global/bin/pm2 save
+
+            # ===== 10단계: PM2 상태 확인 =====
+            echo "10단계: PM2 프로세스 상태를 확인합니다..."
+            ~/.npm-global/bin/pm2 status || echo "PM2 상태 확인 실패"

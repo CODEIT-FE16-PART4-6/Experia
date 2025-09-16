@@ -1,0 +1,39 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 앱 디렉토리로 이동
+            cd /home/ubuntu/Experia
+
+            # 최신 코드 가져오기
+            git pull origin main
+
+            # 의존성 설치 (프로덕션만)
+            npm ci --omit=dev
+
+            # 애플리케이션 빌드
+            npm run build
+
+            # PM2로 애플리케이션 재시작
+            pm2 restart experia || pm2 start npm --name "experia" -- start
+
+            # 배포 상태 확인
+            pm2 status

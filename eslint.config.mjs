@@ -22,6 +22,12 @@ const eslintConfig = [
       prettier: prettier,
       import: importPlugin,
     },
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
     rules: {
       // 기본 ESLint 규칙 - 핵심만 유지
       'no-unused-vars': 'off', // JS용 기본 비활성화
