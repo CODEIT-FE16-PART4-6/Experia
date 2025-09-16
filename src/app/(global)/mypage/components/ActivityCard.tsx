@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import StarIcon from '@/assets/icons/ic_StarSmall.svg';
 import Button from '@/components/Button';
@@ -10,6 +11,7 @@ import ReviewCreateModal from '@/components/review/ReviewCreateModal';
 import useModalStore from '@/stores/modalStore';
 import { ActivityType } from '@/types/schema/activitiesSchema';
 import { ReservationType } from '@/types/schema/reservationSchema';
+import { cancelReservation } from '@/utils/api-public/api-reservations.api';
 import formatPrice from '@/utils/formatter/formatPrice';
 import formatRating from '@/utils/formatter/formatRating';
 
@@ -34,9 +36,31 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
   const router = useRouter();
   const closeModal = useModalStore(state => state.closeModal);
   const openModal = useModalStore(state => state.openModal);
+  const [isCanceling, setIsCanceling] = useState(false);
 
   if (type === 'reservation') {
     const reservation = data as ReservationType;
+
+    const handleCancelReservation = async () => {
+      if (isCanceling) return;
+
+      setIsCanceling(true);
+      try {
+        await cancelReservation(reservation.id);
+
+        alert('예약이 취소되었습니다.');
+        // 목록 새로고침을 위해 부모 컴포넌트의 콜백 호출
+        if (onDeleteSuccess) {
+          onDeleteSuccess();
+        }
+      } catch (error) {
+        console.error('예약 취소 중 오류 발생:', error);
+        const errorMessage = error instanceof Error ? error.message : '예약 취소에 실패했습니다.';
+        alert(errorMessage);
+      } finally {
+        setIsCanceling(false);
+      }
+    };
 
     return (
       <div className='flex h-auto w-full flex-wrap overflow-hidden rounded-2xl bg-white shadow-lg sm:h-[156px] sm:flex-nowrap lg:h-[204px]'>
@@ -67,8 +91,13 @@ const ActivityCard = ({ data, type, onDeleteSuccess }: ActivityCardProps) => {
             <h4 className='text-2xl font-bold'>₩ {formatPrice(reservation.totalPrice)}</h4>
 
             {reservation.status === 'pending' && (
-              <Button size='sm' className='w-auto sm:px-2 sm:py-1 md:px-6 md:py-2 lg:px-[42px]'>
-                예약 취소
+              <Button
+                size='sm'
+                className='w-auto sm:px-2 sm:py-1 md:px-6 md:py-2 lg:px-[42px]'
+                onClick={handleCancelReservation}
+                disabled={isCanceling}
+              >
+                {isCanceling ? '취소 중...' : '예약 취소'}
               </Button>
             )}
 
